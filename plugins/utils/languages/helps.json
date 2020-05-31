@@ -1,0 +1,12 @@
+{
+    "es": {
+        "say": ".say [oracion] - Decir una oracion",
+        "pick": ".pick [opc1, opc2, ..] - Elige una opcion entre las opciones",
+        "tour": ".tour (formato), (segundos para iniciar u off), (minutos para el autodq u off), (máximo número de users u off), (elimination u roundrobin). Todos los argumentos son opcionales."
+    },
+    "en": {
+        "say": ".say [target] - Say a sentence",
+        "pick": ".pick [opc1, opc2, ..] - Randomly selects an item from a list containing 2 or more elements.",
+        "tour": ".tour (format), (seconds to start or off), (minutes autodq or off), (max Users or off), (elimination or roundrobin). All arguments are optional."
+    }
+}

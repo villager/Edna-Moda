@@ -1,0 +1,11 @@
+{
+    "name": "Language System",
+    "version": "2.0.0",
+    "main": "index.js",
+    "author": {
+        "name": "Aldair Beltran",
+        "email": "aldairbeltran3@hotmail.com",
+        "url": "https://github.com/villager"
+    },
+    "private": true
+}
