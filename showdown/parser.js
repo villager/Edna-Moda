@@ -13,25 +13,49 @@ class Parser {
 		this.message = '';
 		this.serverid = bot.id;
 	}
+	splitToken(message) {
+		message = splint(message, ' ');
+		return message;
+	}
 	splitCommand(message) {
 		this.cmd = '';
 		this.cmdToken = '';
 		this.target = '';
-        if (!message || !message.trim().length) return;
-        
+		let isWord = false;
+		if (!message || !message.trim().length) return;
 		let cmdToken = message.charAt(0);
-        if (Config.triggers.indexOf(cmdToken) === -1) return; 
-		if (cmdToken === message.charAt(1)) return;
-		let cmd = '', target = '';
-		let spaceIndex = message.indexOf(' ');
-		if (spaceIndex > 0) {
-			cmd = message.slice(1, spaceIndex).toLowerCase();
-			target = message.slice(spaceIndex + 1);
-		} else {
-			cmd = message.slice(1).toLowerCase();
-			target = '';
+        if (Config.triggers.indexOf(cmdToken) === -1) {
+			let maybeToken = this.splitToken(message);
+			if(Config.triggers.indexOf(maybeToken[0]) > -1) {
+				cmdToken = maybeToken[0];
+				isWord = true;
+			} else {
+				return; 
+			}
 		}
-
+		let cmd = '', target = '';
+		if (isWord) {
+			let splitWords = this.splitToken(message);
+			if(cmdToken === splitWords[1]) return;
+			if(splitWords.length > 2) {
+				let tar = splitWords.pop();
+				cmd = splitWords[1];
+				target = tar;
+			}  else {
+				cmd = splitWords[1];
+				target = '';
+			}
+		} else {
+			if (cmdToken === message.charAt(1)) return;
+			let spaceIndex = message.indexOf(' ');
+			if (spaceIndex > 0) {
+				cmd = message.slice(1, spaceIndex).toLowerCase();
+				target = message.slice(spaceIndex + 1);
+			} else {
+				cmd = message.slice(1).toLowerCase();
+				target = '';
+			}
+		}
 		let curCommands = Chat.psCommands;
 		let commandHandler;
 		let fullCmd = cmd;

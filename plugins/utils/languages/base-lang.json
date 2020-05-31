@@ -19,7 +19,7 @@
     },
     "english": {
         "version": "The Bot's version is $1",
-        "about": "Hello I'm $1 a multi-plataform created by $2, you can see my code at $3",
+        "about": "Hello I'm $1 a cross-plataform created by $2, you can see my code at $3",
         "errorlog": {
             "link": "Here is your errorlog $1",
             "error": "Sorry... we couldn't get the error log"

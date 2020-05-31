@@ -6,24 +6,49 @@ class Parser {
 		this.messageId = 0;
 		this.target = '';
 	}
-    splitCommand(message) {
+	splitToken(message) {
+		message = splint(message, ' ');
+		return message;
+	}
+	splitCommand(message) {
 		this.cmd = '';
 		this.cmdToken = '';
 		this.target = '';
+		let isWord = false;
 		if (!message || !message.trim().length) return;
-        let cmdToken = message.charAt(0);
-        if(Config.triggers.indexOf(cmdToken) === -1) return;
-		if (cmdToken === message.charAt(1)) return;
-		let cmd = '', target = '';
-		let spaceIndex = message.indexOf(' ');
-		if (spaceIndex > 0) {
-			cmd = message.slice(1, spaceIndex).toLowerCase();
-			target = message.slice(spaceIndex + 1);
-		} else {
-			cmd = message.slice(1).toLowerCase();
-			target = '';
+		let cmdToken = message.charAt(0);
+        if (Config.triggers.indexOf(cmdToken) === -1) {
+			let maybeToken = this.splitToken(message);
+			if(Config.triggers.indexOf(maybeToken[0]) > -1) {
+				cmdToken = maybeToken[0];
+				isWord = true;
+			} else {
+				return; 
+			}
 		}
-
+		let cmd = '', target = '';
+		if (isWord) {
+			let splitWords = this.splitToken(message);
+			if(cmdToken === splitWords[1]) return;
+			if(splitWords.length > 2) {
+				let tar = splitWords.pop();
+				cmd = splitWords[1];
+				target = tar;
+			}  else {
+				cmd = splitWords[1];
+				target = '';
+			}
+		} else {
+			if (cmdToken === message.charAt(1)) return;
+			let spaceIndex = message.indexOf(' ');
+			if (spaceIndex > 0) {
+				cmd = message.slice(1, spaceIndex).toLowerCase();
+				target = message.slice(spaceIndex + 1);
+			} else {
+				cmd = message.slice(1).toLowerCase();
+				target = '';
+			}
+		}
 		let curCommands = Chat.discordCommands;
 		let commandHandler;
 		let fullCmd = cmd;
@@ -38,7 +63,7 @@ class Parser {
 				// in case someone messed up, don't loop
 				commandHandler = curCommands[commandHandler];
 			} else if (Array.isArray(commandHandler)) {
-				return this.splitCommand(cmdToken + 'help ' + fullCmd.slice(0, -4), true);
+				return this.splitCommand(cmdToken + 'help ' + fullCmd.slice(0, -4));
 			}
 			if (commandHandler && typeof commandHandler === 'object') {
 				let spaceIndex = target.indexOf(' ');
@@ -67,7 +92,7 @@ class Parser {
 		this.fullCmd = fullCmd;
 
 		return commandHandler;
-    }
+	}
     parse(message) {
 		this.bot.lastMessage = message.content;
 		this.bot.lastUser = message.author;
