@@ -103,7 +103,7 @@ exports.psCommands = {
     about() {
         let version = Chat.packageData.url;
         let author = Chat.packageData.author && Chat.packageData.author.name;
-        this.sendReply(Lang.replace(this.lang, 'about', Config.name,author, version));
+        this.sendReply(Lang.replace(this.lang, 'about', this.bot.name,author, version));
     },
 }
 exports.discordCommands = {

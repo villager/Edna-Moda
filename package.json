@@ -1,6 +1,6 @@
 {
     "name": "Edna Moda",
-    "version": "1.0.3",
+    "version": "3.0.0",
     "main": "node build",
     "scripts": {
         "start": "node app",
@@ -9,15 +9,16 @@
     },
     "author": {
         "name": "Aldair Beltran",
-        "email": "aldairbeltran3@hotmail.com"
+        "email": "aldairbeltran3@hotmail.com",
+        "url": "https://github.com/villager"
     },
     "dependencies": {
         "discord.js": "^12.2.0",
         "node-static": "^0.7.11",
         "ps-data": "git://github.com/spaceshowdown/ps-data.git",
         "request": "^2.88.2",
-        "sugar": "1.4.1",
-        "sockjs-client": "1.1.4"
+        "sockjs-client": "^1.1.4",
+        "sugar": "^1.4.1"
     },
     "optionalDependencies": {
         "githubhook": "^1.9.3"

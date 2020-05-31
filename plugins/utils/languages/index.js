@@ -6,7 +6,6 @@ const ROOT_PATH = pathModule.resolve(__dirname, '..');
 class  LoadLang {
     constructor(path) {
         if(!path) path = './base-lang.json';
-		this.path = pathModule.resolve(ROOT_PATH, path);
         this.translations = Object.create(null);
         this.path = path;
     }

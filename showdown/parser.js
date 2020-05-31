@@ -19,7 +19,8 @@ class Parser {
 		this.target = '';
         if (!message || !message.trim().length) return;
         
-        let cmdToken = message.charAt(0);
+		let cmdToken = message.charAt(0);
+		console.log(Config.triggers.indexOf(cmdToken) );
         if (Config.triggers.indexOf(cmdToken) === -1) return; 
 		if (cmdToken === message.charAt(1)) return;
 		let cmd = '', target = '';
@@ -78,24 +79,24 @@ class Parser {
 	}
 	sendStrict(data) {
 		if(this.pmTarget) {
-			return this.bot.send(`/pm ${this.pmTarget}, ${data}`, this.room.id);	
+			return this.bot.send(`/pm ${toId(this.pmTarget)}, ${data}`, toId(this.room));	
 		} else {
 			if(!this.can('games', false)) { // Can't brodcast
-				return this.bot.send(`/pm ${this.user.id}, ${data}`, this.room.id);
+				return this.bot.send(`/pm ${toId(this.user)}, ${data}`, toId(this.room));
 			} {
-				return this.bot.send(data, this.room.id);	
+				return this.bot.send(data, toId(this.room));	
 			}
 		}		
 	}
 	sendReply(data) {
 		if(this.pmTarget) {
-			this.bot.send(`/pm ${this.pmTarget}, ${data}`, this.room.id);	
+			this.bot.send(`/pm ${toId(this.pmTarget)}, ${data}`, toId(this.room));	
 		} else {
-			this.bot.send(data, this.room.id);			
+			this.bot.send(data, toId(this.room));			
 		}
 	}
 	get lang() {
-		let lang = this.room.language ? this.room.language : this.bot.language);
+		let lang = this.room.language ? this.room.language : this.bot.language;
 		return lang;
 	}
 	can(permission, broadcast) {
@@ -110,7 +111,7 @@ class Parser {
 		this.bot.lastUser = user;
 		let commandHandler = this.splitCommand(message);
 		if (typeof commandHandler === 'function') {
-			if(toId(this.bot.lastUser) === toId(Config.name)) return; // Ignorar los  comandos dichos por el mismo bot
+			if(toId(this.bot.lastUser) === toId(this.bot.name)) return; // Ignorar los  comandos dichos por el mismo bot
             this.user = user;
 			this.message = message;
 			this.room = room;
@@ -136,7 +137,7 @@ class Parser {
 				user: this.user.id,
 				message: this.message,
 				pmTarget: this.pmTarget && this.pmTarget,
-				room: this.room.id,
+				room: this.room,
 			}, this.bot.id);;
 		}
 		if (result === undefined) result = false;

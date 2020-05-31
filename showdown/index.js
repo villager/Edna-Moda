@@ -20,7 +20,8 @@ class PSBot extends EventEmitter {
 		this.name = opts.name;
 		this.pass = opts.password;
 		this.named = false;
-        this.baseRooms = opts.rooms;
+		this.baseRooms = opts.rooms;
+		this.initCmds = opts.initCmds;
         this.formats = Object.create(null);
         this.lastMessage = undefined;
         this.disconnecting = false;
@@ -165,7 +166,7 @@ class PSBot extends EventEmitter {
 		case 'updateuser':
 			if (toId(splittedLine[1]) !== toId(this.name)) return;
 			this.send('/cmd rooms');
-			let cmds = [];
+			let cmds = Plugins.initCmds();
 			for (const cmd of cmds) this.send(cmd);
 			if (!this.joinedRooms && splittedLine[2] === '1') {
 				if (Array.isArray(this.baseRooms)) {

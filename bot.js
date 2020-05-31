@@ -19,9 +19,8 @@ global.Chat = require('./chat');
 let bots = Object.create(null);
 
 global.Plugins = require('./plugins');
-Plugins.eventEmitter.setMaxListeners(Object.keys(Plugins.features).length);
-
-
+Plugins.init();
+Plugins.eventEmitter.setMaxListeners(Object.keys(Plugins.plugins).length);
 global.Discord = null
 
 class GBot {

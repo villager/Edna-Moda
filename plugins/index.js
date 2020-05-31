@@ -1,5 +1,7 @@
 "use strict";
 
+const cluster = require('cluster');
+
 let plugins = Object.create(null);
 
 function getPlugin(plugin) {
@@ -9,7 +11,7 @@ function getPlugin(plugin) {
 
 const Plugins = module.exports = getPlugin;
 
-
+Plugins.plugins = plugins;
 const KEYS_ACTION = [
     ['showdown', Chat.psCommands],
     ['discord', Chat.discordCommands],
@@ -40,8 +42,27 @@ const COMMANDS_MAP = new Map([
     ['discord', 'discordCommands'],
     ['global', 'globalCommands'],
 ]);
-
-function loadPlugins() {
+Plugins.init = function() {
+    let pluginsList = Tools.FS('./plugins/plugins').readdirSync();
+    for (const plugin of pluginsList) {
+        Plugins.load(plugin);
+    }
+};
+Plugins.initCmds = function() {
+    let cmds = [];
+    Bot.forEach(bot => {
+        if(Array.isArray(bot.initCmds)) {
+            cmds = cmds.concat(bot.initCmds);
+        }
+    });
+    Plugins.forEach(plugin => {
+        if(Array.isArray(plugin.initCmds)) {
+            cmds = cmds.concat(plugin.initCmds);
+        }
+    });
+    return cmds;
+};
+Plugins.loadPlugins = function() {
     Plugins.forEach(plugin => {
         // The key is the king
         if(plugin.key) {
@@ -65,5 +86,3 @@ const events = require('./utils/events');
 Plugins.Language = require('./utils/languages');
 
 Plugins.eventEmitter = new events.EventEmitter();
-
-Plugins.eventEmitter.on('loadPlugins', loadPlugins);

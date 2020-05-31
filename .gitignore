@@ -4,4 +4,3 @@ logs/*
 !logs/README.md
 /node_modules
 package-lock.json
-report.*
