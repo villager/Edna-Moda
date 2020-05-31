@@ -94,13 +94,9 @@ class Parser {
     linkifyReply(title, data, url) {
         this.sendReply(Embed.notify(title, data).setURL(url));
 	}
-	can(permission) {
-		for (const owner of Config.owners) {
-			for (const nick of owner.aliases) {
-				if(toUserName(nick) === toUserName(this.user)) return true;
-			}
-		}
-		this.sendReply('Acceso Denegado');
+	can(permission, broadcasting) {
+		if(Chat.hasAuth(this.bot.id, this.user, permission)) return true;
+		if(broadcasting) this.sendReply('Acceso Denegado');
 		return false;
 	}
 	runHelp(help) {
