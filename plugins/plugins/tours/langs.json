@@ -1,0 +1,106 @@
+{
+    "spanish": {
+        "tourend": {
+            "err": "No hay ningún torneo en esta sala", 
+            "err2": "El torneo ya ha empezado"
+        },
+        "tour": {
+            "e2": "Ya hay un torneo en esta sala",
+            "invalid_format": "El formato $1 no es valido para torneos",
+            "e4": "El tiempo para iniciar o es válido",
+            "e5": "El AutoDq no es válido",
+            "e6": "El máximo numero de users no es válido",
+            "e7": "El tipo de torneo no es válido. Usa alguno de estos: elimination, roundrobin",
+            "notstarted": "Error: El torneo no ha empezado, probablemente por un cambio en los permisos o en los comandos",
+            "paramerror": "Parámetro $1 no encontrado, Los parámetros correctos son: $2"
+        },
+        "official": {
+            "not" : "La funcion Leaderboards no esta disponibe para la sala $1",
+            "notour" : "No hay ningún torneo en esta sala",
+            "already" : "El torneo ya era oficial",
+            "already-not" : "El torneo no es oficial",
+            "official" : "Este torneo es ahora oficial y contará para el Leaderboards",
+            "unofficial" : "Este torneo ha dejado de ser oficial"
+        },
+        "leaderboard": {
+            "usage": "Uso correcto",
+            "invuser": "Nombre de usuario no válido",
+            "rank": "Ranking de",
+            "in": "en",
+            "points": "Puntos",
+            "w": "Ganador",
+            "f": "Finalista",
+            "sf": "Semifinalista",
+            "times": "veces",
+            "total": "Total",
+            "tours": "torneos jugados",
+            "bwon": "batlalas ganadas",
+            "not": "La funcion Leaderboards no esta disponibe para la sala",
+            "empty": "No hay ningún torneo registrado aún para la sala",
+            "table": "Tabla del leaderboards",
+            "err": "Error subiendo la tabla del leaderboards a Hastebin",
+            "use": "Usa",
+            "confirm": "para confirmar el borrado de los datos de leaderboards en la sala",
+            "invhash": "Código no válido",
+            "data": "Datos del Leaderboars de la sala",
+            "del": "borrados",
+            "wasset": "La configuracion del sistema de Leaderboards ha sido establecida para la sala",
+            "wasdisabled": "La funcion Leaderboards ha sido desactivada para la sala",
+            "alrdisabled": "La funcion Leaderboards ya estaba desactivada en la sala",
+            "unknown": "Opción desconocida"
+         },
+         "congrats": "Felicidades **$1**, escoge tier para el siguiente torneo"
+    },
+    "english": {
+        "tourend": {
+            "err": "There is not a tournament in this room",
+            "err2": "Error: Tournament has already started"
+        },
+        "tour": {
+            "e2": "There is already a tournament in this room",
+            "invalid_format": "Format $1 is not valid for tournaments",
+            "e4": "Time to start is not a valid time",
+            "e5": "Autodq is not a valid time",
+            "e6": "Max users number is not valid",
+            "e7": "Tour type is not valid. Valid types are: elimination, roundrobin",
+            "notstarted": "Error: the tournament did not start, probably because I do not have permission to create tournaments or commands were changed.",
+            "paramerror": "Parameter $1 not found, valid parameter are: $2"
+        },
+        "official":{
+            "not": "Leaderboards are not enabled for room $1",
+            "notour": "There is no tournament in this room",
+            "already": "The tournament is already official",
+            "already-not": "The tournament is already unofficial",
+            "official": "This tournament is now official and will count for the leaderboards",
+            "unofficial": "This tournament is no longer official"
+        },
+        "leaderboard": {
+            "usage": "Usage",
+            "invuser": "Invalid username",
+            "rank": "Ranking of",
+            "in": "in",
+            "points": "Points",
+            "w": "Winner",
+            "f": "Finalist",
+            "sf": "Semifinalist",
+            "times": "times",
+            "total": "Total",
+            "tours": "tours played",
+            "bwon": "battles won",
+            "not": "Leaderboards are not enabled for room $1",
+            "empty": "There are no registered tournaments yet for room",
+            "table": "Leaderboards table",
+            "err": "Error uploading leaderboards table to Hastebin",
+            "use": "Use",
+            "confirm": "to confirm the leaderboars data reset for room",
+            "invhash": "Invalid hashcode",
+            "data": "Leaderboars data for room",
+            "del": "was resetted",
+            "wasset": "Leaderboards configuration was set for room",
+            "wasdisabled": "Leaderboards was disabled for room",
+            "alrdisabled": "Leaderboards is already disabled for room",
+            "unknown": "Unknown option"
+        },
+        "congrats": "Congratulations **$1**!, choose tier for the next tour"
+    }
+}

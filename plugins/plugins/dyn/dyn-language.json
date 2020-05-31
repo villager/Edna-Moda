@@ -1,0 +1,14 @@
+{
+    "spanish": {
+        "non_server_exist": "No hay ningun comando registrado en el servidor",
+        "non_exist": "$1 no es un comando registrado en el servidor",
+        "header": "Comandos Dinamicos",
+        "list_error": "Error al cargar la lista"
+    },
+    "english":{
+        "non_server_exist": "There's not any dyn cmd registered in the server",
+        "non_exist": "$1 is not a registered dyn",
+        "header": "Dynamic Commands",
+        "list_error": "Failed to upload list"
+    }
+}

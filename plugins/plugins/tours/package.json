@@ -1,0 +1,18 @@
+{
+    "name": "Pokemon-Bot-Showdown Tournament",
+    "version": "1.0.0",
+    "main": "tours.js",
+    "author": {
+        "name": "Aldair Beltran",
+        "email": "aldairbeltran3@hotmail.com",
+        "url": "https://github.com/villager"
+    },
+    "contributors": [
+        {
+            "name": "Ecuacion",
+            "email": "alajandro5gt01@gmail.com",
+            "url": "https://github.com/ecuacion"
+        }          
+    ],
+    "private": true
+}

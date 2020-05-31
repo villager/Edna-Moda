@@ -6,9 +6,19 @@ class Parser {
 		this.messageId = 0;
 		this.target = '';
 	}
+	get id() {
+		return this.bot.id;
+	}
 	splitToken(message) {
 		message = splint(message, ' ');
 		return message;
+	}
+	splitOne(target) {
+		const commaIndex = target.indexOf(',');
+		if (commaIndex < 0) {
+			return [target.trim(), ''];
+		}
+		return [target.slice(0, commaIndex).trim(), target.slice(commaIndex + 1).trim()];
 	}
 	splitCommand(message) {
 		this.cmd = '';
@@ -51,7 +61,7 @@ class Parser {
 				target = '';
 			}
 		}
-		let curCommands = Chat.discordCommands;
+		let curCommands = this.bot.commands;
 		let commandHandler;
 		let fullCmd = cmd;
 
@@ -118,9 +128,6 @@ class Parser {
 		let lang = (this.bot.language);
 		return lang;
 	}
-    linkifyReply(title, data, url) {
-        this.sendReply(Embed.notify(title, data).setURL(url));
-	}
 	can(permission, broadcasting) {
 		if(Chat.hasAuth(this.bot.id, this.user, permission)) return true;
 		if(broadcasting) this.sendReply('Acceso Denegado');
@@ -131,7 +138,7 @@ class Parser {
 		this.run(commandHandler);
 	}
     run(commandHandler) {
-        if (typeof commandHandler === 'string') commandHandler = Chat.discordCommands[commandHandler];
+        if (typeof commandHandler === 'string') commandHandler = this.bot.commands[commandHandler];
 		let result;
 		try {
 			result = commandHandler.call(this, this.target, this.user, this.message);

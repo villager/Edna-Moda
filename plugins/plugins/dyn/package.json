@@ -1,0 +1,11 @@
+{
+    "name": "Dynamic Commands",
+    "version": "1.0.0",
+    "main": "dyn.js",
+    "author": {
+        "name": "Aldair Beltran",
+        "email": "aldairbeltran3@hotmail.com",
+        "url": "https://github.com/villager"
+    },
+    "private": true
+}

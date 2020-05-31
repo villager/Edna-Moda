@@ -15,13 +15,12 @@ Chat.loadPlugins = function() {
         if (data) Chat.packageData = JSON.parse(data);
     });
     Plugins.loadPlugins();
-
     Object.assign(Chat.discordCommands, Chat.globalCommands);
     Object.assign(Chat.psCommands, Chat.globalCommands);
 
 };
 Chat.hasAuth = function(id, user, perm) {
-    let userId = id === 'discord' ? toUsername(user) : toId(user);
+    let userId = id === 'discord' ? toUserName(user) : toId(user);
     for (const owner of Config.owners) {
         if(owner.id === userId) return true;
         for (const aliases of owner.aliases) {

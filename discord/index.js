@@ -9,10 +9,24 @@ class DiscordClient extends BaseClient {
         this.lastUser = '';
         this.id = 'discord';
         this.lastMessage = '';
+        this.commands = Object.create(null);
         this.language = 'spanish';
         this.name = Config.name;
+        this.initPlugins();
     }
-
+    loadCommands() {
+        Chat.loadPlugins();
+        Plugins.eventEmitter.emit('onDynamic', this).flush();
+        Object.assign(this.commands, Chat.discordCommands);
+    }
+    initPlugins() {
+		Plugins.forEach(plugin => {
+			if(typeof plugin.init === 'function') {
+					plugin.init(this);
+			}
+		});
+		this.loadCommands();		
+	}
     status() {
         this.on('ready', () => {
             this.user.setUsername(Config.name);

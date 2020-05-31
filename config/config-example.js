@@ -11,6 +11,8 @@ Config.owners = [
     }
 ];
 
+Config.isInitializacion = true;
+
 /**
  * Pokemon Showdown Config
  */

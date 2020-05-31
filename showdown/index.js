@@ -22,7 +22,8 @@ class PSBot extends EventEmitter {
 		this.named = false;
 		this.baseRooms = opts.rooms;
 		this.initCmds = opts.initCmds;
-        this.formats = Object.create(null);
+		this.formats = Object.create(null);
+		this.commands = Object.create(null);
         this.lastMessage = undefined;
         this.disconnecting = false;
         this.joinedRooms = false;
@@ -81,6 +82,7 @@ class PSBot extends EventEmitter {
 			//this.status.onConnection();
 			this.conntime = Date.now();
 			console.log(`Conectado a ${this.id}`);
+			this.initPlugins();
 			this.emit('connect', this.socket);
 		}.bind(this);
 		this.socket.onclose = function (e) {
@@ -95,14 +97,26 @@ class PSBot extends EventEmitter {
 				data = JSON.stringify(data);
 			}
 			this.lastMessage = Date.now();
-			Chat.loadPlugins();
 			this.emit('message', data);
 			this.receive(data);
 		}.bind(this);
 		this.connecting = true;
 		this.emit('connecting');
 
-    }
+	}
+	loadCommands() {
+		Chat.loadPlugins();
+		Plugins.eventEmitter.emit('onDynamic', this).flush();
+		Object.assign(this.commands, Chat.psCommands); // Assign base PS commands
+	}
+	initPlugins() {
+		Plugins.forEach(plugin => {
+			if(typeof plugin.init === 'function') {
+					plugin.init(this);
+			}
+		});
+		this.loadCommands();		
+	}
 	receive(msg) {
         this.lastMessage = Date.now();
         this.emit('message', msg);
@@ -134,13 +148,7 @@ class PSBot extends EventEmitter {
 	}
     parseLine(roomid, data, isInit) {
 		let splittedLine = data.substr(1).split('|');
-		this.emit('on', this, roomid, data, isInit, splittedLine);
-		if (splittedLine[0]) {
-			var thisEvent = (splittedLine[0].charAt(0) !== '-') ? 'major' : 'minor';
-			this.emit(thisEvent, roomid, splittedLine[0], data.substr(splittedLine[0].length + 2), isInit);
-		} else {
-			this.emit('major', roomid, '', data, isInit);
-		}
+		Plugins.eventEmitter.emit('PS_PARSE', this, roomid, data, isInit, splittedLine).flush();
 		switch (splittedLine[0]) {
 		case 'error':
 			console.log(splittedLine[1]);
@@ -298,6 +306,15 @@ class PSBot extends EventEmitter {
 				this.formats[toId(name)] = formatData;
 			}
 		}
+	}
+	parseAliases(format) {
+		if (!format) return '';
+		format = toId(format);
+		var aliases = Config.formatAliases || {};
+		if (this.formats[format]) return format;
+		if (aliases[format]) format = toId(aliases[format]);
+		if (this.formats[format]) return format;
+		return format;
 	}
 	send(data, room) {
 		if(!room) room = '';

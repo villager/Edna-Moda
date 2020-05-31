@@ -22,7 +22,7 @@ exports.globalCommands = {
 			let altCommandHelp;
 			let helpCmd;
 			let targets = target.split(' ');
-			let allCommands = this.bot.id === 'discord' ? Chat.discordCommands : Chat.psCommands;
+			let allCommands = this.bot.commands;
 			if (typeof allCommands[target] === 'string') {
 				// If a function changes with command name, help for that command name will be searched first.
 				altCommandHelp = target + 'help';

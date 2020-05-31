@@ -21,7 +21,8 @@ let bots = Object.create(null);
 
 global.Plugins = require('./plugins');
 Plugins.init();
-Plugins.eventEmitter.setMaxListeners(Object.keys(Plugins.plugins).length);
+let listeners = (Object.keys(Config.servers).length + 1) * Object.keys(Plugins.plugins).length;
+Plugins.eventEmitter.setMaxListeners(listeners);
 global.Discord = null
 
 class GBot {
@@ -77,3 +78,6 @@ Bot.bots = bots;
 Bot.forEach = function(callback, thisArg) {
     Object.values(bots).forEach(callback, thisArg);
 };
+setTimeout(() => {
+    console.log(Object.assign(Discord.commands));
+}, 1000 * 5)

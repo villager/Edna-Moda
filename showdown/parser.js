@@ -13,9 +13,19 @@ class Parser {
 		this.message = '';
 		this.serverid = bot.id;
 	}
+	get id () {
+		return this.bot.id;
+	}
 	splitToken(message) {
 		message = splint(message, ' ');
 		return message;
+	}
+	splitOne(target) {
+		const commaIndex = target.indexOf(',');
+		if (commaIndex < 0) {
+			return [target.trim(), ''];
+		}
+		return [target.slice(0, commaIndex).trim(), target.slice(commaIndex + 1).trim()];
 	}
 	splitCommand(message) {
 		this.cmd = '';
@@ -58,7 +68,7 @@ class Parser {
 				target = '';
 			}
 		}
-		let curCommands = Chat.psCommands;
+		let curCommands = this.bot.commands;
 		let commandHandler;
 		let fullCmd = cmd;
 
@@ -153,7 +163,7 @@ class Parser {
 		this.run(commandHandler);
 	}
 	run(commandHandler) {
-        if (typeof commandHandler === 'string') commandHandler = Chat.psCommands[commandHandler];
+        if (typeof commandHandler === 'string') commandHandler = this.bot.commands[commandHandler];
 		let result;
 		try {
 			result = commandHandler.call(this, this.target, this.room, this.user, this.message);
