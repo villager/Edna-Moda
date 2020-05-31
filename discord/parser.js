@@ -7,7 +7,7 @@ class Parser {
 		this.target = '';
 	}
 	splitToken(message) {
-		message = splint(message, ' ', 3);
+		message = splint(message, ' ');
 		return message;
 	}
 	splitCommand(message) {
@@ -31,11 +31,13 @@ class Parser {
 			let splitWords = this.splitToken(message);
 			if(cmdToken === splitWords[1]) return;
 			if(splitWords.length > 2) {
-				let tar = splitWords.pop();
 				cmd = splitWords[1];
-				target = tar;
+				splitWords.splice(splitWords.indexOf(cmdToken), 1);
+				splitWords.splice(splitWords.indexOf(cmd), 1);
+				target = splitWords.join(' ');
 			}  else {
-				cmd = splitWords[1];
+				message = message.split(' ');
+				cmd = message[1];
 				target = '';
 			}
 		} else {
