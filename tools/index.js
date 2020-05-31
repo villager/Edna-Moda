@@ -20,23 +20,23 @@ Tools.toUserName = function(name) {
 	return ('' + name).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
 
-Tools.splint = function (target, separator, length) {
+Tools.splint = function(target, separator, length) {
 	if (!separator) separator = ',';
 
 	let cmdArr = [];
+	let positions = [];
 	if (length > 0) {
-		let sepIndex = -1;
-		for (let count = 0; ; count++) { // jscs:ignore disallowSpaceBeforeSemicolon
-			sepIndex = target.indexOf(separator);
-			if (count + 1 === length) {
-				cmdArr.push(target);
+		for (let i = 0; i < target.length; i++) {
+			if(separator === target[i]) positions.push(i);
+		}
+		for (let i = 0; i < positions.length; i++) {
+        	if(cmdArr.length + 1 === length) {
+				cmdArr.push(target.slice(positions[i - 1], target.length));
 				break;
-			} else if (sepIndex === -1) {
-				cmdArr.push(target);
-				break;
+           	} else if(i === 0) {
+				cmdArr.push(target.slice(0, positions[i]));
 			} else {
-				cmdArr.push(target.to(sepIndex));
-				target = target.from(sepIndex + 1);
+				cmdArr.push(target.slice(positions[i - 1], positions[i]));
 			}
 		}
 	} else if (length < 0) {
@@ -57,7 +57,7 @@ Tools.splint = function (target, separator, length) {
 	} else {
 		cmdArr = target.split(separator);
 	}
-	return cmdArr.map(cmdr => cmdr.trim());
+	return cmdArr.map(cmd => cmd.trim());
 }
 
 Tools.FS = require('../lib/fs');

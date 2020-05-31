@@ -7,7 +7,7 @@ class Parser {
 		this.target = '';
 	}
 	splitToken(message) {
-		message = splint(message, ' ');
+		message = splint(message, ' ', 3);
 		return message;
 	}
 	splitCommand(message) {

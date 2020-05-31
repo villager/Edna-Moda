@@ -14,7 +14,7 @@ class Parser {
 		this.serverid = bot.id;
 	}
 	splitToken(message) {
-		message = splint(message, ' ');
+		message = splint(message, ' ', 3);
 		return message;
 	}
 	splitCommand(message) {
