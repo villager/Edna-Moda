@@ -2,6 +2,11 @@
 
 const Lang = Plugins.Language.load();
 
+const LANG_LIST = new Set(['en', 'es']);
+const SPANISH_ALIASES = new Set(['es', 'spanish', 'español', 'espaol', 'espanol']);
+const ENGLISH_ALIASES = new Set(['en', 'ing', 'ingles', 'us', 'uk', 'english']);
+const { MessageEmbed } = require('discord.js');
+
 exports.key = ['global', 'showdown', 'discord'];
 
 exports.globalCommands = {
@@ -104,23 +109,48 @@ exports.psCommands = {
         let version = Chat.packageData.url;
         let author = Chat.packageData.author && Chat.packageData.author.name;
         this.sendReply(Lang.replace(this.lang, 'about', this.bot.name,author, version));
-    },
+	},
+	language(target, room) {
+        if(!this.can('invite', true)) return false;
+        if(!target) return this.sendReply(Lang.getSub(this.lang, 'language', 'target'));
+        if(!LANG_LIST.has(target) && !SPANISH_ALIASES.has(target) && !ENGLISH_ALIASES.has(target)) {
+            return this.sendReply(Lang.getSub(this.lang, 'language', 'unavileable'));
+        }
+        if(SPANISH_ALIASES.has(target)) {
+            if(room.language === 'es') return this.sendReply(Lang.getSub(this.lang, 'language', 'alr_es'));
+            this.sendReply(Lang.getSub(this.lang, 'language', 'now_es'));
+            room.language = 'es';
+        }
+        if(ENGLISH_ALIASES.has(target)) {
+            if(room.language === 'en') return this.sendReply(Lang.getSub(this.lang, 'language', 'alr_en'));
+            this.sendReply(Lang.getSub(this.lang, 'language', 'now_en'));
+            room.language = 'en';            
+        }
+    }
 }
 exports.discordCommands = {
 	errorlog() {
 		if(!this.can('hotpatch', true)) return false;
-		let log = Tools.FS('../logs/errors.log').readSync().toString();
+		let log = Tools.FS('./logs/errors.log').readSync().toString();
 		Tools.Hastebin.upload(log, (r, link) =>{
 			let fullLink = 'https://' + link;
-			if(r) this.linkifyReply('Errores', 'Log de errores global del Bot', fullLink);
-			else this.sendReply('Lo sentimos, no fue posible encontrar los logs');
+			if(r) {
+				let data = new MessageEmbed({
+					title: 'Errores',
+					description: 'Log de errores del Bot',
+					url: fullLink
+				});
+				this.sendReply(data);
+			} else this.sendReply('Lo sentimos, no fue posible encontrar los logs');
 		});
 	},
     about() {
-        let packageData = Chat.packageData;
-        this.linkifyReply('Acerca de mi...',
-        `Soy ${Config.name} un bot multi-plataforma creado 
-        por ${packageData.author && packageData.author.name} para el servidor Space Showdown
-        `, packageData.url);
+		let packageData = Chat.packageData;
+		let data = new MessageEmbed({
+			title: 'Acerca de mi...',
+			description: `Soy ${Config.name} un bot multi-plataforma creado por ${packageData.author && packageData.author.name} para el servidor Space Showdown`,
+			url: packageData.url
+		});
+		this.sendReply(data);
     },    
 }

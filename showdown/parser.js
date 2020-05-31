@@ -20,7 +20,6 @@ class Parser {
         if (!message || !message.trim().length) return;
         
 		let cmdToken = message.charAt(0);
-		console.log(Config.triggers.indexOf(cmdToken) );
         if (Config.triggers.indexOf(cmdToken) === -1) return; 
 		if (cmdToken === message.charAt(1)) return;
 		let cmd = '', target = '';

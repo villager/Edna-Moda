@@ -49,3 +49,13 @@ Config.servers = {
         language: "spanish",
     }
 };
+
+/**
+ * 
+ * Discord Config
+ * 
+ */
+
+Config.token = '';
+
+Config.name = '';

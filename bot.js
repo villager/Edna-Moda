@@ -1,6 +1,7 @@
 
 
 const PSBot = require('./showdown');
+const DiscordBot = require('./discord');
 
 global.Config = require('./config/config');
 
@@ -25,6 +26,9 @@ global.Discord = null
 
 class GBot {
     constructor() {
+        if(Config.token && Config.name) {
+            this.discord = Discord = new DiscordBot();
+        }
         this.servers = Object.create(null);
         for (let i in Config.servers) {
             let Server = Config.servers[i];
@@ -52,6 +56,7 @@ class GBot {
             Server.connect();
             Chat.loadPlugins();
         }
+        if(this.discord) this.discord.connect();
     }
 }
 const GlobalBot = global.GlobalBot = new GBot ();
