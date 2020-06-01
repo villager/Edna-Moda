@@ -1,0 +1,36 @@
+{
+    "english": {
+        "data": {
+            "target": "You need to set a target",
+            "atk": "Attack",
+            "def": "Deffense",
+            "spe": "Speed",
+            "spa": "Special Attack",
+            "spd": "Special Deffense",
+            "hp": "Health"
+        },
+        "types": "Types",
+        "hab": "Abilities",
+        "none": "None",
+        "group": "Group",
+        "evolution": "Evolution",
+        "404": "We couldn't found that pokemon"
+    },
+    "spanish": {
+        "data": {
+            "target": "Necesitas especificar un Pokemon",
+            "atk": "Ataque",
+            "def": "Defensa",
+            "spe": "Velocidad",
+            "spa": "Ataque Especial",
+            "spd": "Defensa Especial",
+            "hp": "Vida"
+        },
+        "types": "Tipos",
+        "hab": "Habilidades",
+        "none": "Ninguna",
+        "group": "Grupo",
+        "evolution": "Evolucion",
+        "404": "No pudimos encontrar el pokemon"
+    }
+}

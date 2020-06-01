@@ -10,7 +10,7 @@ class DiscordClient extends BaseClient {
         this.id = 'discord';
         this.lastMessage = '';
         this.commands = Object.create(null);
-        this.language = 'spanish';
+        this.language = 'english';
         this.name = Config.name;
         this.initPlugins();
     }

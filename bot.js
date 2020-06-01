@@ -78,6 +78,3 @@ Bot.bots = bots;
 Bot.forEach = function(callback, thisArg) {
     Object.values(bots).forEach(callback, thisArg);
 };
-setTimeout(() => {
-    console.log(Object.assign(Discord.commands));
-}, 1000 * 5)
