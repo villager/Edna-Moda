@@ -1,5 +1,6 @@
+/plugins/plugins/**/data/*
+!plugins/plugins/**/data/*-example*
 config/*
-!config/config-example.js
 logs/*
 !logs/README.md
 /node_modules
