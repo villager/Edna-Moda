@@ -2,6 +2,8 @@
 
 const path = require('path');
 let dyns = Object.create(null);
+const { MessageEmbed } = require('discord.js');
+
 const PHRASES_DIR = path.resolve(__dirname, 'data', 'dyn.json');
 const Lang = Plugins.Language.load(path.resolve(__dirname, 'dyn-language.json'));
 let saveDyns = () => Tools.FS(PHRASES_DIR).writeUpdate(() => JSON.stringify(dyns));
@@ -36,7 +38,6 @@ exports.loadData = function() {
 exports.init = function(server) {
     Plugins.eventEmitter.on('onDynamic', initDyns);
 };
-
 exports.globalCommands = {
     dyn(target) {
         if(!dyns[this.id]) return this.sendReply(Lang.get(this.lang, 'non_server_exist'));
@@ -56,11 +57,53 @@ exports.globalCommands = {
             aliases: [],
         }
         saveDyns();
+        this.bot.commands[target[0]] = function() {
+            this.sendReply(target[1]);
+        }
         this.sendReply(`Dynamic command saved as ${target[0]}`);
     },
+    deletedyn(target) {
+        if(!this.can('mute', true)) return false;
+        if(!dyns[this.id]) return false;
+        if(!dyns[this.id][target]) return this.sendReply('El comando no existe');
+        delete dyns[this.id][target];
+        delete this.bot.commands[target]; // Delete handler
+        saveDyns();
+        this.sendReply(`You've delete dynamic command "${target}"`);
+    }
 };
 exports.discordCommands = {
+    dynlist: 'listdyn',
+    listdyn() {
+        if(!dyns[this.id]) return this.sendReply(Lang.getSub(this.lang, 'dyn', 'non_server_exist'));       
+        let data = '';
+        data += Lang.get(this.lang, 'header') + '\n';
+        for (let i in dyns[this.id]) {
+            let dyn = dyns[this.id][i];
+            data += `${i} -> ${dyn.action} `;
+            if(dyn.aliases.length > 0) {
+                data += '(';
+                for (const alias of dyn.aliases) {
+                    data += alias + ', ';
+                }
+                data += ')';
+            }
+            data += '\n';
+        }
+        Tools.Hastebin.upload(data, (r, link) => {
+            if(r) {
+                let fullLink = 'https://' + link;
+                let embed = new MessageEmbed({
+                    title: Lang.get(this.lang, 'header'),
+                    url: fullLink
+                });
+                this.sendReply(embed);
+            } else {
+                this.sendReply(`${Lang.get(this.lang, 'list_error')}`);
+            }
+        });
 
+    }
 };
 exports.psCommands = {
     dynlist: 'listdyn',
@@ -80,7 +123,6 @@ exports.psCommands = {
             }
             data += '\n';
         }
-        console.log(data);
         Tools.Hastebin.upload(data, (r, link) => {
             if(r) {
                 this.sendReply(`${Lang.get(this.lang, 'header')}: ${link}`);
