@@ -1,7 +1,5 @@
 
 
-const PSBot = require('./showdown');
-const DiscordBot = require('./discord');
 
 global.Config = require('./config/config');
 
@@ -25,6 +23,9 @@ let listeners = (Object.keys(Config.servers).length + 1) * Object.keys(Plugins.p
 Plugins.eventEmitter.setMaxListeners(listeners);
 global.Discord = null
 
+const PSBot = require('./showdown');
+const DiscordBot = require('./discord');
+
 class GBot {
     constructor() {
         if(Config.token && Config.name) {
@@ -37,24 +38,22 @@ class GBot {
 
         }
     }
-    checkConnectivity() {
-        for (let i in Config.servers) {
-            let Server = Config.servers[i];
-            console.log('Config '+ this.servers[i]);
-            if(!this.servers[i]) {
-                console.log('Reconectando a ' + i);
-                this.servers[i] = bots[i] = new PSBot(Server);
-                this.servers[i].connect();
-                Server.connection.on('message', () => {
-                    Chat.loadPlugins();
-                });
-            }
-        }
-    }
     connect() {
         for (let i in this.servers) {
             let Server = this.servers[i];
             Server.connect();
+            /* Bot Status events */
+            Server.on('connecting',  () => {
+			    console.log('Connecting to server: ' + Server.id + ":" + Server.port);
+		    });
+		    Server.on('connect', () => {
+			    console.log('Bot connected to server: ' + Server.id + ":" + Server.port);
+	    	});
+		    Server.on('disconnect', err => {
+		    	console.log('Bot Disconnected' + (err ? (" | " + err.code + ": " + err.message) : ''));
+                if (Server.manager.closed || Server.manager.connecting || Server.manager.status.connected) return;
+                Server.manager.onBegin();
+            });
             Chat.loadPlugins();
         }
         if(this.discord) this.discord.connect();

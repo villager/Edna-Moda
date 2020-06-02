@@ -1,0 +1,6 @@
+{
+    "name": "Timers",
+    "version": "1.0.0",
+    "main": "timers.js",
+    "private": true
+}

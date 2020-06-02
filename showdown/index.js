@@ -6,53 +6,48 @@ const DEFAULT_ROOM = 'lobby';
 const Parser = require('./parser');
 const Room = require('./rooms');
 const SockJS = require('sockjs-client');
-
+const Manager = require('./managers');
 let roomList = Object.create(null);
 
 class PSBot extends EventEmitter {
     constructor(opts) {
-        super();
+		super();
+		// Config Provided
         this.id = opts.id;
         this.host = opts.host;
-        this.connected = false;
         this.port = opts.port;
-		this.rooms =  Object.create(null);
 		this.name = opts.name;
 		this.pass = opts.password;
-		this.named = false;
-		this.baseRooms = opts.rooms;
+		this.baseRooms = opts.rooms || 'lobby';
 		this.initCmds = opts.initCmds;
+		this.language = opts.language || 'english';
+		// Objects
+		this.rooms =  Object.create(null);
 		this.formats = Object.create(null);
 		this.commands = Object.create(null);
-        this.lastMessage = undefined;
+		
         this.disconnecting = false;
+		this.named = false;
         this.joinedRooms = false;
         this.roomcount = 0;
         this.challengekeyid = '';
 		this.challenge = '';
-		this.autoreconnect = true;
-		this.users = new Map();
 		this.group = '';
-		this.language = opts.language;
+
+		this.users = new Map();
 		this.parser = new Parser(this);
+		this.manager = new Manager.Connection(this);
+		this.roomManager = new Manager.Room(this);
+
 		this.sending = {};
 		this.nextSend = 0;
 		this.maxLinesSend = 3;
-        this.socket = null;    
-
+		this.socket = null;   		
     }
     get botNick() {
         return this.bot.name;
 	}
 	reset() {
-		if (this.connectionRetryTimer) {
-			clearTimeout(this.connectionRetryTimer);
-			this.connectionRetryTimer = null;
-		}
-		if (this.loginRetryTimer) {
-			clearTimeout(this.loginRetryTimer);
-			this.loginRetryTimer = null;
-		}
 		for (let k in this.sending) {
 			this.sending[k].kill();
 			delete this.sending[k];
@@ -61,46 +56,46 @@ class PSBot extends EventEmitter {
         for (let i in this.rooms) {
             delete this.rooms[i];
         }
-		this.conntime = 0;
+		this.manager.conntime = 0;
 	}
     connect() {
-		if (this.connected || this.socket) return;
-		this.closed = false;
+		if (this.manager.status.connected || this.socket) return;
+		this.manager.closed = false;
 		this.reset();
         this.socket = new SockJS(`http://${this.host}:${this.port}/showdown/`);
-		this.socket.onerror = function () {
-			this.connecting = false;
+		this.socket.onerror = () => {
+			this.manager.connecting = false;
 			this.reset();
 			if (this.socket) {
 				this.socket.close();
 				this.socket = null;
 			}
 			this.emit('disconnect');
-		}.bind(this);
-		this.socket.onopen = function () {
-			this.connecting = false;
+		};
+		this.socket.onopen = () => {
+			this.manager.connecting = false;
 			//this.status.onConnection();
-			this.conntime = Date.now();
-			console.log(`Conectado a ${this.id}`);
+			this.manager.conntime = Date.now();
 			this.initPlugins();
+			this.manager.attemps = 0;
 			this.emit('connect', this.socket);
-		}.bind(this);
-		this.socket.onclose = function (e) {
-			if (!this.closed) this.socket = null;
-			this.connecting = false;
+		};
+		this.socket.onclose = (e)=> {
+			if (!this.manager.closed) this.socket = null;
+			this.manager.connecting = false;
 			this.reset();
 			this.emit('disconnect', {code: e.code, message: e.reason});
-		}.bind(this);
-		this.socket.onmessage = function (e) {
+		};
+		this.socket.onmessage = (e) => {
 			let data = e.data;
 			if (typeof data !== "string") {
 				data = JSON.stringify(data);
 			}
-			this.lastMessage = Date.now();
 			this.emit('message', data);
 			this.receive(data);
-		}.bind(this);
-		this.connecting = true;
+			this.manager.activity.date = Date.now();
+		};
+		this.manager.connecting = true;
 		this.emit('connecting');
 
 	}
@@ -118,7 +113,6 @@ class PSBot extends EventEmitter {
 		this.loadCommands();		
 	}
 	receive(msg) {
-        this.lastMessage = Date.now();
         this.emit('message', msg);
 		this.receiveMsg(msg);
 	}
@@ -177,10 +171,7 @@ class PSBot extends EventEmitter {
 			let cmds = Plugins.initCmds();
 			for (const cmd of cmds) this.send(cmd);
 			if (!this.joinedRooms && splittedLine[2] === '1') {
-				if (Array.isArray(this.baseRooms)) {
-                    for (const room of this.baseRooms) this.joinRoom(room);
-					this.joinedRooms = true;
-				}
+				this.roomManager.onBegin();
 			}
 			break;
 		case 'pm':
@@ -332,7 +323,7 @@ class PSBot extends EventEmitter {
     sendBase(data) {
 		if (!this.socket) return null;
 		let id = this.getSendId();
-		let manager = new SendManager(data, 3,
+		let manager = new Manager.Send(data, 3,
 			function (msg) {
 				this.socket.send(msg);
 				this.emit('send', msg);
@@ -386,12 +377,14 @@ class PSBot extends EventEmitter {
 				if (json.actionsuccess) {
 					self.named = true;
 					self.send('/trn ' + name + ',0,' + json['assertion']);
+					self.roomManager.onBegin();
 				} else {
 					console.log('Could not log in: ' + JSON.stringify(json), self.id);
 				}
 			} catch (e) {
 				self.named = true;
 				self.send('/trn ' + name + ',0,' + body);
+				self.roomManager.onBegin();
 			}
 		}
     }
@@ -407,84 +400,6 @@ class PSBot extends EventEmitter {
                 this.joinRoom(room);
             }
         }
-	}
-}
-class SendManager {
-	/**
-	 * @param {String|Array<String>} data
-	 * @param {Number} msgMaxLines
-	 * @param {function(String)} sendFunc
-	 * @param {function} destroyHandler
-	 */
-	constructor(data, msgMaxLines, sendFunc, destroyHandler) {
-		this.data = data;
-		this.msgMaxLines = msgMaxLines;
-		this.sendFunc = sendFunc;
-		this.status = 'sending';
-		this.callback = null;
-		this.destroyHandler = destroyHandler;
-		this.err = null;
-		this.interval = null;
-	}
-
-	start() {
-		let data = this.data;
-		if (!(data instanceof Array)) {
-			data = [data.toString()];
-		} else {
-			data = data.slice();
-		}
-		let nextToSend = function () {
-			if (!data.length) {
-				clearInterval(this.interval);
-				this.interval = null;
-				this.finalize();
-				return;
-			}
-			let toSend = [];
-			let firstMsg = data.shift();
-			toSend.push(firstMsg);
-			let roomToSend = "";
-			if (firstMsg.indexOf('|') >= 0) {
-				roomToSend = firstMsg.split('|')[0];
-			}
-			while (data.length > 0 && toSend.length < this.msgMaxLines) {
-				let subMsg = data[0];
-				if (subMsg.split('|')[0] !== roomToSend) {
-					break;
-				} else {
-					toSend.push(subMsg.split('|').slice(1).join('|'));
-					data.shift();
-				}
-			}
-			this.sendFunc(toSend.join('\n'));
-		};
-		this.interval = setInterval(nextToSend.bind(this), 2000);
-		nextToSend.call(this);
-	}
-
-	finalize() {
-		this.status = 'finalized';
-		if (typeof this.callback === "function") this.callback(this.err);
-		if (typeof this.destroyHandler === "function") this.destroyHandler(this);
-	}
-
-	/**
-	 * @param {function} callback
-	 */
-	then(callback) {
-		if (this.status !== 'sending') {
-			return callback(this.err);
-		} else {
-			this.callback = callback;
-		}
-	}
-
-	kill() {
-		if (this.interval) clearInterval(this.interval);
-		this.interval = null;
-		this.err = new Error("Send Manager was killed");
-		this.finalize();
 	}
 }
 

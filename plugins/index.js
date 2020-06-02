@@ -120,5 +120,6 @@ Plugins.initData = function() {
 const events = require('./utils/events');
 
 Plugins.Language = require('./utils/languages');
+Plugins.Timers = require('./utils/timers');
 
 Plugins.eventEmitter = new events.EventEmitter();
