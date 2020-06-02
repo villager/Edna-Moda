@@ -1,0 +1,6 @@
+{
+    "name": "Global Utils",
+    "version": "1.0.0",
+    "main": "global.js",
+    "private": true
+}

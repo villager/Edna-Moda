@@ -4,20 +4,28 @@
 global.Config = require('./config/config');
 
 if(Config.servers['id1']) throw Error('Edit your config!');
+global.Plugins = require('./plugins');
 
 global.Monitor = require('./lib/monitor');
-
-global.Tools = require('./tools');
-
-global.toId = Tools.toId;
-global.splint = Tools.splint;
-global.toUserName = Tools.toUserName;
 
 global.Chat = require('./chat');
 
 let bots = Object.create(null);
+function getBot(bot) {
+    if(!bots[bot]) return false;
+    return bots[bot];
+}
+global.Bot = getBot;
 
-global.Plugins = require('./plugins');
+Bot.bots = bots;
+
+Bot.forEach = function(callback, thisArg) {
+    Object.values(bots).forEach(callback, thisArg);
+};
+
+global.toId = Plugins.Utils.toId;
+global.splint = Plugins.Utils.splint;
+global.toUserName = Plugins.Utils.toUserName;
 Plugins.init();
 let listeners = (Object.keys(Config.servers).length + 1) * Object.keys(Plugins.plugins).length;
 Plugins.eventEmitter.setMaxListeners(listeners);
@@ -62,18 +70,3 @@ class GBot {
 const GlobalBot = global.GlobalBot = new GBot ();
 
 GlobalBot.connect();
-/**
- * Verificar el Status del Bot cada 5 minutos
- */
-
-function getBot(bot) {
-    if(!bots[bot]) return false;
-    return bots[bot];
-}
-global.Bot = getBot;
-
-Bot.bots = bots;
-
-Bot.forEach = function(callback, thisArg) {
-    Object.values(bots).forEach(callback, thisArg);
-};

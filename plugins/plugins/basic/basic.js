@@ -66,10 +66,20 @@ exports.globalCommands = {
     sayhelp: true,
 	eval(target) {
 		if(!this.can('hotpatch', true)) return false;
-		if(this.bot.id !== 'discord') {
-			this.sendReply(`!code ${eval(target)}`);
-		} else {
-			this.sendReply(eval(target));
+		let result = eval(target);
+		try {
+			if(this.bot.id !== 'discord') {
+				this.sendReply(`!code ${result}`);
+			} else {
+				this.sendReply(result);
+			}
+		} catch(e) {
+			const message = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '').replace(/\n/g, '\n||');
+			if(this.bot.id !== 'discord') {
+				this.sendReply(`!code ${message}`);
+			} else {
+				this.sendReply(message);
+			}
 		}
 	},
 	uptime() {
@@ -81,7 +91,7 @@ exports.globalCommands = {
 		const uptimeHours = Math.floor(uptime / (60 * 60)) - uptimeDays * 24;
 		if (uptimeHours) uptimeText += ", " + uptimeHours + " " + (uptimeHours === 1 ? "hour" : "hours");
 		} else {
-		uptimeText = Tools.toDurationString(uptime * 1000);
+		uptimeText = Plugins.Utils.toDurationString(uptime * 1000);
 		}
 		this.sendReply("Uptime: **" + uptimeText + "**");
 	},
@@ -98,8 +108,8 @@ exports.globalCommands = {
 exports.psCommands = {
     errorlog(target, room, user) {
         if(!this.can('hotpatch', true)) return false;
-        let log = Tools.FS('../logs/errors.log').readSync().toString();
-        Tools.Hastebin.upload(log, (r, link) => {
+        let log = Plugins.FS('../logs/errors.log').readSync().toString();
+        Plugins.Hastebin.upload(log, (r, link) => {
             let fullLink = 'https://' + link;
             if(r) this.sendReply(Lang.replaceSub(this.lang, 'errorlog', 'link',fullLink));
             else this.sendReply(Lang.getSub(this.lang, 'errorlog', 'error'));
@@ -131,8 +141,8 @@ exports.psCommands = {
 exports.discordCommands = {
 	errorlog() {
 		if(!this.can('hotpatch', true)) return false;
-		let log = Tools.FS('./logs/errors.log').readSync().toString();
-		Tools.Hastebin.upload(log, (r, link) =>{
+		let log = Plugins.FS('./logs/errors.log').readSync().toString();
+		Plugins.Hastebin.upload(log, (r, link) =>{
 			let fullLink = 'https://' + link;
 			if(r) {
 				let data = new MessageEmbed({

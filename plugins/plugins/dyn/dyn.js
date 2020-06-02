@@ -6,7 +6,7 @@ const { MessageEmbed } = require('discord.js');
 
 const PHRASES_DIR = path.resolve(__dirname, 'data', 'dyn.json');
 const Lang = Plugins.Language.load(path.resolve(__dirname, 'dyn-language.json'));
-let saveDyns = () => Tools.FS(PHRASES_DIR).writeUpdate(() => JSON.stringify(dyns));
+let saveDyns = () => Plugins.FS(PHRASES_DIR).writeUpdate(() => JSON.stringify(dyns));
 
 exports.key = ['global', 'discord', 'showdown'];
 
@@ -75,7 +75,7 @@ exports.globalCommands = {
 exports.discordCommands = {
     dynlist: 'listdyn',
     listdyn() {
-        if(!dyns[this.id]) return this.sendReply(Lang.getSub(this.lang, 'dyn', 'non_server_exist'));       
+        if(!dyns[this.id]) return this.sendReply(Lang.getSub(this.lang,'non_server_exist'));       
         let data = '';
         data += Lang.get(this.lang, 'header') + '\n';
         for (let i in dyns[this.id]) {
@@ -90,7 +90,7 @@ exports.discordCommands = {
             }
             data += '\n';
         }
-        Tools.Hastebin.upload(data, (r, link) => {
+        Plugins.Hastebin.upload(data, (r, link) => {
             if(r) {
                 let fullLink = 'https://' + link;
                 let embed = new MessageEmbed({
@@ -108,7 +108,7 @@ exports.discordCommands = {
 exports.psCommands = {
     dynlist: 'listdyn',
     listdyn() {
-        if(!dyns[this.id]) return this.sendReply(Lang.getSub(this.lang, 'dyn', 'non_server_exist'));       
+        if(!dyns[this.id]) return this.sendReply(Lang.getSub(this.lang, 'non_server_exist'));       
         let data = '';
         data += Lang.get(this.lang, 'header') + '\n';
         for (let i in dyns[this.id]) {
@@ -123,7 +123,7 @@ exports.psCommands = {
             }
             data += '\n';
         }
-        Tools.Hastebin.upload(data, (r, link) => {
+        Plugins.Hastebin.upload(data, (r, link) => {
             if(r) {
                 this.sendReply(`${Lang.get(this.lang, 'header')}: ${link}`);
             } else {

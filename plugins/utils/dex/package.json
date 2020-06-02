@@ -1,0 +1,6 @@
+{
+    "name": "Dex",
+    "version": "1.0.0",
+    "main": "dex.js",
+    "private": true
+}

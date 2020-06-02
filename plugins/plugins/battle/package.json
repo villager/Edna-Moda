@@ -1,0 +1,11 @@
+{
+    "name": "Pokemon Showdown Battles",
+    "version": "1.0.0",
+    "contributor": {
+        "name": "Aldair Beltran",
+        "email": "aldairbeltran23@hotmail.com",
+        "url": "https://github.com/villager"
+    },
+    "main": "index.js",
+    "private": true
+}

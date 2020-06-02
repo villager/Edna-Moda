@@ -1,7 +1,6 @@
 "use strict";
 
 const path = require('path');
-const psData = require('ps-data');
 const Api = require('./lib/api');
 const Dex = require('./lib/dex');
 
@@ -15,9 +14,9 @@ let items = exports.items = Object.create(null);
 
 let moves = exports.moves = Object.create(null);
 
-const saveAbilities = exports.saveAbilities = () => Tools.FS(ABILITIES_DIR).writeUpdate(() => JSON.stringify(abilities));
-const saveItems = exports.saveItems = () => Tools.FS(ITEMS_DIR).writeUpdate(() => JSON.stringify(items));
-const saveMoves = exports.saveMoves = () => Tools.FS(MOVES_DIR).writeUpdate(() => JSON.stringify(moves));
+const saveAbilities = exports.saveAbilities = () => Plugins.FS(ABILITIES_DIR).writeUpdate(() => JSON.stringify(abilities));
+const saveItems = exports.saveItems = () => Plugins.FS(ITEMS_DIR).writeUpdate(() => JSON.stringify(items));
+const saveMoves = exports.saveMoves = () => Plugins.FS(MOVES_DIR).writeUpdate(() => JSON.stringify(moves));
 
 exports.loadData = function() {
     let fileData = [
@@ -37,8 +36,12 @@ exports.loadData = function() {
 }
 
 function localAbilitie(abilitie) {
-    let psAbilitie = psData.getAbilities(8)[abilitie];
+    let psAbilitie = Plugins.Dex.getAbility(abilitie);
     if(abilities[abilitie]) return Promise.resolve(abilities[abilitie]);
+    let spanish = Dex.searchSpanish(abilitie);
+    if(spanish && spanish.type === 'Abilitie') {
+        return Promise.resolve(abilities[spanish.iteration]);
+    }
     return new Promise((resolve, reject) => {
         Api.searchAbilitie(psAbilitie.num).then(data => {
             abilities[abilitie] = data;
@@ -48,8 +51,12 @@ function localAbilitie(abilitie) {
     })
 }
 function localItem(item) {
-    let psItem = psData.getItems(8)[item];
+    let psItem = Plugins.Dex.getItems(item);
     if(items[item]) return Promise.resolve(items[item]);
+    let spanish = Dex.searchSpanish(item);
+    if(spanish && spanish.type === 'Item') {
+        return Promise.resolve(item[spanish.iteration]);
+    }
     return new Promise((resolve, reject) => {
         Api.searchItem(psItem.spritenum).then(data => {
             items[item] = data;
@@ -59,8 +66,12 @@ function localItem(item) {
     })
 }
 function localMove(move) {
-    let psMove = psData.getMoves(8)[move];
+    let psMove = Plugins.Dex.getMoves(move);
     if(moves[move]) return Promise.resolve(moves[move]);
+    let spanish = Dex.searchSpanish(move);
+    if(spanish && spanish.type === 'Move') {
+        return Promise.resolve(moves[spanish.iteration]);
+    }
     return new Promise((resolve, reject) => {
         Api.searchItem(psMove.num).then(data => {
             moves[move] = data;

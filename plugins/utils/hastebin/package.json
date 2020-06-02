@@ -1,0 +1,6 @@
+{
+    "name": "Hastebin",
+    "version": "1.0.0",
+    "main": "hastebin.js",
+    "private": true
+}

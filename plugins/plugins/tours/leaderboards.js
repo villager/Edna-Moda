@@ -234,8 +234,8 @@ function onTournamentEnd(server, room, data) {
 	if (!results) return;
 	Monitor.debug("Updating leaderboard...");
 	writeResults(server, room, results);
-	Tools.FS(TOURS_DATA).writeUpdate(() => JSON.stringify(ladder));
-	Monitor.debug("Leaderboard updated. " + Tools.getDateString());
+	Plugins.FS(TOURS_DATA).writeUpdate(() => JSON.stringify(ladder));
+	Monitor.debug("Leaderboard updated. " + Plugins.getDateString());
 }
 
 let resetCodes =  exports.resetCodes = {};
@@ -245,7 +245,7 @@ function getResetHashCode (server, room) {
 	for (let i in resetCodes) {
 		if (resetCodes[server.id][i] === room) delete resetCodes[server.id][i];
 	}
-	let code = Tools.generateRandomNick(10);
+	let code = Plugins.generateRandomNick(10);
 	resetCodes[server.id][code] = room;
 	return code;
 }
@@ -254,7 +254,7 @@ function execResetHashCode (server, code) {
 		var room = resetCodes[code];
 		if (ladder[server.id][room]) {
 			delete ladder[server.id][room];
-            Tools.FS(TOURS_DATA).writeUpdate(() => JSON.stringify(ladder));
+            Plugins.FS(TOURS_DATA).writeUpdate(() => JSON.stringify(ladder));
 		}
 		delete resetCodes[code];
 		return room;

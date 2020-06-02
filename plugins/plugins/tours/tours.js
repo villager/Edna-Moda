@@ -360,7 +360,7 @@ exports.commands = {
 				var target = toId(args[0] || by);
 				if (target.length > 18) return this.restrictReply(this.trad('invuser'));
 				var rank = Features['tours'].Leaderboards.getPoints(tarRoom, target);
-				var txt = this.trad('rank') + " **" + Tools.toName(rank.name) + "** " + this.trad('in') + " __" + Tools.toName(tryGetRoomName(tarRoom)) + "__ | ";
+				var txt = this.trad('rank') + " **" + Plugins.toName(rank.name) + "** " + this.trad('in') + " __" + Plugins.toName(tryGetRoomName(tarRoom)) + "__ | ";
 				txt += this.trad('points') + ": " + rank.points + " | ";
 				txt += this.trad('w') + ": " + rank.wins + " " + this.trad('times') + ", " + this.trad('f') + ": " + rank.finals + " " + this.trad('times') + ", " + this.trad('sf') + ": " + rank.semis + " " + this.trad('times') + ". ";
 				txt += this.trad('total') + ": " + rank.tours + " " + this.trad('tours') + ", " + rank.battles + " " + this.trad('bwon') + ".";
@@ -375,9 +375,9 @@ exports.commands = {
 				if (!top || !top.length) return this.restrictReply(this.trad('empty') + " " + tarRoom, "rank");
 				var topResults = [];
 				for (var i = 0; i < 5 && i < top.length; i++) {
-					topResults.push("__#" + (i + 1) + "__ **" + Tools.toName(top[i][0]) + "** (" + top[i][6] + ")");
+					topResults.push("__#" + (i + 1) + "__ **" + Plugins.toName(top[i][0]) + "** (" + top[i][6] + ")");
 				}
-				this.restrictReply("**" + Tools.toName(tryGetRoomName(tarRoom)) + "** | " + topResults.join(", "), "rank");
+				this.restrictReply("**" + Plugins.toName(tryGetRoomName(tarRoom)) + "** | " + topResults.join(", "), "rank");
 				break;
 			case "table":
 				if (!this.isRanked('roomowner')) return false;
@@ -389,7 +389,7 @@ exports.commands = {
 				if (!size || size < 0) return this.reply(this.trad('usage') + ": " + this.cmdToken + cmd + " [room], [size]");
 				var table = Features['tours'].Leaderboards.getTable(tarRoom, size);
 				if (!table) return this.reply(this.trad('empty') + " " + tarRoom);
-				Tools.uploadToHastebin(table, function (r, link) {
+				Plugins.uploadToHastebin(table, function (r, link) {
 					if (r) return this.pmReply(this.trad('table') + " ("  + tarRoom + '): ' + link);
 					else this.pmReply(this.trad('err'));
 				}.bind(this));

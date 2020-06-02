@@ -11,7 +11,7 @@ Chat.discordCommands = Object.create(null);
 Chat.packageData = {};
 
 Chat.loadPlugins = function() {  
-    Tools.FS('./package.json').readTextIfExists().then(data => {
+    Plugins.FS('./package.json').readTextIfExists().then(data => {
         if (data) Chat.packageData = JSON.parse(data);
     });
     Plugins.loadPlugins();

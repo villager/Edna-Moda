@@ -40,7 +40,7 @@ const COMMANDS_MAP = new Map([
     ['global', 'globalCommands'],
 ]);
 Plugins.init = function() {
-    let pluginsList = Tools.FS('./plugins/plugins').readdirSync();
+    let pluginsList = Plugins.FS('./plugins/plugins').readdirSync();
     for (const plugin of pluginsList) {
         Plugins.load(plugin);
     }
@@ -93,7 +93,7 @@ Plugins.initData = function() {
             plugin.initData();
         }
         for (const folder of DATA_FOLDERS) {
-            Tools.FS(joinPath('plugins', plugin.id, folder)).readdir().then(files => {
+            Plugins.FS(joinPath('plugins', plugin.id, folder)).readdir().then(files => {
                 let fileDict = Object.create(null);
                 let exampleFiles = [];
                 for (let fileName of files) {
@@ -107,9 +107,9 @@ Plugins.initData = function() {
                 for (let fileData of exampleFiles) {
                     let baseFile = joinPath('plugins', plugin.id, folder, fileData.name + fileData.ext);
                     let originalFile = joinPath('plugins', plugin.id, folder, fileData.name + '-example' + fileData.ext);
-                    Tools.FS(baseFile).isFile().catch(() =>{
+                    Plugins.FS(baseFile).isFile().catch(() =>{
                         console.log(`Creating file ${fileData.name}`);
-                        Tools.FS(baseFile).writeSync(Tools.FS(originalFile).readSync());
+                        Plugins.FS(baseFile).writeSync(Plugins.FS(originalFile).readSync());
     
                     })
                 }
@@ -118,8 +118,10 @@ Plugins.initData = function() {
     });
 }
 const events = require('./utils/events');
-
+Plugins.FS = require('../lib/fs');
 Plugins.Language = require('./utils/languages');
 Plugins.Timers = require('./utils/timers');
-
+Plugins.Hastebin = require('./utils/hastebin');
+Plugins.Utils = require('./utils/global');
+Plugins.Dex = require('./utils/dex');
 Plugins.eventEmitter = new events.EventEmitter();

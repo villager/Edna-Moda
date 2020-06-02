@@ -1,7 +1,27 @@
 "use strict";
 
 const psData = require('ps-data');
-
+const Storage = require('../storage');
+function searchSpanish(lookingfor) {
+    let found = false;
+    lookingfor = toId(lookingfor);
+    let lookingIn = [[Storage.moves, 'Move'], [Storage.abilities, 'Abilitie']]
+    for (const looking of lookingIn) {
+        for (let i in looking[0]) {
+            let data = looking[0][i];
+            if(!data.spanish) continue;
+            if(toId(data.spanish.name) === toId(lookingfor)) {
+                found = {
+                    type: looking[1],
+                    iteration: i,
+                }
+                break;
+            }
+        }
+        if(found) break;
+    }
+    return found;
+}
 function searchTemplate(lookingfor) {
     lookingfor = toId(lookingfor);
     if(psData.getDex(8)[lookingfor]) {
@@ -12,7 +32,9 @@ function searchTemplate(lookingfor) {
         return 'Item';
     } else if(psData.getMoves(8)[lookingfor]) {
         return 'Move';
-    } return false;
+    } else if(searchSpanish(lookingfor)) {
+        return searchSpanish(lookingfor).type;
+    } else  return false;
 }
 
 function getGen(name, num) {
@@ -69,7 +91,7 @@ function getMove(move) {
     move = toId(move);
     return psData.getMoves(8)[move];
 }
-
+exports.searchSpanish = searchSpanish;
 exports.getMove = getMove;
 exports.getGen = getGen;
 exports.search = searchTemplate;

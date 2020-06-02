@@ -136,13 +136,13 @@ exports.psCommands = {
                 Storage.localAbilitie(toId(target).replace(' ', '')).then(abilitie => {
                     let data = `**${abilitie[this.lang].name}:** `;
                     data += abilitie[this.lang].desc.replace('\n', ' ');
-                    this.sendStrict(data);
+                    this.sendReply(data);
                 }).catch(() =>{
-                    this.sendStrict(Lang.get(this.lang, '404'));
+                    this.sendReply(Lang.get(this.lang, '404'));
                 });
             break;
             default: {
-                this.sendStrict(Lang.get(this.lang, '404'));
+                this.sendReply(Lang.get(this.lang, '404'));
             }
         }
     }
@@ -163,6 +163,8 @@ exports.discordCommands = {
                         description: abilitie[this.lang].desc
                     });
                     this.sendReply(embed);
+                }).catch(() => {
+                    this.sendReply(Lang.get(this.lang, '404'));
                 });
             break;
             case 'Move':
@@ -173,6 +175,8 @@ exports.discordCommands = {
                         color: TYPE_TO_COLOR.has(Dex.getMove(target).type) ? MAP_COLOR.get(TYPE_TO_COLOR.get(Dex.getMove(target).type)) : '#CCC'
                     });
                     this.sendReply(embed);
+                }).catch(() => {
+                    this.sendReply(Lang.get(this.lang, '404'));
                 });
             break;
             default: {

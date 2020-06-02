@@ -112,7 +112,7 @@ class Parser {
 
 		return commandHandler;
 	}
-	sendStrict(data) {
+	sendReply(data) {
 		if(this.pmTarget) {
 			return this.bot.send(`/pm ${toId(this.pmTarget)}, ${data}`, toId(this.room));	
 		} else {
@@ -122,13 +122,6 @@ class Parser {
 				return this.bot.send(data, toId(this.room));	
 			}
 		}		
-	}
-	sendReply(data) {
-		if(this.pmTarget) {
-			this.bot.send(`/pm ${toId(this.pmTarget)}, ${data}`, toId(this.room));	
-		} else {
-			this.bot.send(data, toId(this.room));			
-		}
 	}
 	get lang() {
 		let lang = this.room.language ? this.room.language : this.bot.language;

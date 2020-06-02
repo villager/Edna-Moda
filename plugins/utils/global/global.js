@@ -1,6 +1,7 @@
 "use strict";
 
 
+
 const Tools = module.exports = {};
 
 Tools.toId = function(text) {
@@ -60,10 +61,7 @@ Tools.splint = function(target, separator, length) {
 	return cmdArr.map(cmd => cmd.trim());
 }
 
-Tools.FS = require('../lib/fs');
 
-Tools.Hastebin = require('./hastebin')
-;
 Tools.toName = function (text) {
 	if (!text) return '';
 	return text.trim();
