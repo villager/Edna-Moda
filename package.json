@@ -1,5 +1,5 @@
 {
-    "name": "Edna Moda",
+    "name": "edna-moda",
     "version": "3.0.0",
     "main": "node build",
     "scripts": {
