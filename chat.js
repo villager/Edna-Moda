@@ -20,6 +20,7 @@ Chat.loadPlugins = function() {
 
 };
 Chat.hasAuth = function(id, user, perm) {
+    let group;
     let userId = id === 'discord' ? toUserName(user) : toId(user);
     for (const owner of Config.owners) {
         if(owner.id === userId) return true;
@@ -31,8 +32,13 @@ Chat.hasAuth = function(id, user, perm) {
         return true; // I'll do this latter
     } else {
         let rank = Config.permissions[perm];
-        if(rank == user.group) return true; // It's equal 
-        if (Config.rankList.indexOf(user.group) >= Config.rankList.indexOf(rank)) return true;            
+        if(toId(Bot(id).name) === userId) {
+            group = Bot(id).group;
+        }  else {
+            group = user.charAt(0);
+        }
+        if(rank === group) return true; // It's equal 
+        if (Config.rankList.indexOf(group) >= Config.rankList.indexOf(rank)) return true;            
     }
     return false;
 };

@@ -21,7 +21,7 @@ class Activity extends Plugins.Timers {
 }
 class RoomManager extends Plugins.Timers{
 	constructor(server) {
-		super(1000 * 30);
+		super(1000 * 15);
 		this.baseRooms = server.baseRooms;
 		this.server = server;
 	}
