@@ -1,14 +1,22 @@
-Edna Moda
+# Edna Moda
 
-Cross-Server Bot and Cross-Plataform
+[![Build Status](https://travis-ci.org/villager/Edna-Moda.svg?branch=master)](https://travis-ci.org/villager/Edna-Moda)
 
-====================
+Edna is a Cross-Server (Pokemon Showdown) and Cross-Plataform (Showdown and Discord)
 
-Special Thanks to:
-[Showdown](https://github.com/smogon/pokemon-showdown)
 
-[PS-Bot - Panpawn](https://github.com/panpawn/PS-Bot)
+------
 
-[Pokemon-Showdown-Node-Bot - Ecuacion](https://github.com/Ecuacion/Pokemon-Showdown-Node-Bot)
+## Credits
 
-[Muphasa-bot - nicolito128](https://github.com/nicolito128/Muphasa-bot)
+* [Aldair Beltran (Villager)](https://github.com/villager)
+
+Part of this code is imported from other developments, so credits to:
+
+* [panpawn](https://github.com/panpawn)
+
+* [Ecuacion](https://github.com/Ecuacion)
+
+* [nicolito128](https://github.com/nicolito128)
+
+* [Pokemon Showdown](https://github.com/smogon/pokemon-showdown)
