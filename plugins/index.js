@@ -47,7 +47,7 @@ Plugins.init = function() {
     if(Config.isInitializacion) Plugins.initData();
     Plugins.forEach(plugin => {
         if(typeof plugin.loadData === 'function') {
-            plugin.loadData();
+            if(!Config.testMode) plugin.loadData();
         }
     });
 };

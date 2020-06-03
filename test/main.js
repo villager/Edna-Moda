@@ -23,6 +23,7 @@ Config.servers = {
         initCmd: [],
     }
 };
+Config.testMode = true;
 Config.token = 'ABCDEFGHIJKLMNOPQRSTUVWXZAS';
 Config.name = 'Edna Moda';
 
