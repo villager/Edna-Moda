@@ -8,7 +8,7 @@ Config.owners = [
     {
         id: 'owner1',
         aliases: ['owner1', 'discord_nick', 'ps_nick1'],
-    }
+    },
 ];
 
 Config.isInitializacion = true;
@@ -27,7 +27,7 @@ Config.permissions = {
 	'invite': '#',
 	'forcewin': '&',
 	'hotpatch': '~',
-}
+};
 
 Config.servers = {
     "id1": {
@@ -49,13 +49,11 @@ Config.servers = {
         rooms: ['lobby'],
         initCmds: ['/avatar clemont'],
         language: "spanish",
-    }
+    },
 };
 
-/**
- * 
+/** 
  * Discord Config
- * 
  */
 
 Config.token = '';

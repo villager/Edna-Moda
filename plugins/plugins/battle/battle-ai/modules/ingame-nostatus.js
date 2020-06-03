@@ -1,4 +1,5 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true});/**
+"use strict";
+/**
  * Ingame (No Status)
  *
  * Simple algorithm, just choose the move that causes more damage
@@ -14,12 +15,11 @@
  *  - Priority -1000 - Switch / Shift / Pass
  *	- Priority -100000 - Moves 0 damage
  */
-var _calc = require('../calc'); var CalcFile = _calc;
-const Calc = CalcFile;
+const Calc = require('../calc');
 const Pokemon = Calc.Pokemon;
 const Conditions = Calc.Conditions;
 
- function setup(Data) {
+ exports.setup = function (Data) {
 	const BattleModule = {};
 	BattleModule.id = "ingame-nostatus";
 
@@ -261,4 +261,4 @@ const Conditions = Calc.Conditions;
 	};
 
 	return BattleModule;
-} exports.setup = setup;
+};

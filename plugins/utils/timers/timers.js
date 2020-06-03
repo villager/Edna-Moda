@@ -6,7 +6,7 @@ class BotTimer {
         this.time = time;
     }
     clear() {
-        if(!this.timer) return;
+        if (!this.timer) return;
         clearTimeout(this.timer);
         this.timer = null;
     }

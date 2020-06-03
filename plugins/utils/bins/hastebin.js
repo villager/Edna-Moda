@@ -6,7 +6,7 @@ function upload(toUpload, callback) {
 	let reqOpts = {
 		hostname: "hastebin.com",
 		method: "POST",
-		path: '/documents'
+		path: '/documents',
 	};
 	let req = https.request(reqOpts, res => {
 		res.on('data', chunk => {

@@ -17,7 +17,7 @@ exports.StatsId = {
 	spd: 'spd',
 	Spe: 'spe',
 	Spd: 'spe',
-	spe: 'spe'
+	spe: 'spe',
 };
 
 exports.StatsName = {
@@ -26,7 +26,7 @@ exports.StatsName = {
 	def: 'Def',
 	spa: 'SpA',
 	spd: 'SpD',
-	spe: 'Spe'
+	spe: 'Spe',
 };
 
 exports.Type = {

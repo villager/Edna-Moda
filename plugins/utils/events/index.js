@@ -59,7 +59,7 @@ EventEmitter.prototype._maxListeners = undefined;
 // added to it. This is a useful default which helps finding memory leaks.
 EventEmitter.defaultMaxListeners = 10;
 
-EventEmitter.init = function() {
+EventEmitter.init = function () {
   if (!this._events || this._events === Object.getPrototypeOf(this)._events) {
     this._events = {};
     this._eventsCount = 0;
@@ -75,7 +75,7 @@ EventEmitter.prototype.event = '';
 EventEmitter.prototype.parentEvent = '';
 
 EventEmitter.prototype._getEvent = function () {
-  var stackEntry = getStackEntry(this._stack, -1);
+  let stackEntry = getStackEntry(this._stack, -1);
 
   if (stackEntry === null)
     return '';
@@ -84,7 +84,7 @@ EventEmitter.prototype._getEvent = function () {
 };
 
 EventEmitter.prototype._getParentEvent = function () {
-  var stackEntry = getStackEntry(this._stack, -2);
+  let stackEntry = getStackEntry(this._stack, -2);
 
   if (stackEntry === null)
     return '';
@@ -109,18 +109,18 @@ EventEmitter.prototype._pushStack = function (data) {
 // EventEmitter#getData, EventEmitter#flush, and EventEmitter#end
 // have the exact same side effects, but different return values.
 
-EventEmitter.prototype.getData = function() {
+EventEmitter.prototype.getData = function () {
   if (!this._data) // Missing EventEmitter#emit call
     throw new Error("Bad access to EventEmitter data");
 
-  var data = this._data;
+  let data = this._data;
   this._popStack();
   return data;
 };
 
 // This looks streamy... hmmm
 
-EventEmitter.prototype.flush = function() {
+EventEmitter.prototype.flush = function () {
   if (!this._data) // Missing EventEmitter#emit call
     throw new Error("Bad call to EventEmitter#flush");
 
@@ -128,7 +128,7 @@ EventEmitter.prototype.flush = function() {
   return this;
 };
 
-EventEmitter.prototype.end = function(value) {
+EventEmitter.prototype.end = function (value) {
   if (!this._data) // Missing EventEmitter#emit call
     throw new Error("Bad call to EventEmitter#end");
 
@@ -136,7 +136,7 @@ EventEmitter.prototype.end = function(value) {
   return value;
 };
 
-EventEmitter.prototype.data = function(key, value) {
+EventEmitter.prototype.data = function (key, value) {
   if (!this._data) // Not initialized yet
     throw new Error("Bad access to EventEmitter data");
 
@@ -148,7 +148,7 @@ EventEmitter.prototype.data = function(key, value) {
   return this;
 };
 
-EventEmitter.prototype.env = function(key, value) {
+EventEmitter.prototype.env = function (key, value) {
   if (!this._data) // Missing EventEmitter#emit call
     throw new Error("Bad access to EventEmitter environment");
 
@@ -160,16 +160,16 @@ EventEmitter.prototype.env = function(key, value) {
   return this;
 };
 
-EventEmitter.prototype.preventDefault = function() {
+EventEmitter.prototype.preventDefault = function () {
   this.env('defaultPrevented', true);
   return this;
 };
 
-EventEmitter.prototype.isDefaultPrevented = function() {
+EventEmitter.prototype.isDefaultPrevented = function () {
   return !!this.env('defaultPrevented');
 };
 
-EventEmitter.prototype.hadListeners = function() {
+EventEmitter.prototype.hadListeners = function () {
   return !!this.env('hadListeners');
 };
 
@@ -193,7 +193,7 @@ EventEmitter.prototype.getMaxListeners = function getMaxListeners() {
 };
 
 // These standalone emit* functions are used to optimize calling of event
-// handlers for fast cases because emit() itself often has a variable number of
+// handlers for fast cases because emit() itself often has a letiable number of
 // arguments and can be deoptimized because of that. These functions always have
 // the same number of arguments and thus do not get deoptimized, so the code
 // inside them can execute faster.
@@ -201,9 +201,9 @@ function emitNone(handler, isFn, self) {
   if (isFn)
     handler.call(self);
   else {
-    var len = handler.length;
-    var listeners = arrayClone(handler, len);
-    for (var i = 0; i < len; ++i)
+    let len = handler.length;
+    let listeners = arrayClone(handler, len);
+    for (let i = 0; i < len; ++i)
       listeners[i].call(self);
   }
 }
@@ -211,9 +211,9 @@ function emitOne(handler, isFn, self, arg1) {
   if (isFn)
     handler.call(self, arg1);
   else {
-    var len = handler.length;
-    var listeners = arrayClone(handler, len);
-    for (var i = 0; i < len; ++i)
+    let len = handler.length;
+    let listeners = arrayClone(handler, len);
+    for (let i = 0; i < len; ++i)
       listeners[i].call(self, arg1);
   }
 }
@@ -221,9 +221,9 @@ function emitTwo(handler, isFn, self, arg1, arg2) {
   if (isFn)
     handler.call(self, arg1, arg2);
   else {
-    var len = handler.length;
-    var listeners = arrayClone(handler, len);
-    for (var i = 0; i < len; ++i)
+    let len = handler.length;
+    let listeners = arrayClone(handler, len);
+    for (let i = 0; i < len; ++i)
       listeners[i].call(self, arg1, arg2);
   }
 }
@@ -231,9 +231,9 @@ function emitThree(handler, isFn, self, arg1, arg2, arg3) {
   if (isFn)
     handler.call(self, arg1, arg2, arg3);
   else {
-    var len = handler.length;
-    var listeners = arrayClone(handler, len);
-    for (var i = 0; i < len; ++i)
+    let len = handler.length;
+    let listeners = arrayClone(handler, len);
+    for (let i = 0; i < len; ++i)
       listeners[i].call(self, arg1, arg2, arg3);
   }
 }
@@ -242,9 +242,9 @@ function emitMany(handler, isFn, self, args) {
   if (isFn)
     handler.apply(self, args);
   else {
-    var len = handler.length;
-    var listeners = arrayClone(handler, len);
-    for (var i = 0; i < len; ++i)
+    let len = handler.length;
+    let listeners = arrayClone(handler, len);
+    for (let i = 0; i < len; ++i)
       listeners[i].apply(self, args);
   }
 }
@@ -253,8 +253,8 @@ EventEmitter.prototype.emit = function emit(type) {
   if (!type)
     throw new Error("Unspecified event");
 
-  var er, err, handler, len, args, i, events;
-  var doError = (type === 'error');
+  let er, err, handler, len, args, i, events;
+  let doError = (type === 'error');
 
   this._data = new DataEntry(type);
   this._pushStack(this._data);
@@ -263,7 +263,7 @@ EventEmitter.prototype.emit = function emit(type) {
 
   events = this._events;
   if (events) {
-    doError = (doError && events.error == null);
+    doError = (doError && events.error === null);
     this.env('hadListeners', true);
   } else if (!doError)
     return this;
@@ -285,7 +285,6 @@ EventEmitter.prototype.emit = function emit(type) {
         throw err;
       }
     }
-    return this;
   }
 
   handler = events[type];
@@ -293,7 +292,7 @@ EventEmitter.prototype.emit = function emit(type) {
   if (!handler)
     return this;
 
-  var isFn = typeof handler === 'function';
+  let isFn = typeof handler === 'function';
   len = arguments.length;
   switch (len) {
     // fast cases
@@ -321,9 +320,9 @@ EventEmitter.prototype.emit = function emit(type) {
 };
 
 EventEmitter.prototype.addListener = function addListener(type, listener) {
-  var m;
-  var events;
-  var existing;
+  let m;
+  let events;
+  let existing;
 
   if (typeof listener !== 'function')
     throw new TypeError('listener must be a function');
@@ -382,7 +381,7 @@ EventEmitter.prototype.once = function once(type, listener) {
   if (typeof listener !== 'function')
     throw new TypeError('listener must be a function');
 
-  var fired = false;
+  let fired = false;
 
   function g() {
     this.removeListener(type, g);
@@ -402,7 +401,7 @@ EventEmitter.prototype.once = function once(type, listener) {
 // emits a 'removeListener' event iff the listener was removed
 EventEmitter.prototype.removeListener =
     function removeListener(type, listener) {
-      var list, events, position, i;
+      let list, events, position, i;
 
       if (typeof listener !== 'function')
         throw new TypeError('listener must be a function');
@@ -460,7 +459,7 @@ EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
 
 EventEmitter.prototype.removeAllListeners =
     function removeAllListeners(type) {
-      var listeners, events;
+      let listeners, events;
 
       events = this._events;
       if (!events)
@@ -482,8 +481,8 @@ EventEmitter.prototype.removeAllListeners =
 
       // emit removeListener for all listeners on all events
       if (arguments.length === 0) {
-        var keys = Object.keys(events);
-        for (var i = 0, key; i < keys.length; ++i) {
+        let keys = Object.keys(events);
+        for (let i = 0, key; i < keys.length; ++i) {
           key = keys[i];
           if (key === 'removeListener') continue;
           this.removeAllListeners(key);
@@ -509,9 +508,9 @@ EventEmitter.prototype.removeAllListeners =
     };
 
 EventEmitter.prototype.listeners = function listeners(type) {
-  var evlistener;
-  var ret;
-  var events = this._events;
+  let evlistener;
+  let ret;
+  let events = this._events;
 
   if (!events)
     ret = [];
@@ -528,7 +527,7 @@ EventEmitter.prototype.listeners = function listeners(type) {
   return ret;
 };
 
-EventEmitter.listenerCount = function(emitter, type) {
+EventEmitter.listenerCount = function (emitter, type) {
   if (typeof emitter.listenerCount === 'function') {
     return emitter.listenerCount(type);
   } else {
@@ -551,7 +550,7 @@ function listenerCount(type) {
   }
 
   return 0;
-};
+}
 
 // Helper constructors
 function EnvironmentEntry(type) {
@@ -562,26 +561,26 @@ EnvironmentEntry.prototype = Object.create(null, {
     value: EnvironmentEntry,
     enumerable: false,
     writable: true,
-    configurable: true
+    configurable: true,
   },
   hadListeners: {
     value: false,
     enumerable: false,
     writable: true,
-    configurable: true
+    configurable: true,
   },
   defaultPrevented: {
     value: false,
     enumerable: false,
     writable: true,
-    configurable: true
+    configurable: true,
   },
   eventType: {
     value: '',
     enumerable: false,
     writable: true,
-    configurable: true
-  }
+    configurable: true,
+  },
 });
 
 function DataEntry(type) {
@@ -597,37 +596,37 @@ DataEntry.prototype = Object.create(null, {
 		value: DataEntry,
 		enumerable: false,
 		writable: true,
-		configurable: true
-	}
+		configurable: true,
+	},
 });
 
 // About 1.5x faster than the two-arg version of Array#splice().
 function spliceOne(list, index) {
-  for (var i = index, k = i + 1, n = list.length; k < n; i += 1, k += 1)
+  for (let i = index, k = i + 1, n = list.length; k < n; i += 1, k += 1)
     list[i] = list[k];
   list.pop();
 }
 
 function arrayClone(arr, i) {
-  var copy = new Array(i);
+  let copy = new Array(i);
   while (i--)
     copy[i] = arr[i];
   return copy;
 }
 
-function getStackEntry (stack, delta) {
+function getStackEntry(stack, delta) {
   if (stack.length < -delta)
     return null;
 
   return stack[stack.length + delta];
-};
+}
 
-function getStackLeakError (stack) {
+function getStackLeakError(stack) {
   return ['(node) warning: possible EventEmitter memory ' +
   'leak detected. Stack is %d units long: %s. ' +
   'Call EventEmitter#[getData|end|flush] exactly once ' +
   'after each EventEmitter#emit call',
   stack.length, stack.map(function (entry) {
-    return entry ? entry._env.eventType : '#null'
+    return entry ? entry._env.eventType : '#null';
   }).join(", ")];
 }

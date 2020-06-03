@@ -1,9 +1,11 @@
+"use strict";
+
 const BaseClient = require('discord.js').Client;
 const Parser = require('./parser');
 
 class DiscordClient extends BaseClient {
     constructor() {
-        super()
+        super();
         this.activity = `Usame con: ${Config.triggers.join(' o ')}`;
 		this.parser = new Parser(this);
         this.lastUser = '';
@@ -21,8 +23,8 @@ class DiscordClient extends BaseClient {
     }
     initPlugins() {
 		Plugins.forEach(plugin => {
-			if(typeof plugin.init === 'function') {
-					plugin.init(this);
+			if (typeof plugin.init === 'function') {
+				plugin.init(this);
 			}
 		});
 		this.loadCommands();		
@@ -31,19 +33,19 @@ class DiscordClient extends BaseClient {
         this.on('ready', () => {
             this.user.setUsername(Config.name);
             this.user.setActivity(this.activity);
-        })
+        });
     }
     sendMsg(id, message) {
         let sendRoom = null;
         this.guilds.cache.forEach(guild => {
             guild.channels.cache.forEach(channel => {
-                if(channel.id === id) sendRoom = channel;
-            })
+                if (channel.id === id) sendRoom = channel;
+            });
         });
-        if(sendRoom) {
+        if (sendRoom) {
             sendRoom.send(message);
             return true;
-        } else{
+        } else {
             return false;
         }
     }
@@ -51,12 +53,12 @@ class DiscordClient extends BaseClient {
 		let sendTo = null;
         this.guilds.cache.forEach(guild => {
             guild.members.cache.forEach(user => {
-                if(user.id === id) {
+                if (user.id === id) {
                     sendTo = user;
                 }			
             });
-		})
-		if(sendTo) {
+		});
+		if (sendTo) {
 			sendTo.send(message);
 			return true;
 		} else return false;
@@ -75,7 +77,6 @@ class DiscordClient extends BaseClient {
         // Connection to discord
         this.login(Config.token);
         console.log(`${Config.name} conectado correctamente a Discord`);
-
     }
 }
 module.exports = DiscordClient;

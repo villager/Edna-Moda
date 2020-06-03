@@ -13,7 +13,7 @@ class Parser {
 		this.message = '';
 		this.serverid = bot.id;
 	}
-	get id () {
+	get id() {
 		return this.bot.id;
 	}
 	splitToken(message) {
@@ -37,7 +37,7 @@ class Parser {
 		let cmdToken = message.charAt(0);
         if (Config.triggers.indexOf(cmdToken) === -1) {
 			let maybeToken = this.splitToken(message);
-			if(Config.triggers.indexOf(maybeToken[0]) > -1) {
+			if (Config.triggers.indexOf(maybeToken[0]) > -1) {
 				cmdToken = maybeToken[0];
 				isWord = true;
 			} else {
@@ -47,8 +47,8 @@ class Parser {
 		let cmd = '', target = '';
 		if (isWord) {
 			let splitWords = this.splitToken(message);
-			if(cmdToken === splitWords[1]) return;
-			if(splitWords.length > 2) {
+			if (cmdToken === splitWords[1]) return;
+			if (splitWords.length > 2) {
 				cmd = splitWords[1];
 				splitWords.splice(splitWords.indexOf(cmdToken), 1);
 				splitWords.splice(splitWords.indexOf(cmd), 1);
@@ -114,10 +114,10 @@ class Parser {
 		return commandHandler;
 	}
 	sendReply(data) {
-		if(this.pmTarget) {
+		if (this.pmTarget) {
 			return this.bot.send(`/pm ${toId(this.pmTarget)}, ${data}`, toId(this.room));	
 		} else {
-			if(!this.can('games', false)) { // Can't brodcast
+			if (!this.can('games', false)) { // Can't brodcast
 				return this.bot.send(`/pm ${toId(this.user)}, ${data}`, toId(this.room));
 			} {
 				return this.bot.send(data, toId(this.room));	
@@ -129,22 +129,22 @@ class Parser {
 		return lang;
 	}
 	can(permission, broadcast) {
-		if(Chat.hasAuth(this.bot.id, this.user, permission)) return true;
-		if(broadcast) this.sendReply('Acceso Denegado');
+		if (Chat.hasAuth(this.bot.id, this.user, permission)) return true;
+		if (broadcast) this.sendReply('Acceso Denegado');
 		return false;
 	}
     parse(room, user, message, pm) {
 		this.pmTarget = '';
 		this.bot.lastMessage = message;
-		if(toId(this.bot.name) === toId(user)) this.bot.group = user.charAt(0);
+		if (toId(this.bot.name) === toId(user)) this.bot.group = user.charAt(0);
 		this.bot.lastUser = user;
 		let commandHandler = this.splitCommand(message);
 		if (typeof commandHandler === 'function') {
-			if(toId(this.bot.lastUser) === toId(this.bot.name)) return; // Ignorar los  comandos dichos por el mismo bot
+			if (toId(this.bot.lastUser) === toId(this.bot.name)) return; // Ignorar los  comandos dichos por el mismo bot
             this.user = user;
 			this.message = message;
 			this.room = room;
-			if(pm) this.pmTarget = user;
+			if (pm) this.pmTarget = user;
         	this.run(commandHandler);
 		}        
     }
@@ -162,12 +162,12 @@ class Parser {
 		try {
 			result = commandHandler.call(this, this.target, this.room, this.user, this.message);
 		} catch (err) {
-			Monitor.log(err,{
+			Monitor.log(err, {
 				user: this.user.id,
 				message: this.message,
 				pmTarget: this.pmTarget && this.pmTarget,
 				room: this.room,
-			}, this.bot.id);;
+			}, this.bot.id);
 		}
 		if (result === undefined) result = false;
 		return result;      

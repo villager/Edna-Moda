@@ -11,28 +11,28 @@ const AUTOJOIN_DIR = path.resolve(__dirname, 'data', 'autojoin.json');
 exports.saveTeams = () => Plugins.FS(TEAMS_DIR).writeUpdate(() => JSON.stringify(teams));
 exports.saveJoins = () => Plugins.FS(AUTOJOIN_DIR).writeUpdate(() => JSON.stringify(autoJoin));
 
-exports.loadData = function() {
+exports.loadData = function () {
     let fileData = [
         ['teams.json', teams],
         ['autojoin.json', autoJoin],
-    ]
+    ];
     for (const file of fileData) {
         try {
             require.resolve(`./data/${file[0]}`);
-        } catch(e) {
+        } catch (e) {
             Monitor.log(e);
         }
         try {
             let JSONdata = require(`./data/${file[0]}`);
             Object.assign(file[1], JSONdata);
-        } catch(e) {
+        } catch (e) {
             Monitor.log(e);
         }
     }
-}
-exports.isSaved = function(name) {
-    if(teams[name]) return true;
+};
+exports.isSaved = function (name) {
+    if (teams[name]) return true;
     return false;
-}
+};
 exports.teams = teams;
 exports.autoJoin = autoJoin;

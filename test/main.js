@@ -21,7 +21,7 @@ Config.servers = {
         password: "Yourpasswordedna<3",
         language: 'english',
         initCmd: [],
-    }
+    },
 };
 Config.testMode = true;
 Config.token = 'ABCDEFGHIJKLMNOPQRSTUVWXZAS';
@@ -33,7 +33,7 @@ function testFolder(folder) {
     folder = path.resolve(__dirname, folder);
     let files = fs.readdirSync(folder);
     for (const file of files) {
-        if(file.substr(-3) === '.js') {
+        if (file.substr(-3) === '.js') {
             require(`${folder}/${file}`);
         }
     }

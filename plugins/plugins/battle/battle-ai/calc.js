@@ -81,6 +81,7 @@ class Pokemon {
 		return res;
 	}
 } 
+
 class Conditions {
     constructor(data) {
 		if (typeof data !== "object") throw new Error("Invalid conditions data");
@@ -95,11 +96,7 @@ class Conditions {
 	}
 } 
 
-
 class Damage {
-	
-	
-	
 	constructor(hp, rolls) {
 		this.rolls = rolls || [];
 		this.hp = hp || 0;
@@ -135,7 +132,7 @@ class Damage {
 }
 
 
-function getRolls  (n, p) {
+function getRolls(n, p) {
 	if (!p) p = 0.85;
 	let r = [];
 	for (let m = n * p; m <= n; m++) {
@@ -144,7 +141,7 @@ function getRolls  (n, p) {
 	return r;
 } 
 
-function getHazardsDamage (poke, conditions, gen, inverse) {
+function getHazardsDamage(poke, conditions, gen, inverse) {
 	let dmg = 0;
 	let side = conditions.side;
 	if (gen >= 3 && poke.ability && poke.ability.id === "magicguard") return 0;
@@ -173,7 +170,7 @@ function getHazardsDamage (poke, conditions, gen, inverse) {
  *  - gen (6 by default)
 */
 
-function calculate (pokeA, pokeB, move, conditionsA, conditionsB, gconditions, gen) {
+function calculate(pokeA, pokeB, move, conditionsA, conditionsB, gconditions, gen) {
 	if (!gen) gen = 7;
 	if (!gconditions) gconditions = {};
 	if (!conditionsA) conditionsA = {};

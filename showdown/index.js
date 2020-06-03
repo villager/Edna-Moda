@@ -80,13 +80,13 @@ class PSBot extends EventEmitter {
 			this.manager.attemps = 0;
 			this.emit('connect', this.socket);
 		};
-		this.socket.onclose = (e)=> {
+		this.socket.onclose = e => {
 			if (!this.manager.closed) this.socket = null;
 			this.manager.connecting = false;
 			this.reset();
 			this.emit('disconnect', {code: e.code, message: e.reason});
 		};
-		this.socket.onmessage = (e) => {
+		this.socket.onmessage = e => {
 			let data = e.data;
 			if (typeof data !== "string") {
 				data = JSON.stringify(data);
@@ -97,7 +97,6 @@ class PSBot extends EventEmitter {
 		};
 		this.manager.connecting = true;
 		this.emit('connecting');
-
 	}
 	loadCommands() {
 		Chat.loadPlugins();
@@ -106,8 +105,8 @@ class PSBot extends EventEmitter {
 	}
 	initPlugins() {
 		Plugins.forEach(plugin => {
-			if(typeof plugin.init === 'function') {
-					plugin.init(this);
+			if (typeof plugin.init === 'function') {
+				plugin.init(this);
 			}
 		});
 		this.loadCommands();		
@@ -158,11 +157,11 @@ class PSBot extends EventEmitter {
 			this.login(this.name, this.pass);
 			break;
 		case 'c:':
-			if(isInit) break;
+			if (isInit) break;
 			this.parser.parse(this.rooms[roomid], splittedLine[2], splittedLine.slice(3).join('|'), false);
 			break;
 		case 'c':
-			if(isInit) break;
+			if (isInit) break;
 			this.parser.parse(this.rooms[roomid], splittedLine[1], splittedLine.slice(2).join('|'), false);
 			break;
 		case 'updateuser':
@@ -180,11 +179,11 @@ class PSBot extends EventEmitter {
 		case 'join':
 		case 'j':
 		case 'J':
-			if(isInit) break; // no nos interesa del pasado
+			if (isInit) break; // no nos interesa del pasado
 			break;
 		case 'l':
 		case 'L':
-			if(isInit) break; // no nos interesa del pasado
+			if (isInit) break; // no nos interesa del pasado
 			break;
 		case 'init':
 			this.rooms[roomid] = new Room(roomid, {
@@ -217,23 +216,23 @@ class PSBot extends EventEmitter {
 			switch (splittedLine[1]) {
 				case 'userdetails':
 					let data = JSON.parse(splittedLine[2]);
-					if(data.id !== toId(this.name)){
+					if (data.id !== toId(this.name)) {
 						let data = JSON.parse(splittedLine[2]);
-						if(data.group) this.group = data.group;						
+						if (data.group) this.group = data.group;						
 					}
 				break;
 			case 'rooms':
 				if (splittedLine[2] === 'null') break;
                 let roomData = JSON.parse(splittedLine.slice(2));
-                if(!roomList[this.id]) {
+                if (!roomList[this.id]) {
                     roomList[this.id] = {};
                 }
                 for (let i in roomData['official']) {
-                    if(!roomList[this.id].isOfficial) roomList[this.id].isOfficial = [];
+                    if (!roomList[this.id].isOfficial) roomList[this.id].isOfficial = [];
 					roomList[this.id].isOfficial.push(roomData['official'][i].title);
                 }
                 for (let i in roomData['chat']) {
-                    if(!roomList[this.id].isChat)roomList[this.id].isChat = [];
+                    if (!roomList[this.id].isChat)roomList[this.id].isChat = [];
                     roomList[this.id].isChat.push(roomData['chat'][i].title);
                 }
 				if (!this.joinedRooms) {
@@ -301,14 +300,14 @@ class PSBot extends EventEmitter {
 	parseAliases(format) {
 		if (!format) return '';
 		format = toId(format);
-		var aliases = Config.formatAliases || {};
+		let aliases = Config.formatAliases || {};
 		if (this.formats[format]) return format;
 		if (aliases[format]) format = toId(aliases[format]);
 		if (this.formats[format]) return format;
 		return format;
 	}
 	send(data, room) {
-		if(!room) room = '';
+		if (!room) room = '';
 		if (!(data instanceof Array)) {
 			data = [data.toString()];
 		}
@@ -331,7 +330,7 @@ class PSBot extends EventEmitter {
 
 			function () {
 				delete this.sending[id];
-			}.bind(this)
+			}.bind(this),
 		);
 		this.sending[id] = manager;
 		manager.start();
@@ -343,15 +342,15 @@ class PSBot extends EventEmitter {
 		if (pass !== '') {
 			options = {
 				headers: {
-					'content-type': 'application/x-www-form-urlencoded'
+					'content-type': 'application/x-www-form-urlencoded',
 				},
 				url: 'http://play.pokemonshowdown.com/action.php',
-				body: "act=login&name=" + encodeURIComponent(name) + "&pass=" + encodeURIComponent(pass) + "&challengekeyid=" + this.challengekeyid + "&challenge=" + this.challenge
+				body: "act=login&name=" + encodeURIComponent(name) + "&pass=" + encodeURIComponent(pass) + "&challengekeyid=" + this.challengekeyid + "&challenge=" + this.challenge,
 			};
 			request.post(options, callback);
 		} else {
 			options = {
-				url: 'http://play.pokemonshowdown.com/action.php?act=getassertion&userid=' + toId(name) + '&challengekeyid=' + this.challengekeyid + '&challenge=' + this.challenge
+				url: 'http://play.pokemonshowdown.com/action.php?act=getassertion&userid=' + toId(name) + '&challengekeyid=' + this.challengekeyid + '&challenge=' + this.challenge,
 			};
 			request(options, callback);
 		}
@@ -373,7 +372,7 @@ class PSBot extends EventEmitter {
 				return;
 			}
 			try {
-				var json = JSON.parse(body.substr(1, body.length));
+				let json = JSON.parse(body.substr(1, body.length));
 				if (json.actionsuccess) {
 					self.named = true;
 					self.send('/trn ' + name + ',0,' + json['assertion']);
@@ -389,12 +388,12 @@ class PSBot extends EventEmitter {
 		}
     }
     joinRoom(room) {
-        if(this.rooms[room]) return; // Ya estaba en la sala
+        if (this.rooms[room]) return; // Ya estaba en la sala
 		this.rooms[room] =  new Room(room);
         this.send(`/join ${room}`);
     }
     joinAllRooms() {
-        if(!roomList[this.id]) return;
+        if (!roomList[this.id]) return;
         for (let i in roomList[this.id]) {
             for (const room of roomList[this.id][i]) {
                 this.joinRoom(room);

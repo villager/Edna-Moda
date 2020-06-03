@@ -18,28 +18,28 @@ const saveAbilities = exports.saveAbilities = () => Plugins.FS(ABILITIES_DIR).wr
 const saveItems = exports.saveItems = () => Plugins.FS(ITEMS_DIR).writeUpdate(() => JSON.stringify(items));
 const saveMoves = exports.saveMoves = () => Plugins.FS(MOVES_DIR).writeUpdate(() => JSON.stringify(moves));
 
-exports.loadData = function() {
+exports.loadData = function () {
     let fileData = [
         ['abilities.json', abilities],
         ['items.json', items],
         ['moves.json', moves],
-    ]
+    ];
     for (const file of fileData) {
         try {
             require.resolve(`./data/${file[0]}`);
-        } catch(e) {Monitor.log(e)}
+        } catch (e) {Monitor.log(e)}
         try {
             let JSONdata = require(`./data/${file[0]}`);
             Object.assign(file[1], JSONdata);
-        } catch(e){Monitor.log(e)}
+        } catch (e) {Monitor.log(e)}
     }
-}
+};
 
 function localAbilitie(abilitie) {
     let psAbilitie = Plugins.Dex.getAbility(abilitie);
-    if(abilities[abilitie]) return Promise.resolve(abilities[abilitie]);
+    if (abilities[abilitie]) return Promise.resolve(abilities[abilitie]);
     let spanish = Dex.searchSpanish(abilitie);
-    if(spanish && spanish.type === 'Abilitie') {
+    if (spanish && spanish.type === 'Abilitie') {
         return Promise.resolve(abilities[spanish.iteration]);
     }
     return new Promise((resolve, reject) => {
@@ -48,13 +48,13 @@ function localAbilitie(abilitie) {
             saveAbilities();
             resolve(data);
         }).catch(e => {reject(e)});
-    })
+    });
 }
 function localItem(item) {
     let psItem = Plugins.Dex.getItems(item);
-    if(items[item]) return Promise.resolve(items[item]);
+    if (items[item]) return Promise.resolve(items[item]);
     let spanish = Dex.searchSpanish(item);
-    if(spanish && spanish.type === 'Item') {
+    if (spanish && spanish.type === 'Item') {
         return Promise.resolve(item[spanish.iteration]);
     }
     return new Promise((resolve, reject) => {
@@ -63,13 +63,13 @@ function localItem(item) {
             saveItems();
             resolve(data);
         }).catch(e => {reject(e)});
-    })
+    });
 }
 function localMove(move) {
     let psMove = Plugins.Dex.getMoves(move);
-    if(moves[move]) return Promise.resolve(moves[move]);
+    if (moves[move]) return Promise.resolve(moves[move]);
     let spanish = Dex.searchSpanish(move);
-    if(spanish && spanish.type === 'Move') {
+    if (spanish && spanish.type === 'Move') {
         return Promise.resolve(moves[spanish.iteration]);
     }
     return new Promise((resolve, reject) => {
@@ -78,7 +78,7 @@ function localMove(move) {
             saveMoves();
             resolve(data);
         }).catch(e => {reject(e)});
-    })
+    });
 }
 exports.localAbilitie = localAbilitie;
 exports.localItem = localItem;

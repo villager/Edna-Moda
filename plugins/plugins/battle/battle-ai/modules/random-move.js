@@ -1,10 +1,8 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true});/**
+"use strict";
+/**
  * Random Move
  */
-
-'use strict';
-
- function setup (Data) {
+exports.setup = function (Data) {
 	const BattleModule = {};
 	BattleModule.id = "randommove";
 
@@ -42,4 +40,4 @@
 	};
 
 	return BattleModule;
-} exports.setup = setup;
+};

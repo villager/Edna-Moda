@@ -6,14 +6,14 @@ const Pastie = require('./pastie');
 function upload(toUpload, callback) {
     try {
         Hastebin.upload(toUpload, callback);
-    } catch(e) {
+    } catch (e) {
         Pastie.upload(toUpload, callback);
     }
 }
 function download(key, callback) {
     try {
         Hastebin.download(key, callback);
-    } catch(e) {
+    } catch (e) {
         Pastie.download(key, callback);
     }
 }

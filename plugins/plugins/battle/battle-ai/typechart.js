@@ -1,6 +1,6 @@
 "use strict";
 
-function getMultipleEff (typeA, typeB, gen, notInmmune) {
+function getMultipleEff(typeA, typeB, gen, notInmmune) {
 	let mux = 1;
 	let tmp;
 	for (let i = 0; i < typeB.length; i++) {
@@ -10,7 +10,7 @@ function getMultipleEff (typeA, typeB, gen, notInmmune) {
 	}
 	return mux;
 } 
-function getEffectiveness (typeA, typeB , gen) {
+function getEffectiveness(typeA, typeB, gen) {
 	if (!gen) gen = 8;
 	let chart = exports.gen8;
 	if (["gen" + gen]) chart = ["gen" + gen];
@@ -1119,8 +1119,8 @@ const gen8 = {
 		"Steel": 2,
 		"Water": 2,
 	},
-}; 
+};
 
 exports.gen1 = gen1;
 exports.getEffectiveness = getEffectiveness;
-exports.getMultipleEff = getMultipleEff;;
+exports.getMultipleEff = getMultipleEff;

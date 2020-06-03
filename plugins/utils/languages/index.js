@@ -1,11 +1,8 @@
 "use strict";
 
-const pathModule = require('path');
-const ROOT_PATH = pathModule.resolve(__dirname, '..');
-
 class  LoadLang {
     constructor(path) {
-        if(!path) path = './base-lang.json';
+        if (!path) path = './base-lang.json';
         this.translations = Object.create(null);
         this.path = path;
     }
@@ -18,11 +15,11 @@ class  LoadLang {
     get(lang, msg) {
         let language = lang;
         this.load();
-        if(!this.translations[language]) throw Error(`Lenguaje ${language} no existe`);
-        if(!this.translations[language][msg]) throw Error(`Mensaje ${msg} no existe en ${language}`);        
+        if (!this.translations[language]) throw Error(`Lenguaje ${language} no existe`);
+        if (!this.translations[language][msg]) throw Error(`Mensaje ${msg} no existe en ${language}`);        
         return this.translations[language][msg];
     }
-    getSub (lang, msg, sub) {
+    getSub(lang, msg, sub) {
         return this.get(lang, msg)[sub];
     }
     replaceSub(lang, msg, sub, ...args) {
@@ -46,10 +43,9 @@ class  LoadLang {
 }
 function loadLang(langPath) {
     return new LoadLang(langPath);
-
-};
+}
 exports.load = loadLang;
 
-exports.loadHelp = function() {
+exports.loadHelp = function () {
     return new LoadLang('./helps.json');
 };

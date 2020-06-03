@@ -29,7 +29,7 @@ class Parser {
 		let cmdToken = message.charAt(0);
         if (Config.triggers.indexOf(cmdToken) === -1) {
 			let maybeToken = this.splitToken(message);
-			if(Config.triggers.indexOf(maybeToken[0]) > -1) {
+			if (Config.triggers.indexOf(maybeToken[0]) > -1) {
 				cmdToken = maybeToken[0];
 				isWord = true;
 			} else {
@@ -39,8 +39,8 @@ class Parser {
 		let cmd = '', target = '';
 		if (isWord) {
 			let splitWords = this.splitToken(message);
-			if(cmdToken === splitWords[1]) return;
-			if(splitWords.length > 2) {
+			if (cmdToken === splitWords[1]) return;
+			if (splitWords.length > 2) {
 				cmd = splitWords[1];
 				splitWords.splice(splitWords.indexOf(cmdToken), 1);
 				splitWords.splice(splitWords.indexOf(cmd), 1);
@@ -113,7 +113,7 @@ class Parser {
 		this.messageId = message.id;
 		let commandHandler = this.splitCommand(message.content);
 		if (typeof commandHandler === 'function') {
-			if(toId(this.bot.lastUser.username) === toId(Config.name)) return; // Ignorar los  comandos dichos por el mismo bot
+			if (toId(this.bot.lastUser.username) === toId(Config.name)) return; // Ignorar los  comandos dichos por el mismo bot
             const channel = message.channel;
             this.channel = channel;
             this.user = message.author;
@@ -129,8 +129,8 @@ class Parser {
 		return lang;
 	}
 	can(permission, broadcasting) {
-		if(Chat.hasAuth(this.bot.id, this.user, permission)) return true;
-		if(broadcasting) this.sendReply('Acceso Denegado');
+		if (Chat.hasAuth(this.bot.id, this.user, permission)) return true;
+		if (broadcasting) this.sendReply('Acceso Denegado');
 		return false;
 	}
 	runHelp(help) {
@@ -143,10 +143,10 @@ class Parser {
 		try {
 			result = commandHandler.call(this, this.target, this.user, this.message);
 		} catch (err) {
-			Monitor.log(err,{
+			Monitor.log(err, {
 				user: this.user.username,
 				message: this.message,
-			}, 'Discord');;
+			}, 'Discord');
 		}
 		if (result === undefined) result = false;
 		return result;      

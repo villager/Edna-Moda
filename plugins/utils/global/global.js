@@ -1,10 +1,8 @@
 "use strict";
 
-
-
 const Tools = module.exports = {};
 
-Tools.toId = function(text) {
+Tools.toId = function (text) {
     if (text && text.id) {
         text = text.id;
     } else if (text && text.username) {
@@ -14,27 +12,27 @@ Tools.toId = function(text) {
     return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
 
-Tools.toUserName = function(name) {
-	if(name && name.username) {
+Tools.toUserName = function (name) {
+	if (name && name.username) {
 		name = name.username;
 	} 
 	return ('' + name).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
 
-Tools.splint = function(target, separator, length) {
+Tools.splint = function (target, separator, length) {
 	if (!separator) separator = ',';
 
 	let cmdArr = [];
 	let positions = [];
 	if (length > 0) {
 		for (let i = 0; i < target.length; i++) {
-			if(separator === target[i]) positions.push(i);
+			if (separator === target[i]) positions.push(i);
 		}
 		for (let i = 0; i < positions.length; i++) {
-        	if(cmdArr.length + 1 === length) {
+        	if (cmdArr.length + 1 === length) {
 				cmdArr.push(target.slice(positions[i - 1], target.length));
 				break;
-           	} else if(i === 0) {
+           	} else if (i === 0) {
 				cmdArr.push(target.slice(0, positions[i]));
 			} else {
 				cmdArr.push(target.slice(positions[i - 1], positions[i]));
@@ -59,7 +57,7 @@ Tools.splint = function(target, separator, length) {
 		cmdArr = target.split(separator);
 	}
 	return cmdArr.map(cmd => cmd.trim());
-}
+};
 
 
 Tools.toName = function (text) {
@@ -78,7 +76,7 @@ Tools.escapeHTML = function (str) {
 		.replace(/\//g, '&#x2f;');
 };
 
-Tools.toDurationString = function(val, options = {}) {
+Tools.toDurationString = function (val, options = {}) {
 	// TODO: replace by Intl.DurationFormat or equivalent when it becomes available (ECMA-402)
 	// https://github.com/tc39/ecma402/issues/47
 	const date = new Date(+val);
@@ -108,4 +106,4 @@ Tools.toDurationString = function(val, options = {}) {
 		.slice(0, precision)
 		.join(" ")
 		.trim();
-}
+};

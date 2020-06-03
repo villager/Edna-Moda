@@ -2,7 +2,7 @@
 
 const psData = require("ps-data");
 
-function getEffect (effect, gen) {
+function getEffect(effect, gen) {
     if (!effect || typeof effect === 'string') {
         let name = (effect || '').trim();
         if (name.substr(0, 5) === 'item:') {
@@ -52,12 +52,12 @@ function getEffect (effect, gen) {
     return effect;
 } 
 
-function getTemplate (poke, gen) {
+function getTemplate(poke, gen) {
 	if (!gen || gen > 8 || gen < 1) gen = 8;
 	poke = toId(poke || "");
 	let pokemon = {};
 	let temp;
-	for (var i = 8; i >= gen; i--) {
+	for (let i = 8; i >= gen; i--) {
 		try {
             temp = psData.getDex(i)[poke];
 			if (!temp) continue;
@@ -65,9 +65,9 @@ function getTemplate (poke, gen) {
 			continue;
 		}
 		if (!temp.inherit) {
-			for (var i in pokemon) delete pokemon[i];
+			for (let x in pokemon) delete pokemon[x];
 		}
-		for (var i in temp) pokemon[i] = temp[i];
+		for (let x in temp) pokemon[x] = temp[x];
 	}
 	if (!pokemon.species) {
 		return {
@@ -79,7 +79,7 @@ function getTemplate (poke, gen) {
 			heightm: 1.2,
 			weightkg: 58,
 			color: "White",
-			eggGroups: ["Field"]
+			eggGroups: ["Field"],
 		};
 	}
 	return pokemon;
@@ -127,7 +127,7 @@ function getMove(move, gen) {
     if (!moveData.effectType) moveData.effectType = 'Move';
     return moveData;
 } 
-function getItem (item, gen) {
+function getItem(item, gen) {
     if (!gen || gen > 8 || gen < 1) gen = 8;
     item = toId(item || "");
     let itemData = {};
@@ -416,7 +416,7 @@ class Player {
         return alive;
     }
 } 
-function getFormatsData (gen) {
+function getFormatsData(gen) {
     if (!gen || gen > 8 || gen < 1) gen = 8;
     try {
         return psData.getFormatsData(gen);
@@ -431,5 +431,5 @@ exports.Move = Move;
 exports.getAbility = getAbility;
 exports.getItem = getItem;
 exports.getMove = getMove;
-exports.getTemplate = exports.getPokemon = getTemplate
+exports.getTemplate = exports.getPokemon = getTemplate;
 exports.getEffect = getEffect;

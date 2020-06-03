@@ -81,7 +81,7 @@ Object.defineProperty(exports, 'inFreeBSDJail', {
       inFreeBSDJail = false;
     }
     return inFreeBSDJail;
-  }
+  },
 });
 
 Object.defineProperty(exports, 'localhostIPv4', {
@@ -104,7 +104,7 @@ Object.defineProperty(exports, 'localhostIPv4', {
     if (localhostIPv4 === null) localhostIPv4 = '127.0.0.1';
 
     return localhostIPv4;
-  }
+  },
 });
 
 // opensslCli defined lazily to reduce overhead of spawnSync
@@ -309,7 +309,7 @@ function leakedGlobals() {
       leaked.push(val);
 
   return leaked;
-};
+}
 exports.leakedGlobals = leakedGlobals;
 
 // Turn this off if the test should not check for global leaks.
@@ -354,7 +354,7 @@ exports.mustCall = function(fn, expected) {
     expected: expected,
     actual: 0,
     stack: (new Error()).stack,
-    name: fn.name || '<anonymous>'
+    name: fn.name || '<anonymous>',
   };
 
   // add the exit listener only once to avoid listener leak warnings

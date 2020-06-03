@@ -59,7 +59,6 @@ module.exports = {
 		poke.hp = hp;
 		if (kwargs.from) {
 			let effect = battleData.getEffect(kwargs.from, this.gen);
-			let ofpoke = this.getActive(kwargs.of);
 			if (effect.effectType === 'Ability') {
 				poke.markAbility(effect.name);
 			}
@@ -235,7 +234,6 @@ module.exports = {
 		let poke = this.getActive(args[1]);
 		let effect = battleData.getEffect(args[2], this.gen);
 		let fromeffect = battleData.getEffect(kwargs.from, this.gen);
-		let ofpoke = this.getActive(kwargs.of);
 		if (fromeffect.id === 'skydrop') {
 			return;
 		}
@@ -350,7 +348,6 @@ module.exports = {
 		let poke = this.getActive(args[1]);
 		let item = battleData.getItem(args[2], this.gen);
 		let effect = battleData.getEffect(kwargs.from, this.gen);
-		let ofpoke = this.getActive(kwargs.of);
 		poke.item = '';
 		poke.itemEffect = '';
 		poke.prevItem = item;
@@ -506,7 +503,6 @@ module.exports = {
 	"-end": function (args, kwargs) {
 		let poke = this.getActive(args[1]);
 		let effect = battleData.getEffect(args[2], this.gen);
-		let fromeffect = battleData.getEffect(kwargs.from, this.gen);
 		poke.removeVolatile(effect.id);
 		switch (effect.id) {
 			case 'perishsong':
@@ -529,7 +525,6 @@ module.exports = {
 
 	"-activate": function (args, kwargs) {
 		let poke = this.getActive(args[1]);
-		let ident = this.parsePokemonIdent(args[1]);
 		let effect = battleData.getEffect(args[2], this.gen);
 		let ofpoke = this.getActive(kwargs.of);
 		let ofIdent = this.parsePokemonIdent(kwargs.of);
@@ -614,5 +609,5 @@ module.exports = {
 			this.conditions["inversebattle"] = true;
 			console.log(this.id + ": Changed to inverse Battle");
 		}
-	}
+	},
 };

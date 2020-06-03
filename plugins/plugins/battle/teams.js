@@ -7,16 +7,16 @@ let teams = Object.create(null);
 function mergeTeams() {
 	for (let i in Storage.teams) {
 		let team = Storage.teams[i];
-		if(teams[team.format]) teams[team.format] = [];
+		if (teams[team.format]) teams[team.format] = [];
 		teams[team.format].push(team.packed);
 	}
 }
 
 function addTeam(name, format, packed) {
-    if(Storage.isSaved(name)) return false;
+    if (Storage.isSaved(name)) return false;
     Storage.teams[name] = {
         format: format,
-        packed: packed
+        packed: packed,
     };
 	Storage.saveTeams();
 	mergeTeams();
@@ -24,7 +24,7 @@ function addTeam(name, format, packed) {
 }
 
 function removeTeam(name) {
-	if(!Storage.isSaved(name)) return false;
+	if (!Storage.isSaved(name)) return false;
 	delete Storage.teams[name];
 	Storage.saveTeams();
 	mergeTeams();
@@ -52,7 +52,7 @@ function getTeam(format) {
 				}
 				if (Config.debug.debug) console.log("Packed Team: " + JSON.stringify(team));
 				teamStr = packTeam(team);
-			} else if (teamChosen.length){
+			} else if (teamChosen.length) {
 				//parse team
 				teamStr = packTeam(teamChosen);
 			} else {
@@ -68,10 +68,10 @@ function getTeam(format) {
 		console.log(e.stack);
 	}	
 }
-function packTeam(team){
+function packTeam(team) {
 	Plugins.Dex.packTeam(team);
 }
-function hasTeam (format) {
+function hasTeam(format) {
 	let formatId = toId(format);
 	if (teams[formatId]) return true;
 	return false;

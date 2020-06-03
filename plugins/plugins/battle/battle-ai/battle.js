@@ -55,7 +55,7 @@ class Battle {
     send(data) {
         if (!data) return;
        // this.log("SENT: " + JSON.stringify(data));
-       this.server.send(data, this.id,);
+       this.server.send(data, this.id);
     }
 
     log(txt) {}
@@ -159,10 +159,10 @@ class Battle {
         if (!this.self) return; // Not playing
         let win = (toId(winner) === toId(this.server.name));
 		if (win) {
-			var winmsg = Config.winmsg;
+			let winmsg = Config.winmsg;
 			if (winmsg && winmsg.length) this.send(winmsg[Math.floor(Math.random() * winmsg.length)]);
 		} else {
-			var losemsg = Config.losemsg;
+			let losemsg = Config.losemsg;
 			if (losemsg && losemsg.length) this.send(losemsg[Math.floor(Math.random() * losemsg.length)]);
 		}
     }

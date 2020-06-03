@@ -13,5 +13,4 @@ describe("Commands", () => {
             Plugins.loadPlugins();
         });
     });
-
 });

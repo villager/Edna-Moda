@@ -18,7 +18,7 @@ class Activity extends Plugins.Timers {
 	}
 	check() {}
 }
-class RoomManager extends Plugins.Timers{
+class RoomManager extends Plugins.Timers {
 	constructor(server) {
 		super(1000 * 15);
 		this.baseRooms = server.baseRooms;
@@ -26,7 +26,7 @@ class RoomManager extends Plugins.Timers{
 	}
 	check() {
 		for (const room of this.baseRooms) {
-			if(!this.server.rooms[room]) {
+			if (!this.server.rooms[room]) {
 				this.server.joinRoom(room);
 			}
 		}
@@ -35,7 +35,7 @@ class RoomManager extends Plugins.Timers{
 	onBegin() {
 		this.start(() => {
 			this.check();
-		})
+		});
 	}
 }
 class ConnectionManager extends Plugins.Timers {
@@ -51,12 +51,12 @@ class ConnectionManager extends Plugins.Timers {
 		this.conntime = 0;
 	}
 	onBegin() {
-        console.log(`Retrying connection to ${this.server.id} in ${this.time/ 1000} seconds`);
+        console.log(`Retrying connection to ${this.server.id} in ${this.time / 1000} seconds`);
 		this.start(() => {
-			if(this.closed) return;
+			if (this.closed) return;
             this.server.connect();
             this.attemps++;
-            if(this.attemps > this.maxAttemps) {
+            if (this.attemps > this.maxAttemps) {
                 this.activity.clear();
                 this.closed = true;
                 console.log(`Connection closed to ${this.server.id}`);

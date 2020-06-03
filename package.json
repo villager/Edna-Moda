@@ -5,7 +5,14 @@
     "scripts": {
         "start": "node app",
         "build": "node build",
-        "test": "mocha"
+        "test": "mocha",
+        "lint": "eslint . --config .eslintrc.json --cache --ext .js,.ts",
+        "full-lint": "eslint . --config .eslintrc.json --cache --cache-location .eslintfullcache --ext .js,.ts"
+    },
+    "husky": {
+        "hooks": {
+            "pre-push": "npm run lint"
+        }
     },
     "author": {
         "name": "Aldair Beltran",
@@ -23,7 +30,8 @@
         "githubhook": "^1.9.3"
     },
     "devDependencies": {
-        "mocha": "^7.1.1"
+        "mocha": "^7.1.1",
+        "eslint": "^6.8.0"
     },
     "url": "https://github.com/villager/Edna-Moda",
     "license": "MIT",

@@ -2,7 +2,7 @@
 
 const path = require('path');
 const LANG_DIR = path.resolve(__dirname, 'language.json');
-const { MessageEmbed } = require('discord.js');
+const {MessageEmbed} = require('discord.js');
 
 const Lang = Plugins.Language.load(LANG_DIR);
 
@@ -30,20 +30,20 @@ const TYPE_TO_COLOR = new Map([
     ['Water', 'Blue'],
     ['Fairy', 'Pink'],
     ['Fighting', 'Brown'],
-    ['Normal', 'Gray']
+    ['Normal', 'Gray'],
 ]);
 function pokeData(lang, poke) {
     poke = toId(poke);
     let data = Dex.getPokemon(poke);
-    if(!data) return false;
+    if (!data) return false;
     let name = data.name.toLowerCase();
-    if(name.endsWith('-totem')) {
+    if (name.endsWith('-totem')) {
         name = name.replace('-totem', '');
     }  
     let s = data.stats;
     let stats = '';
     for (let i in s) {
-         stats+= `${Lang.getSub(lang, 'data', i)} ${s[i]} | `;
+         stats += `${Lang.getSub(lang, 'data', i)} ${s[i]} | `;
     }
     
     let abilities = [];
@@ -57,7 +57,7 @@ function pokeData(lang, poke) {
 function chatPokeText(lang, poke) {
     poke = toId(poke);
     let data = Dex.getPokemon(poke);
-    if(!data) return false;
+    if (!data) return false;
     let pD = pokeData(lang, poke);
     let output = '';
     output += `**${data.name} #${data.num}** |`;
@@ -70,7 +70,7 @@ function chatPokeText(lang, poke) {
 function chatPokeHTML(lang, poke) {
     poke = toId(poke);
     let data = Dex.getPokemon(poke);
-    if(!data) return false;
+    if (!data) return false;
     let pD = pokeData(lang, poke);
     let output = '';
     output += `<center><strong>${data.name} #${data.num}</strong></center>`;
@@ -91,7 +91,7 @@ function chatPokeHTML(lang, poke) {
 function embedPokemon(lang, poke) {
     poke = toId(poke);
     let data = Dex.getPokemon(poke);
-    if(!data) return false;
+    if (!data) return false;
     let pD = pokeData(lang, poke);
     return new MessageEmbed({
         title: `**${data.name} #${data.num}**`,
@@ -105,25 +105,26 @@ function embedPokemon(lang, poke) {
             {name: Lang.get(lang, "group"), value: data.eggs, inline: true},
             {name: Lang.get(lang, "evolution"), value: data.evos ? data.evos : Lang.get(lang, "none"), inline: true},
             {name: Lang.get(lang, "types"), value: (data.types), inline: true},
-            {name: "Gen", value: data.gen, inline: true}
+            {name: "Gen", value: data.gen, inline: true},
         ],
         image: {url: `https://play.pokemonshowdown.com/sprites/ani/${pD.name}.gif`},
         footer: {
             text: pD.stats,
         },
         color: MAP_COLOR.has(data.color) ? MAP_COLOR.get(data.color) : '#FFFFFF',
-    })    
+    });  
 }
 
-exports.init = function() {
+exports.init = function () {
 }; 
+
 exports.psCommands = {
     dt(target) {
-        if(!target) return this.sendReply(Lang.getSub(this.lang, 'data', 'target'));
-        switch(Dex.search(target)) {
+        if (!target) return this.sendReply(Lang.getSub(this.lang, 'data', 'target'));
+        switch (Dex.search(target)) {
             case 'Pokemon':
-                if(Chat.hasAuth(this.id, this.bot.name, 'html')) {
-                    if(this.can('games', false)) {
+                if (Chat.hasAuth(this.id, this.bot.name, 'html')) {
+                    if (this.can('games', false)) {
                         this.sendReply(`/addhtmlbox ${chatPokeHTML(this.lang, target)}`);
                     } else {
                         this.sendStrict(chatPokeText(this.lang, target));
@@ -137,7 +138,7 @@ exports.psCommands = {
                     let data = `**${abilitie[this.lang].name}:** `;
                     data += abilitie[this.lang].desc.replace('\n', ' ');
                     this.sendReply(data);
-                }).catch(() =>{
+                }).catch(() => {
                     this.sendReply(Lang.get(this.lang, '404'));
                 });
             break;
@@ -145,13 +146,13 @@ exports.psCommands = {
                 this.sendReply(Lang.get(this.lang, '404'));
             }
         }
-    }
+    },
 };
 exports.discordCommands = {
-    data: function(target) {
-        if(!target) return this.sendReply(Lang.getSub(this.lang, 'data', 'target'));
+    data(target) {
+        if (!target) return this.sendReply(Lang.getSub(this.lang, 'data', 'target'));
         let data = false;
-        switch(Dex.search(target)) {
+        switch (Dex.search(target)) {
             case 'Pokemon':
                 data = embedPokemon(this.lang, target);
                 this.sendReply(data);
@@ -160,7 +161,7 @@ exports.discordCommands = {
                 Storage.localAbilitie(toId(target).replace(' ', '')).then(abilitie => {
                     let embed = new MessageEmbed({
                         title: `**${abilitie[this.lang].name}**`,
-                        description: abilitie[this.lang].desc
+                        description: abilitie[this.lang].desc,
                     });
                     this.sendReply(embed);
                 }).catch(() => {
@@ -172,7 +173,7 @@ exports.discordCommands = {
                     let embed = new MessageEmbed({
                         title: `**${move[this.lang].name}**`,
                         description: move[this.lang].desc,
-                        color: TYPE_TO_COLOR.has(Dex.getMove(target).type) ? MAP_COLOR.get(TYPE_TO_COLOR.get(Dex.getMove(target).type)) : '#CCC'
+                        color: TYPE_TO_COLOR.has(Dex.getMove(target).type) ? MAP_COLOR.get(TYPE_TO_COLOR.get(Dex.getMove(target).type)) : '#CCC',
                     });
                     this.sendReply(embed);
                 }).catch(() => {
@@ -183,5 +184,5 @@ exports.discordCommands = {
                 this.sendReply(Lang.get(this.lang, '404'));
             }
         }
-    }
+    },
 };

@@ -6,7 +6,7 @@ const path = require('path');
 let plugins = Object.create(null);
 
 function getPlugin(plugin) {
-    if(!plugins[plugin]) return false;
+    if (!plugins[plugin]) return false;
     return plugins[plugin];
 }
 
@@ -14,7 +14,7 @@ const Plugins = module.exports = getPlugin;
 
 Plugins.plugins = plugins;
 
-Plugins.load = function(pluginPath) {
+Plugins.load = function (pluginPath) {
     const plugin = require('./plugins/' + pluginPath);
 	if (!plugin || typeof plugin !== 'object' && typeof plugin !== 'function') {
 		throw new Error("Plugin inválido: ´" + pluginPath + "´.");
@@ -30,48 +30,50 @@ Plugins.load = function(pluginPath) {
 		return;
 	}
 	return (plugins[pluginPath] = plugin);
-}
-Plugins.forEach = function(callback, thisArg) {
+};
+
+Plugins.forEach = function (callback, thisArg) {
 	return Object.values(plugins).forEach(callback, thisArg);
-}
+};
+
 const COMMANDS_MAP = new Map([
     ['showdown', 'psCommands'],
     ['discord', 'discordCommands'],
     ['global', 'globalCommands'],
 ]);
-Plugins.init = function() {
+Plugins.init = function () {
     let pluginsList = Plugins.FS('./plugins/plugins').readdirSync();
     for (const plugin of pluginsList) {
         Plugins.load(plugin);
     }
-    if(Config.isInitializacion) Plugins.initData();
+    if (Config.isInitializacion) Plugins.initData();
     Plugins.forEach(plugin => {
-        if(typeof plugin.loadData === 'function') {
-            if(!Config.testMode) plugin.loadData();
+        if (typeof plugin.loadData === 'function') {
+            if (!Config.testMode) plugin.loadData();
         }
     });
 };
-Plugins.initCmds = function() {
+Plugins.initCmds = function () {
     let cmds = [];
     Bot.forEach(bot => {
-        if(Array.isArray(bot.initCmds)) {
+        if (Array.isArray(bot.initCmds)) {
             cmds = cmds.concat(bot.initCmds);
         }
     });
     Plugins.forEach(plugin => {
-        if(Array.isArray(plugin.initCmds)) {
+        if (Array.isArray(plugin.initCmds)) {
             cmds = cmds.concat(plugin.initCmds);
         }
     });
     return cmds;
 };
-Plugins.loadPlugins = function() {
+Plugins.loadPlugins = function () {
     Plugins.forEach(plugin => {
         // The key is the king
-        if(plugin.key) {
-            if(Array.isArray(plugin.key)) {
+        if (plugin.key) {
+            if (Array.isArray(plugin.key)) {
                 for (const key of plugin.key) {
-                    if(COMMANDS_MAP.has(key)) {
+                    if (COMMANDS_MAP.has(key)) {
                         Object.assign(Chat[COMMANDS_MAP.get(key)], plugin[COMMANDS_MAP.get(key)]);
                     }
                 }
@@ -82,14 +84,15 @@ Plugins.loadPlugins = function() {
             }
         }
     });
-}
+};
+
 function joinPath(...args) {
     return path.resolve(__dirname, ...args);
 }
-Plugins.initData = function() {
+Plugins.initData = function () {
     const DATA_FOLDERS = ['data'];
 	Plugins.forEach(plugin => {
-        if(typeof plugin.initData === 'function') {
+        if (typeof plugin.initData === 'function') {
             plugin.initData();
         }
         for (const folder of DATA_FOLDERS) {
@@ -107,16 +110,16 @@ Plugins.initData = function() {
                 for (let fileData of exampleFiles) {
                     let baseFile = joinPath('plugins', plugin.id, folder, fileData.name + fileData.ext);
                     let originalFile = joinPath('plugins', plugin.id, folder, fileData.name + '-example' + fileData.ext);
-                    Plugins.FS(baseFile).isFile().catch(() =>{
+                    Plugins.FS(baseFile).isFile().catch(() => {
                         console.log(`Creating file ${fileData.name}`);
                         Plugins.FS(baseFile).writeSync(Plugins.FS(originalFile).readSync());
-    
-                    })
+                    });
                 }
             }).catch(() => {});
         }
     });
-}
+};
+
 const events = require('./utils/events');
 Plugins.FS = require('../lib/fs');
 Plugins.Language = require('./utils/languages');

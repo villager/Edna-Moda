@@ -1,11 +1,10 @@
-"use strict";/**
+"use strict";
+/**
  * Default module for singles
  */
 
-var _calc = require('./../calc'); var CalcFile = _calc;
-const Calc = CalcFile;
-var _typechart = require('./../typechart'); var TypeChartFile = _typechart; 
-const TypeChart = TypeChartFile;
+const Calc = require('../calc');
+const TypeChart = require('../typechart');
 
 const Pokemon = Calc.Pokemon;
 const Conditions = Calc.Conditions;
@@ -493,7 +492,7 @@ exports.setup = function (Data) {
 			}
 			if (move.weather && battle.conditions.weather) {
 				let weather = toId(battle.conditions.weather);
-				if (weather && ((weather in {'desolateland': 1, 'primordialsea': 1, 'deltastream': 1}) || weather === Text.toId(move.weather))) {
+				if (weather && ((weather in {'desolateland': 1, 'primordialsea': 1, 'deltastream': 1}) || weather === toId(move.weather))) {
 					res.unviable.push(decisions[i]);
 				} else {
 					res.viable.push(decisions[i]);
@@ -709,13 +708,13 @@ exports.setup = function (Data) {
 		let chosen = null;
 		let tmp, maxi = null;
 		for (const pokemon of decisions) {
-			if(decisions[0].type === 'switch') {
-				if(battle.foe.active[0] && !battle.foe.active[0].fainted  && battle.self.pokemon[decisions[i][0].pokeId]) {
+			if (decisions[0].type === 'switch') {
+				if (battle.foe.active[0] && !battle.foe.active[0].fainted  && battle.self.pokemon[pokemon.pokeId]) {
 					let pk = battle.self.pokemon[pokemon.pokeId];
 					if (pk.helpers.hasNoViableMoves === battle.foe.active[0].name) continue;
 				}
-				tmp= evaluatePokemon(battle, pokemon.pokeId);
-				if(maxi === null) {
+				tmp = evaluatePokemon(battle, pokemon.pokeId);
+				if (maxi === null) {
 					maxi = tmp;
 					chosen = pokemon;
 				} else if (maxi.t > tmp.t || (maxi.t === tmp.t && maxi.d < tmp.d)) {

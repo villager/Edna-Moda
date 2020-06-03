@@ -280,7 +280,7 @@ module.exports = {
 			this.players[det.side].side.wish = {
 				move: move.id,
 				turn: this.turn,
-				poke: poke
+				poke: poke,
 			};
 		}
 		if (move.id === 'batonpass') {
@@ -365,5 +365,5 @@ module.exports = {
 				break;
 		}
 		this.makeDecision(true);
-	}
+	},
 };

@@ -5,7 +5,7 @@ const Lang = Plugins.Language.load();
 const LANG_LIST = new Set(['en', 'es']);
 const SPANISH_ALIASES = new Set(['es', 'spanish', 'español', 'espaol', 'espanol']);
 const ENGLISH_ALIASES = new Set(['en', 'ing', 'ingles', 'us', 'uk', 'english']);
-const { MessageEmbed } = require('discord.js');
+const {MessageEmbed} = require('discord.js');
 
 exports.key = ['global', 'showdown', 'discord'];
 
@@ -46,7 +46,7 @@ exports.globalCommands = {
 				helpCmd = target + 'help';
 			}
 			if (helpCmd in allCommands) {
-				if(allCommands[helpCmd] === true) {
+				if (allCommands[helpCmd] === true) {
 					const HelpLang = Plugins.Language.loadHelp();
 					this.sendReply(HelpLang.get(this.lang, target));
 				}
@@ -60,22 +60,22 @@ exports.globalCommands = {
 		return this.sendReply(Lang.replace(this.lang, 'version', Chat.packageData.version));
     },
     say(target) {
-        if(!target) return this.runHelp('say');
+        if (!target) return this.runHelp('say');
 		this.sendReply(target);
     },
     sayhelp: true,
 	eval(target) {
-		if(!this.can('hotpatch', true)) return false;
+		if (!this.can('hotpatch', true)) return false;
 		let result = eval(target);
 		try {
-			if(this.bot.id !== 'discord') {
+			if (this.bot.id !== 'discord') {
 				this.sendReply(`!code ${result}`);
 			} else {
 				this.sendReply(result);
 			}
-		} catch(e) {
+		} catch (e) {
 			const message = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '').replace(/\n/g, '\n||');
-			if(this.bot.id !== 'discord') {
+			if (this.bot.id !== 'discord') {
 				this.sendReply(`!code ${message}`);
 			} else {
 				this.sendReply(message);
@@ -107,48 +107,49 @@ exports.globalCommands = {
 };
 exports.psCommands = {
     errorlog(target, room, user) {
-        if(!this.can('hotpatch', true)) return false;
+        if (!this.can('hotpatch', true)) return false;
         let log = Plugins.FS('./logs/errors.log').readSync().toString();
         Plugins.Bins.upload(log, (r, link) => {
             let fullLink = 'https://' + link;
-            if(r) this.sendReply(Lang.replaceSub(this.lang, 'errorlog', 'link',fullLink));
+            if (r) this.sendReply(Lang.replaceSub(this.lang, 'errorlog', 'link', fullLink));
             else this.sendReply(Lang.getSub(this.lang, 'errorlog', 'error'));
         });
     },  
     about() {
         let version = Chat.packageData.url;
         let author = Chat.packageData.author && Chat.packageData.author.name;
-        this.sendReply(Lang.replace(this.lang, 'about', this.bot.name,author, version));
+        this.sendReply(Lang.replace(this.lang, 'about', this.bot.name, author, version));
 	},
 	language(target, room) {
-        if(!this.can('invite', true)) return false;
-        if(!target) return this.sendReply(Lang.getSub(this.lang, 'language', 'target'));
-        if(!LANG_LIST.has(target) && !SPANISH_ALIASES.has(target) && !ENGLISH_ALIASES.has(target)) {
+        if (!this.can('invite', true)) return false;
+        if (!target) return this.sendReply(Lang.getSub(this.lang, 'language', 'target'));
+        if (!LANG_LIST.has(target) && !SPANISH_ALIASES.has(target) && !ENGLISH_ALIASES.has(target)) {
             return this.sendReply(Lang.getSub(this.lang, 'language', 'unavileable'));
         }
-        if(SPANISH_ALIASES.has(target)) {
-            if(room.language === 'es') return this.sendReply(Lang.getSub(this.lang, 'language', 'alr_es'));
+        if (SPANISH_ALIASES.has(target)) {
+            if (room.language === 'es') return this.sendReply(Lang.getSub(this.lang, 'language', 'alr_es'));
             this.sendReply(Lang.getSub(this.lang, 'language', 'now_es'));
             room.language = 'es';
         }
-        if(ENGLISH_ALIASES.has(target)) {
-            if(room.language === 'en') return this.sendReply(Lang.getSub(this.lang, 'language', 'alr_en'));
+        if (ENGLISH_ALIASES.has(target)) {
+            if (room.language === 'en') return this.sendReply(Lang.getSub(this.lang, 'language', 'alr_en'));
             this.sendReply(Lang.getSub(this.lang, 'language', 'now_en'));
             room.language = 'en';            
         }
-    }
-}
+    },
+};
+
 exports.discordCommands = {
 	errorlog() {
-		if(!this.can('hotpatch', true)) return false;
+		if (!this.can('hotpatch', true)) return false;
 		let log = Plugins.FS('./logs/errors.log').readSync().toString();
-		Plugins.Bins.upload(log, (r, link) =>{
+		Plugins.Bins.upload(log, (r, link) => {
 			let fullLink = 'https://' + link;
-			if(r) {
+			if (r) {
 				let data = new MessageEmbed({
 					title: 'Errores',
 					description: 'Log de errores del Bot',
-					url: fullLink
+					url: fullLink,
 				});
 				this.sendReply(data);
 			} else this.sendReply('Lo sentimos, no fue posible encontrar los logs');
@@ -159,8 +160,8 @@ exports.discordCommands = {
 		let data = new MessageEmbed({
 			title: 'Acerca de mi...',
 			description: `Soy ${Config.name} un bot multi-plataforma creado por ${packageData.author && packageData.author.name} para el servidor Space Showdown`,
-			url: packageData.url
+			url: packageData.url,
 		});
 		this.sendReply(data);
     },    
-}
+};

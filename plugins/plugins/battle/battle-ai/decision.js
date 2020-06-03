@@ -138,33 +138,33 @@ function cartesianProduct(tables) {
 	return comb;
 }
 
- function getDecisions (battle) {
-	var res = [];
-	var req = battle.request;
+ function getDecisions(battle) {
+	let res = [];
+	let req = battle.request;
 	if (!req) return null;
 	if (req.wait) return null; // Nothing to do
 	if (req.teamPreview) {
 		/* Team required */
-		var n = 1;
+		let n = 1;
 		if (battle.gametype === 'doubles') n = 2;
 		else if (battle.gametype === 'triples') n = 3;
-		var comb = generateTeamCombinations(req.side.pokemon.length, n);
-		for (var i = 0; i < comb.length; i++) {
+		let comb = generateTeamCombinations(req.side.pokemon.length, n);
+		for (let i = 0; i < comb.length; i++) {
 			res.push([new TeamDecision(comb[i])]);
 		}
 	} else if (req.forceSwitch) {
-		var fw = req.forceSwitch;
-		var tables = [];
-		var toSw, canSw;
+		let fw = req.forceSwitch;
+		let tables = [];
+		let toSw, canSw;
 		toSw = 0;
-		for (var i = 0; i < fw.length; i++) if (fw[i]) toSw++;
-		for (var i = 0; i < fw.length; i++) {
+		for (let i = 0; i < fw.length; i++) if (fw[i]) toSw++;
+		for (let i = 0; i < fw.length; i++) {
 			tables.push([]);
 			if (!fw[i]) {
 				tables[i].push(new PassDecision());
 			} else {
 				canSw = 0;
-				for (var k = 0; k < req.side.pokemon.length; k++) {
+				for (let k = 0; k < req.side.pokemon.length; k++) {
 					if (req.side.pokemon[k].condition === "0 fnt") continue; // Fainted
 					if (req.side.pokemon[k].active) continue; // Active
 					canSw++;
@@ -177,20 +177,20 @@ function cartesianProduct(tables) {
 		}
 		res = cartesianProduct(tables);
 	} else if (req.active) {
-		var tables = [];
-		for (var i = 0; i < req.active.length; i++) {
+		let tables = [];
+		for (let i = 0; i < req.active.length; i++) {
 			tables.push([]);
 			if (req.side.pokemon[i].condition === "0 fnt") {
 				//fainted, pass
 				tables[i].push(new PassDecision());
 				continue;
 			}
-			var active = req.active[i];
-			var auxHasTarget;
+			let active = req.active[i];
+			let auxHasTarget;
 			//moves
-			for (var j = 0; j < active.moves.length; j++) {
+			for (let j = 0; j < active.moves.length; j++) {
 				if (active.moves[j].disabled || active.moves[j].pp === 0) continue; // No more moves
-				var mega = false;
+				let mega = false;
 				if (active.canMegaEvo || (req.side.pokemon[i] && req.side.pokemon[i].canMegaEvo)) mega = true;
 				if (!active.moves[j].target) {
 					// No need to set the target
@@ -198,18 +198,18 @@ function cartesianProduct(tables) {
 					tables[i].push(new MoveDecision(j, null, false, active.moves[j].move));
 				} else if (active.moves[j].target in {'any': 1, 'normal': 1}) {
 					auxHasTarget = false;
-					for (var tar = 0; tar < battle.foe.active.length; tar++) {
+					for (let tar = 0; tar < battle.foe.active.length; tar++) {
 						if (!battle.foe.active[tar] || battle.foe.active[tar].fainted) continue; // Target not found
 						if (active.moves[j].target === 'normal' && isTooFar(battle, tar, i)) continue; // Target too far
 						auxHasTarget = true;
 					}
-					for (var tar = 0; tar < battle.foe.active.length; tar++) {
+					for (let tar = 0; tar < battle.foe.active.length; tar++) {
 						if (auxHasTarget && (!battle.foe.active[tar] || battle.foe.active[tar].fainted)) continue; // Target not found
 						if (active.moves[j].target === 'normal' && isTooFar(battle, tar, i)) continue; // Target too far
 						if (mega) tables[i].push(new MoveDecision(j, tar, true, active.moves[j].move));
 						tables[i].push(new MoveDecision(j, tar, false, active.moves[j].move));
 					}
-					for (var tar = 0; tar < battle.self.active.length; tar++) {
+					for (let tar = 0; tar < battle.self.active.length; tar++) {
 						if (tar === i) continue; // Not self target allowed
 						if (!battle.self.active[tar] || battle.self.active[tar].fainted) continue; // Target not found
 						if (active.moves[j].target === 'normal' && isTooFar(battle, tar, i)) continue; // Target too far
@@ -217,7 +217,7 @@ function cartesianProduct(tables) {
 						tables[i].push(new MoveDecision(j, (-1) * (tar + 1), false, active.moves[j].move));
 					}
 				} else if (active.moves[j].target in {'adjacentAlly': 1}) {
-					for (var tar = 0; tar < battle.self.active.length; tar++) {
+					for (let tar = 0; tar < battle.self.active.length; tar++) {
 						if (tar === i) continue; // Not self target allowed
 						if (!battle.self.active[tar] || battle.self.active[tar].fainted) continue; // Target not found
 						if (active.moves[j].target === 'normal' && isTooFar(battle, tar, i)) continue; // Target too far
@@ -232,7 +232,7 @@ function cartesianProduct(tables) {
 			}
 			//switchs
 			if (!active.trapped) {
-				for (var k = 0; k < req.side.pokemon.length; k++) {
+				for (let k = 0; k < req.side.pokemon.length; k++) {
 					if (req.side.pokemon[k].condition === "0 fnt") continue; // Fainted
 					if (req.side.pokemon[k].active) continue; // Active
 					tables[i].push(new SwitchDecision(k, req.side.pokemon[k].ident));
@@ -248,4 +248,4 @@ function cartesianProduct(tables) {
 	return res;
 } 
 
-exports.getDecisions = getDecisions;;
+exports.getDecisions = getDecisions;

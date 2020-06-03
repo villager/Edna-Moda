@@ -1,7 +1,8 @@
-
-
-
-if(!global.Config) global.Config = require('./config/config');
+"use strict";
+/**
+ *  Main File
+ */
+if (!global.Config) global.Config = require('./config/config');
 
 global.Plugins = require('./plugins');
 
@@ -11,14 +12,14 @@ global.Chat = require('./chat');
 
 let bots = Object.create(null);
 function getBot(bot) {
-    if(!bots[bot]) return false;
+    if (!bots[bot]) return false;
     return bots[bot];
 }
 global.Bot = getBot;
 
 Bot.bots = bots;
 
-Bot.forEach = function(callback, thisArg) {
+Bot.forEach = function (callback, thisArg) {
     Object.values(bots).forEach(callback, thisArg);
 };
 
@@ -28,21 +29,20 @@ global.toUserName = Plugins.Utils.toUserName;
 Plugins.init();
 let listeners = (Object.keys(Config.servers).length + 1) * Object.keys(Plugins.plugins).length;
 Plugins.eventEmitter.setMaxListeners(listeners);
-global.Discord = null
+let Discord = undefined;
+global.Discord = Discord;
 
 const PSBot = require('./showdown');
 const DiscordBot = require('./discord');
-
 class GBot {
     constructor() {
-        if(Config.token && Config.name) {
+        if (Config.token && Config.name) {
             this.discord = Discord = new DiscordBot();
         }
         this.servers = Object.create(null);
         for (let i in Config.servers) {
             let Server = Config.servers[i];
             this.servers[i] = bots[i] = new PSBot(Server);
-
         }
     }
     connect() {
@@ -54,18 +54,18 @@ class GBot {
 			    console.log('Connecting to server: ' + Server.id + ":" + Server.port);
 		    });
 		    Server.on('connect', () => {
-			    console.log('Bot connected to server: ' + Server.id + ":" + Server.port);
-	    	});
-		    Server.on('disconnect', err => {
-		    	console.log('Bot Disconnected' + (err ? (" | " + err.code + ": " + err.message) : ''));
+                console.log('Bot connected to server: ' + Server.id + ":" + Server.port);
+            });
+            Server.on('disconnect', err => {
+                console.log('Bot Disconnected' + (err ? (" | " + err.code + ": " + err.message) : ''));
                 if (Server.manager.closed || Server.manager.connecting || Server.manager.status.connected) return;
                 Server.manager.onBegin();
             });
             Chat.loadPlugins();
         }
-        if(this.discord) this.discord.connect();
+        if (this.discord) this.discord.connect();
     }
 }
-const GlobalBot = global.GlobalBot = new GBot ();
+const GlobalBot = global.GlobalBot = new GBot();
 
 GlobalBot.connect();

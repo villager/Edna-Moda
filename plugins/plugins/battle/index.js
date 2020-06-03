@@ -14,7 +14,7 @@ Config.battles = {
 };
 
 function onParse(server, room, data, isIntro, spl) {
-    switch(spl[0]) {
+    switch (spl[0]) {
         case 'updatechallenges':
             Challenges.parse(server, room, data, isIntro, spl);
         break;
@@ -25,12 +25,12 @@ function onParse(server, room, data, isIntro, spl) {
     try {
 		BattleBot.receive(server, room, data, isIntro);
 	} catch (e) {
-		Monitor.log(e, null ,server);
+		Monitor.log(e, null, server);
 	}
 }
 exports.loadData = Storage.loadData;
 
-exports.init = function() {
+exports.init = function () {
     // Initialize countBattles
     Bot.forEach(bot => {
         countBattles[bot.id] = 0;
