@@ -17,14 +17,13 @@
         "node-static": "^0.7.11",
         "ps-data": "git://github.com/spaceshowdown/ps-data.git",
         "request": "^2.88.2",
-        "sockjs-client": "^1.1.4",
-        "sugar": "^1.4.1"
+        "sockjs-client": "^1.1.4"
     },
     "optionalDependencies": {
         "githubhook": "^1.9.3"
     },
     "devDependencies": {
-        "mocha": "^2.3.4"
+        "mocha": "^7.1.1"
     },
     "url": "https://github.com/villager/Edna-Moda",
     "license": "MIT",
