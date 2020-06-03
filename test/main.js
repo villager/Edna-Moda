@@ -19,8 +19,9 @@ try {
 		path.resolve(__dirname, '../config/config.js'),
 		fs.readFileSync(path.resolve(__dirname, '../config/config-example.js'))
 	);
-} 
-require('../bot');
+} finally {
+    require('../bot');    
+}
 
 Config.servers = {
     "testland":{
