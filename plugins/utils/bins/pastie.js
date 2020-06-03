@@ -11,7 +11,6 @@ function upload(toUpload, callback) {
 	let req = https.request(reqOpts, res => {
 		res.on('data', chunk => {
 			try {
-                console.log(JSON.parse(chunk.toString()));
 				let linkStr = "pastie.io/" + JSON.parse(chunk.toString())['key'];
 				if (typeof callback === "function") callback(true, linkStr);
 			} catch (e) {

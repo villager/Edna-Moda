@@ -31,6 +31,7 @@ class Parser {
 		this.cmd = '';
 		this.cmdToken = '';
 		this.target = '';
+		this.pmTarget = '';
 		let isWord = false;
 		if (!message || !message.trim().length) return;
 		let cmdToken = message.charAt(0);
