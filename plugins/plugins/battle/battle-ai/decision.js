@@ -34,13 +34,13 @@ class PassDecision {
 	constructor() {
 		this.type = "pass";
 	}
-} 
+}
 
 class ShiftDecision {
 	constructor() {
 		this.type = "shift";
 	}
-} 
+}
 
 exports.ShiftDecision = ShiftDecision;
 exports.PassDecision = PassDecision;
@@ -246,6 +246,6 @@ function cartesianProduct(tables) {
 		res = cartesianProduct(tables);
 	}
 	return res;
-} 
+}
 
 exports.getDecisions = getDecisions;

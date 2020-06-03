@@ -38,12 +38,12 @@ describe("Plugins", () => {
             });
         });
         describe('getItem', () => {
-            it('should return an object',  () => {
+            it('should return an object', () => {
                 assert(typeof Plugins.Dex.getItem('Choice Scarf') === "object");
             });
         });
         describe('getAbility', function () {
-            it('should return an object',  () => {
+            it('should return an object', () => {
                 assert(typeof Plugins.Dex.getAbility('Intimidate') === "object");
             });
         });

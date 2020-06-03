@@ -6,7 +6,7 @@ exports.loadData = Storage.loadData;
 
 exports.key = 'showdown';
 
-function onParse(server, room, data, isIntro, spl) { 
+function onParse(server, room, data, isIntro, spl) {
     if (spl[0] === 'j' || spl[0] === 'l') {
         if (isIntro) return;
         if (isBlackList(server.id, room, spl[1])) {
@@ -43,7 +43,7 @@ function isBlackList(server, room, user) {
     if (!Storage.blacklist[server]) return false;
     if (!Storage.blacklist[server][room]) return false;
     if (Storage.blacklist[server][room][toId(user)]) return true;
-    return false;    
+    return false;
 }
 exports.commands = {
     blacklist: {
@@ -62,7 +62,7 @@ exports.commands = {
             if (!isBlackList(this.id, room, target)) return this.sendReply('El usuario no estaba en la lista negra');
             removeBlackList(this.id, room, target);
             this.sendReply(`Has eliminado al usuario ${target} de la lista negra`);
-        }, 
+        },
         list(target, room) {
             if (!this.can('ban', true)) return false;
             if (this.pmTarget) return this.sendReply('Este es un comando de sala');
@@ -72,7 +72,7 @@ exports.commands = {
             loadList += 'Usuarios de la lista negra \n';
             for (let i in Storage.blacklist[this.id][room.id]) {
                 let user = Storage.blacklist[this.id][room.id][i];
-                loadList += `${i} - añadido por ${user.by} el ${user.date}\n`; 
+                loadList += `${i} - añadido por ${user.by} el ${user.date}\n`;
             }
             Plugins.Bins.upload(loadList, (r, link) => {
                 const fullLink = 'https://' + link;

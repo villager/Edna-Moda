@@ -114,8 +114,8 @@ exports.psCommands = {
             if (r) this.sendReply(Lang.replaceSub(this.lang, 'errorlog', 'link', fullLink));
             else this.sendReply(Lang.getSub(this.lang, 'errorlog', 'error'));
         });
-    },  
-    about() {
+	},
+	about() {
         let version = Chat.packageData.url;
         let author = Chat.packageData.author && Chat.packageData.author.name;
         this.sendReply(Lang.replace(this.lang, 'about', this.bot.name, author, version));
@@ -134,8 +134,8 @@ exports.psCommands = {
         if (ENGLISH_ALIASES.has(target)) {
             if (room.language === 'en') return this.sendReply(Lang.getSub(this.lang, 'language', 'alr_en'));
             this.sendReply(Lang.getSub(this.lang, 'language', 'now_en'));
-            room.language = 'en';            
-        }
+			room.language = 'en';
+		}
     },
 };
 
@@ -152,7 +152,7 @@ exports.discordCommands = {
 					url: fullLink,
 				});
 				this.sendReply(data);
-			} else  {
+			} else {
 				this.sendReply('Lo sentimos, no fue posible encontrar los logs');
 			}
 		});
@@ -165,5 +165,5 @@ exports.discordCommands = {
 			url: packageData.url,
 		});
 		this.sendReply(data);
-    },    
+	},
 };

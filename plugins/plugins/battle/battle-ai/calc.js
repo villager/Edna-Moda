@@ -42,7 +42,6 @@ class Pokemon {
 	getIV(iv) {
 		return this.ivs[iv] || 31;
 	}
-
 	getDV(dv) {
 		return this.dvs[dv] || 15;
 	}
@@ -80,7 +79,7 @@ class Pokemon {
 		}
 		return res;
 	}
-} 
+}
 
 class Conditions {
     constructor(data) {
@@ -94,7 +93,7 @@ class Conditions {
 			this[i] = data[i];
 		}
 	}
-} 
+}
 
 class Damage {
 	constructor(hp, rolls) {
@@ -139,7 +138,7 @@ function getRolls(n, p) {
 		r.push(m);
 	}
 	return r;
-} 
+}
 
 function getHazardsDamage(poke, conditions, gen, inverse) {
 	let dmg = 0;

@@ -267,7 +267,7 @@ module.exports = {
 		}
 		let move = null;
 		for (let i = 0; i < poke.moves.length; i++) {
-			if (poke.moves[i].id ===  moveTemplate.id) {
+			if (poke.moves[i].id === moveTemplate.id) {
 				move = poke.moves[i];
 				break;
 			}
@@ -329,7 +329,7 @@ module.exports = {
 		}
 		let move = null;
 		for (let i = 0; i < poke.moves.length; i++) {
-			if (poke.moves[i].id ===  moveTemplate.id) {
+			if (poke.moves[i].id === moveTemplate.id) {
 				move = poke.moves[i];
 				break;
 			}

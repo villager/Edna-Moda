@@ -9,7 +9,8 @@ function getMultipleEff(typeA, typeB, gen, notInmmune) {
 		mux *= tmp;
 	}
 	return mux;
-} 
+}
+
 function getEffectiveness(typeA, typeB, gen) {
 	if (!gen) gen = 8;
 	let chart = exports.gen8;
@@ -25,7 +26,7 @@ function getEffectiveness(typeA, typeB, gen) {
 	default:
 		return 1;
 	}
-} 
+}
 
 const gen8 = {
 	"Bug": {

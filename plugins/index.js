@@ -80,7 +80,7 @@ Plugins.loadPlugins = function () {
             } else {
                 if (plugin.commands && typeof plugin.commands === 'object') {
                     Object.assign(Chat[COMMANDS_MAP.get(plugin.key)], plugin.commands);
-                }     
+                }
             }
         }
     });

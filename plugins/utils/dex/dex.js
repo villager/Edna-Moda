@@ -204,7 +204,7 @@ exports.packTeam = function (team) {
 		}
 	}
 
-	return buf;    
+	return buf;
 };
 
 exports.exportTeam = function (team) {

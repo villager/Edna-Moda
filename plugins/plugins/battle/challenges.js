@@ -23,8 +23,7 @@ exports.parse = function (server, room, message, isIntro, spl) {
     let nBattles = Battle.countBattles[server.id];
 	try {
 	    challenges = JSON.parse(message.substr(18));
-    } catch (e) {return}
-    
+	} catch (e) {return}
 	if (challenges.challengesFrom) {
 		for (let i in challenges.challengesFrom) {
 			if (canChallenge(server, i, nBattles)) {

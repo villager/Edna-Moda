@@ -50,7 +50,7 @@ class GBot {
             let Server = this.servers[i];
             Server.connect();
             /* Bot Status events */
-            Server.on('connecting',  () => {
+            Server.on('connecting', () => {
 			    console.log('Connecting to server: ' + Server.id + ":" + Server.port);
 		    });
 		    Server.on('connect', () => {

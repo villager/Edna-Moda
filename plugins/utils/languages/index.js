@@ -1,6 +1,9 @@
 "use strict";
 
-class  LoadLang {
+class LoadLang {
+    /**
+     * @param {string} path
+     */
     constructor(path) {
         if (!path) path = './base-lang.json';
         this.translations = Object.create(null);
@@ -16,7 +19,7 @@ class  LoadLang {
         let language = lang;
         this.load();
         if (!this.translations[language]) throw Error(`Lenguaje ${language} no existe`);
-        if (!this.translations[language][msg]) throw Error(`Mensaje ${msg} no existe en ${language}`);        
+        if (!this.translations[language][msg]) throw Error(`Mensaje ${msg} no existe en ${language}`);
         return this.translations[language][msg];
     }
     getSub(lang, msg, sub) {
@@ -41,6 +44,10 @@ class  LoadLang {
         return output;
     }
 }
+/**
+ * @param {string} langPath
+ * @return {LoadLang}
+ */
 function loadLang(langPath) {
     return new LoadLang(langPath);
 }

@@ -41,7 +41,7 @@ class Parser {
 				cmdToken = maybeToken[0];
 				isWord = true;
 			} else {
-				return; 
+				return;
 			}
 		}
 		let cmd = '', target = '';
@@ -53,7 +53,7 @@ class Parser {
 				splitWords.splice(splitWords.indexOf(cmdToken), 1);
 				splitWords.splice(splitWords.indexOf(cmd), 1);
 				target = splitWords.join(' ');
-			}  else {
+			} else {
 				message = message.split(' ');
 				cmd = message[1];
 				target = '';
@@ -115,14 +115,14 @@ class Parser {
 	}
 	sendReply(data) {
 		if (this.pmTarget) {
-			return this.bot.send(`/pm ${toId(this.pmTarget)}, ${data}`, toId(this.room));	
+			return this.bot.send(`/pm ${toId(this.pmTarget)}, ${data}`, toId(this.room));
 		} else {
 			if (!this.can('games', false)) { // Can't brodcast
 				return this.bot.send(`/pm ${toId(this.user)}, ${data}`, toId(this.room));
 			} {
-				return this.bot.send(data, toId(this.room));	
+				return this.bot.send(data, toId(this.room));
 			}
-		}		
+		}
 	}
 	get lang() {
 		let lang = this.room.language ? this.room.language : this.bot.language;
@@ -145,9 +145,9 @@ class Parser {
 			this.message = message;
 			this.room = room;
 			if (pm) this.pmTarget = user;
-        	this.run(commandHandler);
-		}        
-    }
+			this.run(commandHandler);
+		}
+	}
 	runHelp(help) {
 		let commandHandler = this.splitCommand(`.help ${help}`);
 		this.run(commandHandler);
@@ -170,7 +170,7 @@ class Parser {
 			}, this.bot.id);
 		}
 		if (result === undefined) result = false;
-		return result;      
-    }
+		return result;
+	}
 }
 module.exports = Parser;

@@ -115,7 +115,7 @@ function parseTournament(server, room, message, isIntro, spl) {
 			break;
 		case 'update':
 			try {
-                let data = JSON.parse(spl[2]);                
+				let data = JSON.parse(spl[2]);
 				for (let i in data) {
 					tourData[server.id][room][i] = data[i];
 				}
@@ -134,10 +134,10 @@ function parseTournament(server, room, message, isIntro, spl) {
 				if (toId(data.results[0][0]) === toId(server.name)) {
 					winners[server.id][room] = data.results[0][0];
 				} else {}
-            	winners[server.id][room] = data.results[0][0];
+				winners[server.id][room] = data.results[0][0];
 			} catch (e) {}
 			// Validar que pueda vocear la felicitacion
-			let lang = room.language ? room.language : server.language;	
+			let lang = room.language ? room.language : server.language;
 			server.send(Lang.replace(lang, 'congrats', winners[server.id][room]));
 			Leaderboards.onTournamentEnd(server, room, tourData[server.id][room]);
 			delete tourData[server.id][room];
@@ -309,7 +309,7 @@ exports.commands = {
 			}
 			if (params.scout) {
 				let scout = toId(params.scout);
-				if (scout in {'yes': 1, 'on': 1, 'true': 1, 'allow': 1, 'allowed': 1})  details.scoutProtect = false;
+				if (scout in {'yes': 1, 'on': 1, 'true': 1, 'allow': 1, 'allowed': 1}) details.scoutProtect = false;
 				else details.scoutProtect = true;
 			}
 		}
@@ -321,7 +321,7 @@ exports.commands = {
 				delete tournaments[this.id][room.id];
 			}
 		}, 2500);
-    },   
+	},
 	unofficial: 'official',
 	official(target, room, user) {
 		//if (!this.can("official")) return;

@@ -10,17 +10,17 @@ function updateJoins() {
 		for (let i in battles[x]) {
 			Storage.autoJoin[x][i] = 1;
 		}
-	}  
+	}
 }
 exports.init = function () {
-    for (let i in battles) { 
+	for (let i in battles) {
 		for (let x in battles[i]) {
 			try {
 				battles[i][x].destroy();
 			} catch (e) {}
 			delete battles[i][x];
-		} 
-    }  
+		}
+	}
 };
 exports.receive = function (server, room, data, isIntro) {
     if (data.charAt(0) === ">") return;
@@ -46,7 +46,7 @@ exports.receive = function (server, room, data, isIntro) {
 			delete battles[server.id][room];
 			updateJoins();
 		}
-	}   
+	}
 };
 exports.tryAbanoned = function () {
 	if (!Config.abandonedBattleAutojoin) return;

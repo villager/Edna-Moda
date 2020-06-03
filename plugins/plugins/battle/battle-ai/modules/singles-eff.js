@@ -709,7 +709,7 @@ exports.setup = function (Data) {
 		let tmp, maxi = null;
 		for (const pokemon of decisions) {
 			if (decisions[0].type === 'switch') {
-				if (battle.foe.active[0] && !battle.foe.active[0].fainted  && battle.self.pokemon[pokemon.pokeId]) {
+				if (battle.foe.active[0] && !battle.foe.active[0].fainted && battle.self.pokemon[pokemon.pokeId]) {
 					let pk = battle.self.pokemon[pokemon.pokeId];
 					if (pk.helpers.hasNoViableMoves === battle.foe.active[0].name) continue;
 				}

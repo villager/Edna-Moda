@@ -75,7 +75,7 @@ exports.globalCommands = {
 exports.discordCommands = {
     dynlist: 'listdyn',
     listdyn() {
-        if (!dyns[this.id]) return this.sendReply(Lang.getSub(this.lang, 'non_server_exist'));       
+        if (!dyns[this.id]) return this.sendReply(Lang.getSub(this.lang, 'non_server_exist'));
         let data = '';
         data += Lang.get(this.lang, 'header') + '\n';
         for (let i in dyns[this.id]) {
@@ -107,7 +107,7 @@ exports.discordCommands = {
 exports.psCommands = {
     dynlist: 'listdyn',
     listdyn() {
-        if (!dyns[this.id]) return this.sendReply(Lang.getSub(this.lang, 'non_server_exist'));       
+        if (!dyns[this.id]) return this.sendReply(Lang.getSub(this.lang, 'non_server_exist'));
         let data = '';
         data += Lang.get(this.lang, 'header') + '\n';
         for (let i in dyns[this.id]) {

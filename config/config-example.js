@@ -52,7 +52,7 @@ Config.servers = {
     },
 };
 
-/** 
+/**
  * Discord Config
  */
 

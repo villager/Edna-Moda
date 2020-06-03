@@ -50,7 +50,7 @@ function getEffect(effect, gen) {
         if (!effect.effectType) effect.effectType = 'Effect';
     }
     return effect;
-} 
+}
 
 function getTemplate(poke, gen) {
 	if (!gen || gen > 8 || gen < 1) gen = 8;
@@ -83,7 +83,8 @@ function getTemplate(poke, gen) {
 		};
 	}
 	return pokemon;
-} 
+}
+
 function getMove(move, gen) {
     if (!gen || gen > 8 || gen < 1) gen = 8;
     move = toId(move || "");
@@ -126,7 +127,8 @@ function getMove(move, gen) {
     }
     if (!moveData.effectType) moveData.effectType = 'Move';
     return moveData;
-} 
+}
+
 function getItem(item, gen) {
     if (!gen || gen > 8 || gen < 1) gen = 8;
     item = toId(item || "");
@@ -159,7 +161,7 @@ function getItem(item, gen) {
     if (!itemData.category) itemData.category = 'Effect';
     if (!itemData.effectType) itemData.effectType = 'Item';
     return itemData;
-} 
+}
 
 function getAbility(ab, gen) {
     if (!gen || gen > 8 || gen < 1) gen = 8;
@@ -193,7 +195,7 @@ function getAbility(ab, gen) {
     if (!ability.category) ability.category = 'Effect';
     if (!ability.effectType) ability.effectType = 'Ability';
     return ability;
-} 
+}
 
 class Move {
     constructor(template) {
@@ -213,7 +215,8 @@ class Move {
             this.pp = Math.floor(this.template.pp * 1.60);
         }
     }
-} 
+}
+
 class Pokemon {
     constructor(template, properties) {
         if (!template || typeof template !== "object") throw new Error("Invalid pokemon template");
@@ -379,7 +382,8 @@ class Pokemon {
         }
         this.transformPrev = null;
     }
-} 
+}
+
 class Player {
     constructor(id, name, avatar) {
         this.id = id || "p0";
@@ -415,7 +419,8 @@ class Player {
         }
         return alive;
     }
-} 
+}
+
 function getFormatsData(gen) {
     if (!gen || gen > 8 || gen < 1) gen = 8;
     try {
@@ -423,7 +428,8 @@ function getFormatsData(gen) {
     } catch (e) {
         Monitor.log(e, 'Format Data Not Found', 'Globaal');
     }
-} 
+}
+
 exports.getFormatsData = getFormatsData;
 exports.Player = Player;
 exports.Pokemon = Pokemon;

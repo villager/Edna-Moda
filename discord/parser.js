@@ -33,7 +33,7 @@ class Parser {
 				cmdToken = maybeToken[0];
 				isWord = true;
 			} else {
-				return; 
+				return;
 			}
 		}
 		let cmd = '', target = '';
@@ -45,7 +45,7 @@ class Parser {
 				splitWords.splice(splitWords.indexOf(cmdToken), 1);
 				splitWords.splice(splitWords.indexOf(cmd), 1);
 				target = splitWords.join(' ');
-			}  else {
+			} else {
 				message = message.split(' ');
 				cmd = message[1];
 				target = '';
@@ -119,8 +119,8 @@ class Parser {
             this.user = message.author;
             this.message = message.content;
             message = this.run(commandHandler);
-		}        
-    }
+		}
+	}
     sendReply(data) {
         this.channel.send(data);
 	}
@@ -149,7 +149,7 @@ class Parser {
 			}, 'Discord');
 		}
 		if (result === undefined) result = false;
-		return result;      
-    }
+		return result;
+	}
 }
 module.exports = Parser;

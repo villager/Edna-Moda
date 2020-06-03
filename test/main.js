@@ -1,9 +1,6 @@
 /**
- * 
  * Testing Our Lady
- * 
  */
-
 "use strict";
 
 const path = require('path');
@@ -29,6 +26,9 @@ Config.name = 'Edna Moda';
 
 require('../bot');
 
+/**
+ * @param {string} folder
+ */
 function testFolder(folder) {
     folder = path.resolve(__dirname, folder);
     let files = fs.readdirSync(folder);
@@ -38,5 +38,5 @@ function testFolder(folder) {
         }
     }
 }
-    
+
 testFolder('./plugins');

@@ -2,11 +2,11 @@
 
 const modFiles = ['singles-eff', 'ingame-nostatus', 'random', 'random-move', 'random-switch'];
 
-const Data = require('./battle-data'); 
+const Data = require('./battle-data');
 
- let modules = Object.create(null);
+let modules = Object.create(null);
 
- exports.modules = modules;
+exports.modules = modules;
 
 modFiles.forEach(function (file) {
 	let mod;

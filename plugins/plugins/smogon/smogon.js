@@ -39,13 +39,12 @@ function pokeData(lang, poke) {
     let name = data.name.toLowerCase();
     if (name.endsWith('-totem')) {
         name = name.replace('-totem', '');
-    }  
+    }
     let s = data.stats;
     let stats = '';
     for (let i in s) {
          stats += `${Lang.getSub(lang, 'data', i)} ${s[i]} | `;
     }
-    
     let abilities = [];
     data.abilities.map(abilitie => {
         let id = toId(abilitie).replace(' ', '');
@@ -62,8 +61,8 @@ function chatPokeText(lang, poke) {
     let output = '';
     output += `**${data.name} #${data.num}** |`;
     output += `${Lang.get(lang, "hab")}: ${pD.abilities} |`;
-    output += `${ Lang.get(lang, "group")}: ${data.eggs} |`;
-    output += `${Lang.get(lang, "evolution")}: ${data.evos ? data.evos :  Lang.get(lang, "none")} |`;
+    output += `${Lang.get(lang, "group")}: ${data.eggs} |`;
+    output += `${Lang.get(lang, "evolution")}: ${data.evos ? data.evos : Lang.get(lang, "none")} |`;
     output += `Gen: ${data.gen}`;
     return output;
 }
@@ -112,11 +111,12 @@ function embedPokemon(lang, poke) {
             text: pD.stats,
         },
         color: MAP_COLOR.has(data.color) ? MAP_COLOR.get(data.color) : '#FFFFFF',
-    });  
+    });
 }
 
 exports.init = function () {
-}; 
+
+};
 
 exports.psCommands = {
     dt(target) {
@@ -131,8 +131,8 @@ exports.psCommands = {
                     }
                 } else {
                     this.sendStrict(chatPokeText(this.lang, target));
-                } 
-            break;   
+                }
+            break;
             case 'Abilitie':
                 Storage.localAbilitie(toId(target).replace(' ', '')).then(abilitie => {
                     let data = `**${abilitie[this.lang].name}:** `;

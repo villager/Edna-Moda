@@ -27,8 +27,8 @@ class DiscordClient extends BaseClient {
 				plugin.init(this);
 			}
 		});
-		this.loadCommands();		
-	}
+        this.loadCommands();
+    }
     status() {
         this.on('ready', () => {
             this.user.setUsername(Config.name);
@@ -55,7 +55,7 @@ class DiscordClient extends BaseClient {
             guild.members.cache.forEach(user => {
                 if (user.id === id) {
                     sendTo = user;
-                }			
+                }
             });
 		});
 		if (sendTo) {

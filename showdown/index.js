@@ -22,11 +22,10 @@ class PSBot extends EventEmitter {
 		this.initCmds = opts.initCmds;
 		this.language = opts.language || 'english';
 		// Objects
-		this.rooms =  Object.create(null);
+		this.rooms = Object.create(null);
 		this.formats = Object.create(null);
 		this.commands = Object.create(null);
-		
-        this.disconnecting = false;
+		this.disconnecting = false;
 		this.named = false;
         this.joinedRooms = false;
         this.roomcount = 0;
@@ -42,8 +41,8 @@ class PSBot extends EventEmitter {
 		this.sending = {};
 		this.nextSend = 0;
 		this.maxLinesSend = 3;
-		this.socket = null;   		
-    }
+		this.socket = null;
+	}
     get botNick() {
         return this.bot.name;
 	}
@@ -109,7 +108,7 @@ class PSBot extends EventEmitter {
 				plugin.init(this);
 			}
 		});
-		this.loadCommands();		
+		this.loadCommands();
 	}
 	receive(msg) {
         this.emit('message', msg);
@@ -187,8 +186,8 @@ class PSBot extends EventEmitter {
 			break;
 		case 'init':
 			this.rooms[roomid] = new Room(roomid, {
-					type: splittedLine[1],
-			});				
+				type: splittedLine[1],
+			});
 			this.roomcount = Object.keys(this.rooms).length;
 			this.emit('joinRoom', roomid, this.rooms[roomid].type);
 			break;
@@ -218,7 +217,7 @@ class PSBot extends EventEmitter {
 					let data = JSON.parse(splittedLine[2]);
 					if (data.id !== toId(this.name)) {
 						let data = JSON.parse(splittedLine[2]);
-						if (data.group) this.group = data.group;						
+						if (data.group) this.group = data.group;
 					}
 				break;
 			case 'rooms':
@@ -354,6 +353,11 @@ class PSBot extends EventEmitter {
 			};
 			request(options, callback);
 		}
+		/**
+		 * @param {Error} error
+		 * @param {string} response
+		 * @param {string} body
+		 */
 		function callback(error, response, body) {
 			if (body === ';') return console.log('Failed to log in, name is registered', self.id);
 			if (body.length < 50) return console.log('Failed to log in: ' + body, self.id);
@@ -389,7 +393,7 @@ class PSBot extends EventEmitter {
     }
     joinRoom(room) {
         if (this.rooms[room]) return; // Ya estaba en la sala
-		this.rooms[room] =  new Room(room);
+		this.rooms[room] = new Room(room);
         this.send(`/join ${room}`);
     }
     joinAllRooms() {

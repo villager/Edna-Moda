@@ -6,7 +6,7 @@
 const path = require('path');
 const TOURS_DATA = path.resolve(__dirname, 'data', 'leaderboards.json');
 
-let ladder = exports.ladder =  {};
+let ladder = exports.ladder = {};
 
 exports.load = function () {
 	try {
@@ -38,8 +38,9 @@ function filterTier(tier, filter) {
 		}
 	} else {
 		return true;
-	}    
+	}
 }
+
 function getConfig(server, room) {
     let res = {
 		tierFilter: null,
@@ -236,7 +237,7 @@ function onTournamentEnd(server, room, data) {
 	Monitor.debug("Leaderboard updated. " + Plugins.getDateString());
 }
 
-let resetCodes =  exports.resetCodes = {};
+let resetCodes = exports.resetCodes = {};
 
 function getResetHashCode(server, room) {
 	if (!ladder[server.id][room]) return null;

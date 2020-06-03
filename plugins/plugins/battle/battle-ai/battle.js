@@ -262,7 +262,7 @@ class Battle {
                 let argstr = args.pop();
                 // default to '.' so it evaluates to boolean true
                 kwargs[argstr.substr(1, bracketPos - 1)] = ((argstr.substr(bracketPos + 1)).trim() || '.');
-            }            
+            }
             if (args[0].substr(0, 1) === '-') {
                 this.runMinor(args, kwargs, isIntro);
             } else {

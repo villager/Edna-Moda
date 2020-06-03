@@ -66,7 +66,7 @@ function getTeam(format) {
 		return teamStr;
 	} catch (e) {
 		console.log(e.stack);
-	}	
+	}
 }
 function packTeam(team) {
 	Plugins.Dex.packTeam(team);
@@ -75,7 +75,7 @@ function hasTeam(format) {
 	let formatId = toId(format);
 	if (teams[formatId]) return true;
 	return false;
-} 
+}
 
 exports.add = addTeam;
 exports.packed = packTeam;

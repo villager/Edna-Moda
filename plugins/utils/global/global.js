@@ -15,7 +15,7 @@ Tools.toId = function (text) {
 Tools.toUserName = function (name) {
 	if (name && name.username) {
 		name = name.username;
-	} 
+	}
 	return ('' + name).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
 
@@ -29,10 +29,10 @@ Tools.splint = function (target, separator, length) {
 			if (separator === target[i]) positions.push(i);
 		}
 		for (let i = 0; i < positions.length; i++) {
-        	if (cmdArr.length + 1 === length) {
+			if (cmdArr.length + 1 === length) {
 				cmdArr.push(target.slice(positions[i - 1], target.length));
 				break;
-           	} else if (i === 0) {
+			} else if (i === 0) {
 				cmdArr.push(target.slice(0, positions[i]));
 			} else {
 				cmdArr.push(target.slice(positions[i - 1], positions[i]));

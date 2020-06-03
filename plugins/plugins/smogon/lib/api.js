@@ -7,7 +7,6 @@ function searchDataRaw(link) {
 	return new Promise((resolve, reject) => {
 		https.get(link, res => {
 			let data = "";
-	
 			res.setEncoding('utf8');
 			res.on('data', chunk => {
 				data += chunk;
@@ -22,8 +21,8 @@ function searchDataRaw(link) {
 			});
 		}).on('error', err => {
 			reject(err);
-		}).setTimeout(3500);	
-	});	
+		}).setTimeout(3500);
+	});
 }
 function searchData(link) {
 	return new Promise((resolve, reject) => {
@@ -51,7 +50,7 @@ function searchData(link) {
 		}).catch(e => reject(e));
 	});
 }
-function searchAbilitie(num) { 
+function searchAbilitie(num) {
 	return new Promise((resolve, reject) => {
 		searchData(`${API_LINK}/ability/${num}`).then(data => {
 			return resolve(data);
@@ -63,7 +62,7 @@ function searchItem(num) {
 		searchData(`${API_LINK}/move/${num}`).then(data => {
 			return resolve(data);
 		}).catch(e => reject(e));
-	});	
+	});
 }
 exports.searchAbilitie = searchAbilitie;
 exports.searchItem = searchItem;
