@@ -6,10 +6,10 @@ const assert = require("assert");
 describe("Commands", () => {
     describe("Load", () => {
         let pluginList = fs.readdirSync("./plugins/plugins/");
-        it ("pluginList should be an array", () => {
+        it("pluginList should be an array", () => {
             assert(Array.isArray(pluginList) === true);
         });
-        it ("Should not crash when it loads", () => {
+        it("Should not crash when it loads", () => {
             pluginList.forEach(plugin => {
                 Plugins.load(plugin);
             });
