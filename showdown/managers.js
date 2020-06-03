@@ -1,5 +1,4 @@
 "use strict";
-const Config = require('../config/config.js');
 
 const DEFAULT_ACTIVITY = {
     every: 10,
