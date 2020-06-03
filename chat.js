@@ -37,7 +37,7 @@ Chat.hasAuth = function (id, user, perm) {
         }  else {
             group = user.charAt(0);
         }
-        if (rank === group) return true; // It's equal 
+        if (rank === group) return true;
         if (Config.rankList.indexOf(group) >= Config.rankList.indexOf(rank)) return true;            
     }
     return false;

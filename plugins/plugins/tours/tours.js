@@ -116,8 +116,9 @@ function parseTournament(server, room, message, isIntro, spl) {
 		case 'update':
 			try {
                 let data = JSON.parse(spl[2]);                
-				for (let i in data)
+				for (let i in data) {
 					tourData[server.id][room][i] = data[i];
+				}
 			} catch (e) {}
 			break;
 		case 'updateEnd':

@@ -61,7 +61,9 @@ class DiscordClient extends BaseClient {
 		if (sendTo) {
 			sendTo.send(message);
 			return true;
-		} else return false;
+		} else {
+            return false;
+        }
 	}
     logs() {
         this.on('error', e => new Error(`${e} \n`));

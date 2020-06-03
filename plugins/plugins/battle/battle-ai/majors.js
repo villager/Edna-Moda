@@ -171,8 +171,9 @@ module.exports = {
 		/* Get the pokemon or create a new one */
 		let poke = null;
 		for (let i = 0; i < this.players[p].pokemon.length; i++) {
-			if (this.players[p].pokemon[i].name === name)
+			if (this.players[p].pokemon[i].name === name) {
 				poke = this.players[p].pokemon[i];
+			}
 		}
 		if (!poke) {
 			poke = new battleData.Pokemon(battleData.getPokemon(details.species, this.gen), {name: name});
@@ -341,11 +342,11 @@ module.exports = {
 	},
 
 	gen: function (args, kwargs) {
-		this.gen = parseInt(args[1], 10);
+		this.gen = parseInt(args[1]);
 	},
 
 	title: function (args, kwargs) {
-		this.title = parseInt(args[1], 10);
+		this.title = parseInt(args[1]);
 	},
 
 	callback: function (args, kwargs) {

@@ -20,8 +20,8 @@ function onParse(server, room, data, isIntro, spl) {
         break;
     }
 	if (!server.rooms[room]) {
-		if (spl[0] !== 'init' || spl[1] !== 'battle') return;
-	} else if (server.rooms[room].type !== "battle") return;
+		if (spl[0] !== 'init' || spl[1] !== 'battle') {return}
+	} else if (server.rooms[room].type !== "battle") {return}
     try {
 		BattleBot.receive(server, room, data, isIntro);
 	} catch (e) {

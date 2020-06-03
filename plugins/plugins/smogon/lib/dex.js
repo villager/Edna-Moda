@@ -34,7 +34,9 @@ function searchTemplate(lookingfor) {
         return 'Move';
     } else if (searchSpanish(lookingfor)) {
         return searchSpanish(lookingfor).type;
-    } else  return false;
+    } else {
+        return false;
+    }
 }
 
 function getGen(name, num) {

@@ -152,7 +152,9 @@ exports.discordCommands = {
 					url: fullLink,
 				});
 				this.sendReply(data);
-			} else this.sendReply('Lo sentimos, no fue posible encontrar los logs');
+			} else  {
+				this.sendReply('Lo sentimos, no fue posible encontrar los logs');
+			}
 		});
 	},
     about() {

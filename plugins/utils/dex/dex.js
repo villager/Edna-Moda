@@ -135,13 +135,14 @@ exports.packTeam = function (team) {
 
 		// moves
 		buf += '|';
-		if (set.moves) for (let j = 0; j < set.moves.length; j++) {
-			let moveid = toId(set.moves[j]);
-			if (j && !moveid) continue;
-			buf += (j ? ',' : '') + moveid;
-			if (moveid.substr(0, 11) === 'hiddenpower' && moveid.length > 11) hasHP = true;
+		if (set.moves) {
+			for (let j = 0; j < set.moves.length; j++) {
+				let moveid = toId(set.moves[j]);
+				if (j && !moveid) continue;
+				buf += (j ? ',' : '') + moveid;
+				if (moveid.substr(0, 11) === 'hiddenpower' && moveid.length > 11) hasHP = true;
+			}
 		}
-
 		// nature
 		buf += '|' + (set.nature || '');
 
@@ -399,7 +400,7 @@ function fastUnpackTeam(buf) {
 
 		// level
 		j = buf.indexOf('|', i);
-		if (i !== j) set.level = parseInt(buf.substring(i, j), 10);
+		if (i !== j) set.level = parseInt(buf.substring(i, j));
 		i = j + 1;
 
 		// happiness
