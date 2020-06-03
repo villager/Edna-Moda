@@ -23,6 +23,9 @@ Config.servers = {
         initCmd: [],
     }
 };
+Config.token = 'ABCDEFGHIJKLMNOPQRSTUVWXZAS';
+Config.name = 'Edna Moda';
+
 require('../bot');
 
 function testFolder(folder) {
