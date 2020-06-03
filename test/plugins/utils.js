@@ -28,23 +28,23 @@ describe("Plugins", () => {
     });
     describe("Dex", () => {
         describe('getTemplate', () => {
-            it("Should return a Pokemon", () => {
-                assert(Plugins.Dex.getTemplate("Gardevoir").name === "Gardevoir");
+            it("Should return a object", () => {
+                assert(Plugins.Dex.getTemplate(toId("Gardevoir")).name === "Gardevoir");
             });
         });
         describe('getMove', () => {
-            it('should return a move', () => {
-                assert(Plugins.Dex.getMove('Tackle').name === "Tackle");
+            it('should return a object', () => {
+                assert(typeof Plugins.Dex.getMove('Tackle') === "object");
             });
         });
         describe('getItem', () => {
-            it('should return an item',  () => {
-                assert(Plugins.Dex.getItem('Choice Scarf').name === "Choice Scarf");
+            it('should return an object',  () => {
+                assert(typeof Plugins.Dex.getItem('Choice Scarf') === "object");
             });
         });
         describe('getAbility', function () {
-            it('should return an ability',  () => {
-                assert(Plugins.Dex.getAbility('Intimidate').name === "Intimidate");
+            it('should return an object',  () => {
+                assert(typeof Plugins.Dex.getAbility('Intimidate') === "object");
             });
         });
     });
