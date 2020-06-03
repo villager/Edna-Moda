@@ -23,6 +23,7 @@ Config.servers = {
         initCmd: [],
     }
 };
+require('../bot');
 
 function testFolder(folder) {
     folder = path.resolve(__dirname, folder);
@@ -35,4 +36,3 @@ function testFolder(folder) {
 }
     
 testFolder('./plugins');
-
