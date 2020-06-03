@@ -6,22 +6,8 @@
 
 "use strict";
 
-let fs = require("fs");
-let path = require("path");
 
-try {
-	require.resolve('../config/config');
-} catch (err) {
-	if (err.code !== 'MODULE_NOT_FOUND' && err.code !== 'ENOENT') throw err; // Should never happen
-
-	console.log("config.js doesn't exist - creating one with default settings...");
-	fs.writeFileSync(
-		path.resolve(__dirname, '../config/config.js'),
-		fs.readFileSync(path.resolve(__dirname, '../config/config-example.js'))
-	);
-} finally {
-    require('../bot');    
-}
+global.Config = require('../config/config-example');
 
 Config.servers = {
     "testland":{
@@ -35,6 +21,7 @@ Config.servers = {
         initCmd: [],
     }
 };
+
 function testFolder(folder) {
     folder = path.resolve(__dirname, folder);
     let files = fs.readdirSync(folder);

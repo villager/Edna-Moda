@@ -1,9 +1,8 @@
 
 
 
-global.Config = require('./config/config');
+if(!global.Config) global.Config = require('./config/config');
 
-if(Config.servers['id1']) throw Error('Edit your config!');
 global.Plugins = require('./plugins');
 
 global.Monitor = require('./lib/monitor');
