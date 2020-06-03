@@ -59,7 +59,11 @@ class GBot {
             Server.on('disconnect', err => {
                 console.log('Bot Disconnected' + (err ? (" | " + err.code + ": " + err.message) : ''));
                 if (Server.manager.closed || Server.manager.connecting || Server.manager.status.connected) return;
-                Server.manager.onBegin();
+                if (!Config.testMode) {
+                    Server.manager.onBegin();
+                } else {
+                    console.log("Sever in a test mode");
+                }
             });
             Chat.loadPlugins();
         }

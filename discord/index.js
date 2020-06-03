@@ -77,8 +77,11 @@ class DiscordClient extends BaseClient {
             this.parser.parse(message);
         });
         // Connection to discord
-        this.login(Config.token);
-        console.log(`${Config.name} conectado correctamente a Discord`);
+        this.login(Config.token).then(() => {
+            console.log(`${Config.name} conectado correctamente a Discord`);
+        }).catch(() => {
+            console.log("No se pudo conectar a Discord");
+        });
     }
 }
 module.exports = DiscordClient;

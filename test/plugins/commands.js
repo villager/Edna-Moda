@@ -1,11 +1,16 @@
 "use strict";
 
-const fs = require('fs');
+const fs = require("fs");
+const assert = require("assert");
 
 describe("Commands", () => {
     describe("Load", () => {
-        it("Should not crash when it loads", () => {
-            fs.readdirSync('./plugins/plugins/').forEach(plugin => {
+        let pluginList = fs.readdirSync("./plugins/plugins/");
+        it ("pluginList should be an array", () => {
+            assert(Array.isArray(pluginList) === true);
+        });
+        it ("Should not crash when it loads", () => {
+            pluginList.forEach(plugin => {
                 Plugins.load(plugin);
             });
         });
