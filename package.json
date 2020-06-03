@@ -5,7 +5,7 @@
     "scripts": {
         "start": "node app",
         "build": "node build",
-		"test": "mocha --exit"
+        "test": "mocha"
     },
     "author": {
         "name": "Aldair Beltran",
@@ -22,6 +22,9 @@
     },
     "optionalDependencies": {
         "githubhook": "^1.9.3"
+    },
+    "devDependencies": {
+        "mocha": "^2.3.4"
     },
     "url": "https://github.com/villager/Edna-Moda",
     "license": "MIT",
