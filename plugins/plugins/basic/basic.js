@@ -108,8 +108,8 @@ exports.globalCommands = {
 exports.psCommands = {
     errorlog(target, room, user) {
         if(!this.can('hotpatch', true)) return false;
-        let log = Plugins.FS('../logs/errors.log').readSync().toString();
-        Plugins.Hastebin.upload(log, (r, link) => {
+        let log = Plugins.FS('./logs/errors.log').readSync().toString();
+        Plugins.Bins.upload(log, (r, link) => {
             let fullLink = 'https://' + link;
             if(r) this.sendReply(Lang.replaceSub(this.lang, 'errorlog', 'link',fullLink));
             else this.sendReply(Lang.getSub(this.lang, 'errorlog', 'error'));
@@ -142,7 +142,7 @@ exports.discordCommands = {
 	errorlog() {
 		if(!this.can('hotpatch', true)) return false;
 		let log = Plugins.FS('./logs/errors.log').readSync().toString();
-		Plugins.Hastebin.upload(log, (r, link) =>{
+		Plugins.Bins.upload(log, (r, link) =>{
 			let fullLink = 'https://' + link;
 			if(r) {
 				let data = new MessageEmbed({

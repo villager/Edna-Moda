@@ -8,7 +8,27 @@
 
 Edna is a Cross-Server (Pokemon Showdown) and Cross-Plataform (Showdown and Discord)
 
+------
 
+## Features Global
+
+- **Multi-Language**: Bot commands and modules can operate in multiple languages at the same time. Curretly only english and spanish are avileable. 
+    
+- **Dynamic commands**: You can create custom text commands (the bot replies with a plain text)
+
+- **Pokemon Commands**: Useful pokemon-related commands.
+
+------
+
+## Features Pokemon Showdown
+
+- **Battle**: This bot can play Pokemon battles itself.
+- **Tournaments**:  Tournament command (to create, start and set the auto-dq in a single command) and finally if the winner say a tier, the bot will create a new tournament
+
+------
+## Features Discord
+
+TO-DO
 ------
 
 ## Credits
