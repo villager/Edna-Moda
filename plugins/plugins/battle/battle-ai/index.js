@@ -7,6 +7,7 @@ let battles = Object.create(null);
 
 function updateJoins() {
     for (let x in battles) {
+		if (!Storage.autoJoin[x]) Storage.autoJoin[x] = {};
 		for (let i in battles[x]) {
 			Storage.autoJoin[x][i] = 1;
 		}

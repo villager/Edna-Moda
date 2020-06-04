@@ -1,7 +1,8 @@
 "use strict";
 
-class Parser {
-	constructor(bot) {
+class BaseParser {
+    constructor(bot) {
+        this.cmd = "";
         this.cmd = '';
         this.cmdToken = '';
         this.target = '';
@@ -10,16 +11,19 @@ class Parser {
         this.room = null;
         this.user = '';
         this.pmTarget = '';
-		this.message = '';
-		this.serverid = bot.id;
-	}
+        this.message = '';
+        this.serverType = "";
+    }
 	get id() {
 		return this.bot.id;
-	}
+    }
+    get lang() {
+        return this.bot.language;
+    }
 	splitToken(message) {
 		message = splint(message, ' ');
 		return message;
-	}
+    }
 	splitOne(target) {
 		const commaIndex = target.indexOf(',');
 		if (commaIndex < 0) {
@@ -112,65 +116,44 @@ class Parser {
 		this.fullCmd = fullCmd;
 
 		return commandHandler;
-	}
-	sendReply(data) {
-		if (this.pmTarget) {
-			return this.bot.send(`/pm ${toId(this.pmTarget)}, ${data}`, toId(this.room));
-		} else {
-			if (!this.can('games', false)) { // Can't brodcast
-				return this.bot.send(`/pm ${toId(this.user)}, ${data}`, toId(this.room));
-			} {
-				return this.bot.send(data, toId(this.room));
-			}
-		}
-	}
-	get lang() {
-		let lang = this.room.language ? this.room.language : this.bot.language;
-		return lang;
-	}
-	can(permission, broadcast) {
-		if (Chat.hasAuth(this.bot.id, this.user, permission)) return true;
+    }
+    can(permission, broadcast) {
+		if (Chat.hasAuth(this.id, this.user, permission)) return true;
 		if (broadcast) this.sendReply('Acceso Denegado');
 		return false;
-	}
-    parse(room, user, message, pm) {
-		this.pmTarget = '';
-		this.bot.lastMessage = message;
-		if (toId(this.bot.name) === toId(user)) this.bot.group = user.charAt(0);
-		this.bot.lastUser = user;
-		let commandHandler = this.splitCommand(message);
-		if (typeof commandHandler === 'function') {
-			if (toId(this.bot.lastUser) === toId(this.bot.name)) return; // Ignorar los  comandos dichos por el mismo bot
-            this.user = user;
-			this.message = message;
-			this.room = room;
-			if (pm) this.pmTarget = user;
-			this.run(commandHandler);
-		}
-	}
+    }
 	runHelp(help) {
-		let commandHandler = this.splitCommand(`.help ${help}`);
+		let commandHandler = this.splitCommand(`${this.cmdToken}help ${help}`);
 		this.run(commandHandler);
 	}
 	runCmd(command) {
-		let commandHandler = this.splitCommand(`.${command}`);
+		let commandHandler = this.splitCommand(`${this.cmdToken}${command}`);
 		this.run(commandHandler);
-	}
-	run(commandHandler) {
+    }
+    run(commandHandler) {
+		let server, room;
+		if (this.serverType === 'Discord') {
+            server = this.room.guild.name;
+            room = this.room.name;
+		} else {
+            server = this.bot.id;
+            room = toId(this.room);
+		}
         if (typeof commandHandler === 'string') commandHandler = this.bot.commands[commandHandler];
 		let result;
 		try {
 			result = commandHandler.call(this, this.target, this.room, this.user, this.message);
 		} catch (err) {
 			Monitor.log(err, {
-				user: this.user.id,
+				user: this.user.username,
 				message: this.message,
-				pmTarget: this.pmTarget && this.pmTarget,
-				room: this.room,
-			}, this.bot.id);
+				room: room,
+				serverType: this.serverType,
+			}, server);
 		}
 		if (result === undefined) result = false;
 		return result;
 	}
 }
-module.exports = Parser;
+
+module.exports = BaseParser;

@@ -1,0 +1,11 @@
+{
+    "name": "timers",
+    "version": "1.0.0",
+    "main": "timers.js",
+    "author": {
+        "name": "Aldair Beltran",
+        "email": "aldairbeltran23@hotmail.com",
+        "url": "https://github.com/villager"
+    },
+    "private": true
+}

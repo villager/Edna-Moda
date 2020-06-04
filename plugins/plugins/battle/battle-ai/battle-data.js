@@ -54,7 +54,7 @@ function getEffect(effect, gen) {
 
 function getTemplate(poke, gen) {
 	if (!gen || gen > 8 || gen < 1) gen = 8;
-	poke = toId(poke || "");
+    poke = toId(poke || "");
 	let pokemon = {};
 	let temp;
 	for (let i = 8; i >= gen; i--) {
@@ -64,12 +64,10 @@ function getTemplate(poke, gen) {
 		} catch (e) {
 			continue;
 		}
-		if (!temp.inherit) {
-			for (let x in pokemon) delete pokemon[x];
-		}
 		for (let x in temp) pokemon[x] = temp[x];
-	}
-	if (!pokemon.species) {
+    }
+//    if (!pokemon.species && temp.name) pokemon.species = temp.name;
+    if (!pokemon.species) {
 		return {
 			num: 235,
 			species: "Smeargle",
@@ -99,9 +97,6 @@ function getMove(move, gen) {
             if (!temp) continue;
         } catch (e) {
             continue;
-        }
-        if (!temp.inherit) {
-            for (let i in moveData) delete moveData[i];
         }
         for (let i in temp) moveData[i] = temp[i];
     }
@@ -141,9 +136,6 @@ function getItem(item, gen) {
         } catch (e) {
             continue;
         }
-        if (!temp.inherit) {
-            for (let i in itemData) delete itemData[i];
-        }
         for (let i in temp) itemData[i] = temp[i];
     }
     if (!itemData.id) {
@@ -174,9 +166,6 @@ function getAbility(ab, gen) {
             if (!temp) continue;
         } catch (e) {
             continue;
-        }
-        if (!temp.inherit) {
-            for (let i in ability) delete ability[i];
         }
         for (let i in temp) ability[i] = temp[i];
     }

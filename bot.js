@@ -29,15 +29,14 @@ global.toUserName = Plugins.Utils.toUserName;
 Plugins.init();
 let listeners = (Object.keys(Config.servers).length + 1) * Object.keys(Plugins.plugins).length;
 Plugins.eventEmitter.setMaxListeners(listeners);
-let Discord = undefined;
-global.Discord = Discord;
 
-const PSBot = require('./showdown');
-const DiscordBot = require('./discord');
+const PSBot = require('./servers/showdown');
+const DiscordBot = require('./servers/discord');
+
 class GBot {
     constructor() {
         if (Config.token && Config.name) {
-            this.discord = Discord = new DiscordBot();
+            this.discord = global.Discord = new DiscordBot();
         }
         this.servers = Object.create(null);
         for (let i in Config.servers) {

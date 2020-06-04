@@ -6,7 +6,7 @@
         "start": "node app",
         "build": "node build",
         "test": "mocha",
-        "lint": "eslint . --config .eslintrc.json --cache --ext .js,.ts",
+        "lint": "eslint . --config .eslintrc.json --cache --ext .js",
         "full-lint": "eslint . --config .eslintrc.json --cache --cache-location .eslintfullcache --ext .js,.ts"
     },
     "husky": {

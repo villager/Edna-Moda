@@ -15,12 +15,14 @@ exports.setup = function (Data) {
 
 	function suposeActiveFoe(battle) {
 		let target = battle.foe.active[0];
+		console.log(target.template);
 		let pokeB = new Pokemon(target.template, {
 			level: target.level,
 			gender: target.gender,
 			shiny: target.shiny,
 			evs: {},
 		});
+		pokeB.template = target.template;
 		pokeB.hp = target.hp;
 		pokeB.status = target.status;
 		if (target.item === "&unknown") {
@@ -41,7 +43,9 @@ exports.setup = function (Data) {
 	function evaluatePokemon(battle, sideId, noMega) {
 		if (!battle.foe.active[0] || battle.foe.active[0].fainted) return {t: 0, d: 0};
 		let pokeA = battle.getCalcRequestPokemon(sideId, !noMega);
+	//	console.log(pokeA);
 		let pokeB = suposeActiveFoe(battle);
+	//	console.log(pokeB);
 		let res = {t: 0, d: 0};
 		let conditionsA, conditionsB;
 		let t = 0;
