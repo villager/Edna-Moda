@@ -6,6 +6,7 @@
         "start": "node app",
         "build": "node build",
         "test": "mocha",
+        "format": "prettier --write \"*.{js,md}\" \"**/**/*.js\"",
         "lint": "eslint . --config .eslintrc.json --cache --ext .js",
         "full-lint": "eslint . --config .eslintrc.json --cache --cache-location .eslintfullcache --ext .js,.ts"
     },
@@ -13,6 +14,12 @@
         "hooks": {
             "pre-push": "npm run lint"
         }
+    },
+    "lint-staged": {
+        "**/*.{js,ts,md}": [
+            "prettier --write"
+        ],
+        "*.{js,ts}": "eslint --fix"
     },
     "mocha": {
         "diff": true,
@@ -22,6 +29,18 @@
         "reporter": "spec",
         "slow": 75,
         "timeout": 2000
+    },
+    "prettier": {
+        "semi": true,
+        "singleQuote": false,
+        "useTabs": true,
+        "trailingComma": "all",
+        "printWidth": 120,
+        "proseWrap": "always",
+        "arrowParens": "avoid",
+        "tabWidth": 4,
+        "endOfLine": "auto",
+        "bracketSpacing": false
     },
     "author": {
         "name": "Aldair Beltran",
@@ -39,11 +58,18 @@
         "node-static": "^0.7.11"
     },
     "devDependencies": {
-        "mocha": "^7.1.1",
+        "eslint": "^7.1.0",
         "husky": "^4.2.3",
-        "eslint": "^7.1.0"
+        "jest": "^26.0.1",
+        "mocha": "^7.1.1",
+        "prettier": "2.0.5",
+        "eslint-config-prettier": "6.11.0",
+        "eslint-plugin-prettier": "3.1.3"
     },
     "url": "https://github.com/villager/Edna-Moda",
+    "bugs": {
+        "url": "https://github.com/Ecuacion/Pokemon-Showdown-Node-Bot/issues"
+    },
     "license": "MIT",
     "private": true
 }

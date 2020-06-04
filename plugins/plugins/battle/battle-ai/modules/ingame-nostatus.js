@@ -15,19 +15,27 @@
  *  - Priority -1000 - Switch / Shift / Pass
  *	- Priority -100000 - Moves 0 damage
  */
-const Calc = require('../calc');
+const Calc = require("../calc");
 const Pokemon = Calc.Pokemon;
 const Conditions = Calc.Conditions;
 
- exports.setup = function (Data) {
+exports.setup = function (Data) {
 	const BattleModule = {};
 	BattleModule.id = "ingame-nostatus";
 
 	/* Bad moves for 1v1 */
-	const BadMoves = ['focuspunch', 'explosion', 'selfdestruct', 'lastresort', 'futuresight', 'firstimpression', 'synchronoise'];
+	const BadMoves = [
+		"focuspunch",
+		"explosion",
+		"selfdestruct",
+		"lastresort",
+		"futuresight",
+		"firstimpression",
+		"synchronoise",
+	];
 
 	/* Moves which require 2 turns without any protection */
-	const DoubleTurnMoves = ['solarbeam'];
+	const DoubleTurnMoves = ["solarbeam"];
 
 	/* Team and Switch Decisions */
 
@@ -60,7 +68,7 @@ const Conditions = Calc.Conditions;
 				if (DoubleTurnMoves.indexOf(move.id) >= 0) calcVal += dmg.getMax() * 0.5;
 				else calcVal += dmg.getMax();
 			}
-			final += (calcVal / 4);
+			final += calcVal / 4;
 		}
 		return 0 + final;
 	}
@@ -158,7 +166,12 @@ const Conditions = Calc.Conditions;
 		}
 
 		if (move.id === "fakeout") {
-			if (!(battle.self.active[act].helpers.sw === battle.turn || battle.self.active[act].helpers.sw === battle.turn - 1)) {
+			if (
+				!(
+					battle.self.active[act].helpers.sw === battle.turn ||
+					battle.self.active[act].helpers.sw === battle.turn - 1
+				)
+			) {
 				return 0; // Fake out only works for first turn
 			}
 		}
@@ -181,10 +194,10 @@ const Conditions = Calc.Conditions;
 		for (let i = 0; i < targets.length; i++) {
 			if (!targets[i]) continue;
 			if (targets[i].fainted) continue;
-			if (move.flags && move.flags['charge'] && targets[i].moves) {
+			if (move.flags && move.flags["charge"] && targets[i].moves) {
 				let hasDangerousMove = false;
 				for (let dangerousMove of targets[i].moves) {
-					if (dangerousMove.id in {'protect': 1, 'detect': 1, 'kingsshield': 1, 'spikyshield': 1, 'dig': 1, 'fly': 1}) {
+					if (dangerousMove.id in {protect: 1, detect: 1, kingsshield: 1, spikyshield: 1, dig: 1, fly: 1}) {
 						hasDangerousMove = true;
 						break;
 					}

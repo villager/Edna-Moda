@@ -2,7 +2,7 @@
  * Random Decision
  */
 
-'use strict';
+"use strict";
 
 exports.setup = function (Data) {
 	const BattleModule = {};

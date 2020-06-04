@@ -17,7 +17,7 @@ class MoveDecision {
 }
 
 class SwitchDecision {
-     constructor(pokeId, poke) {
+	constructor(pokeId, poke) {
 		this.type = "switch";
 		this.poke = poke || "pikachu";
 		this.pokeId = pokeId || 0;
@@ -25,7 +25,7 @@ class SwitchDecision {
 }
 
 class TeamDecision {
-     constructor(team) {
+	constructor(team) {
 		this.type = "team";
 		this.team = team || [0, 1, 2, 3, 4, 5];
 	}
@@ -49,8 +49,8 @@ exports.SwitchDecision = SwitchDecision;
 exports.MoveDecision = MoveDecision;
 
 function isTooFar(battle, a, b) {
-	if (battle.gametype === 'triples') {
-		return ((a === 0 && b === 0) || (a === 2 && b === 2));
+	if (battle.gametype === "triples") {
+		return (a === 0 && b === 0) || (a === 2 && b === 2);
 	} else {
 		return false;
 	}
@@ -112,7 +112,7 @@ function validateDecision(des) {
 		}
 		if (des[i].type !== "pass") passed = false;
 	}
-	if (passed) return false; // You can't pass the turn
+	if (passed) return false; // You can"t pass the turn
 	return true;
 }
 
@@ -138,7 +138,7 @@ function cartesianProduct(tables) {
 	return comb;
 }
 
- function getDecisions(battle) {
+function getDecisions(battle) {
 	let res = [];
 	let req = battle.request;
 	if (!req) return null;
@@ -146,8 +146,8 @@ function cartesianProduct(tables) {
 	if (req.teamPreview) {
 		/* Team required */
 		let n = 1;
-		if (battle.gametype === 'doubles') n = 2;
-		else if (battle.gametype === 'triples') n = 3;
+		if (battle.gametype === "doubles") n = 2;
+		else if (battle.gametype === "triples") n = 3;
 		let comb = generateTeamCombinations(req.side.pokemon.length, n);
 		for (let i = 0; i < comb.length; i++) {
 			res.push([new TeamDecision(comb[i])]);
@@ -196,33 +196,33 @@ function cartesianProduct(tables) {
 					// No need to set the target
 					if (mega) tables[i].push(new MoveDecision(j, null, true, active.moves[j].move));
 					tables[i].push(new MoveDecision(j, null, false, active.moves[j].move));
-				} else if (active.moves[j].target in {'any': 1, 'normal': 1}) {
+				} else if (active.moves[j].target in {any: 1, normal: 1}) {
 					auxHasTarget = false;
 					for (let tar = 0; tar < battle.foe.active.length; tar++) {
 						if (!battle.foe.active[tar] || battle.foe.active[tar].fainted) continue; // Target not found
-						if (active.moves[j].target === 'normal' && isTooFar(battle, tar, i)) continue; // Target too far
+						if (active.moves[j].target === "normal" && isTooFar(battle, tar, i)) continue; // Target too far
 						auxHasTarget = true;
 					}
 					for (let tar = 0; tar < battle.foe.active.length; tar++) {
 						if (auxHasTarget && (!battle.foe.active[tar] || battle.foe.active[tar].fainted)) continue; // Target not found
-						if (active.moves[j].target === 'normal' && isTooFar(battle, tar, i)) continue; // Target too far
+						if (active.moves[j].target === "normal" && isTooFar(battle, tar, i)) continue; // Target too far
 						if (mega) tables[i].push(new MoveDecision(j, tar, true, active.moves[j].move));
 						tables[i].push(new MoveDecision(j, tar, false, active.moves[j].move));
 					}
 					for (let tar = 0; tar < battle.self.active.length; tar++) {
 						if (tar === i) continue; // Not self target allowed
 						if (!battle.self.active[tar] || battle.self.active[tar].fainted) continue; // Target not found
-						if (active.moves[j].target === 'normal' && isTooFar(battle, tar, i)) continue; // Target too far
-						if (mega) tables[i].push(new MoveDecision(j, (-1) * (tar + 1), true, active.moves[j].move));
-						tables[i].push(new MoveDecision(j, (-1) * (tar + 1), false, active.moves[j].move));
+						if (active.moves[j].target === "normal" && isTooFar(battle, tar, i)) continue; // Target too far
+						if (mega) tables[i].push(new MoveDecision(j, -1 * (tar + 1), true, active.moves[j].move));
+						tables[i].push(new MoveDecision(j, -1 * (tar + 1), false, active.moves[j].move));
 					}
-				} else if (active.moves[j].target in {'adjacentAlly': 1}) {
+				} else if (active.moves[j].target in {adjacentAlly: 1}) {
 					for (let tar = 0; tar < battle.self.active.length; tar++) {
 						if (tar === i) continue; // Not self target allowed
 						if (!battle.self.active[tar] || battle.self.active[tar].fainted) continue; // Target not found
-						if (active.moves[j].target === 'normal' && isTooFar(battle, tar, i)) continue; // Target too far
-						if (mega) tables[i].push(new MoveDecision(j, (-1) * (tar + 1), true, active.moves[j].move));
-						tables[i].push(new MoveDecision(j, (-1) * (tar + 1), false, active.moves[j].move));
+						if (active.moves[j].target === "normal" && isTooFar(battle, tar, i)) continue; // Target too far
+						if (mega) tables[i].push(new MoveDecision(j, -1 * (tar + 1), true, active.moves[j].move));
+						tables[i].push(new MoveDecision(j, -1 * (tar + 1), false, active.moves[j].move));
 					}
 				} else {
 					// No need to set the target
@@ -240,7 +240,7 @@ function cartesianProduct(tables) {
 			}
 			//shifts
 			if (req.active.length === 3) {
-				if ((i === 0 || i === 2)) tables[i].push(new ShiftDecision());
+				if (i === 0 || i === 2) tables[i].push(new ShiftDecision());
 			}
 		}
 		res = cartesianProduct(tables);

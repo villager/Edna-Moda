@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 
-const modFiles = ['singles-eff', 'ingame-nostatus', 'random', 'random-move', 'random-switch'];
+const modFiles = ["singles-eff", "ingame-nostatus", "random", "random-move", "random-switch"];
 
-const Data = require('./battle-data');
+const Data = require("./battle-data");
 
 let modules = Object.create(null);
 
@@ -26,7 +26,7 @@ function choose(battle) {
 
 	let tier = toId(battle.tier);
 
-    if (Config.battleModules && Config.battleModules[toId(battle.tier)]) {
+	if (Config.battleModules && Config.battleModules[toId(battle.tier)]) {
 		let modid = Config.battleModules[toId(battle.tier)];
 		if (battle.gametype === "singles" || modid !== "singles-eff") {
 			if (modules[modid]) {
@@ -38,7 +38,7 @@ function choose(battle) {
 		}
 	}
 	/* Module decision by default */
-	if (tier in {'gen7challengecup1v1': 1, 'challengecup1v1': 1, '1v1': 1}) {
+	if (tier in {gen7challengecup1v1: 1, challengecup1v1: 1, "1v1": 1}) {
 		if (modules["ingame-nostatus"]) {
 			console.log("Battle module [" + battle.id + "] - Using ingame-nostatus");
 			return modules["ingame-nostatus"];

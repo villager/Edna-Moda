@@ -1,6 +1,6 @@
 "use strict";
 
-const Storage = require('./storage');
+const Storage = require("./storage");
 
 let teams = Object.create(null);
 
@@ -13,11 +13,11 @@ function mergeTeams() {
 }
 
 function addTeam(name, format, packed) {
-    if (Storage.isSaved(name)) return false;
-    Storage.teams[name] = {
-        format: format,
-        packed: packed,
-    };
+	if (Storage.isSaved(name)) return false;
+	Storage.teams[name] = {
+		format: format,
+		packed: packed,
+	};
 	Storage.saveTeams();
 	mergeTeams();
 	return true;
@@ -35,12 +35,12 @@ function getTeam(format) {
 	let teamStuff = teams[formatId];
 	if (!teamStuff || !teamStuff.length) return false;
 	let teamChosen = teamStuff[Math.floor(Math.random() * teamStuff.length)]; //choose team
-	let teamStr = '';
+	let teamStr = "";
 	try {
-		if (typeof teamChosen === 'string') {
+		if (typeof teamChosen === "string") {
 			//already parsed
 			teamStr = teamChosen;
-		} else if (typeof teamChosen === 'object') {
+		} else if (typeof teamChosen === "object") {
 			if (teamChosen.maxPokemon && teamChosen.pokemon) {
 				//generate random team
 				let team = [];

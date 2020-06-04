@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 // Copyright Node.js contributors. All rights reserved.
 //
@@ -41,7 +41,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
-exports.key = 'Software';
+exports.key = "Software";
 
 
 function EventEmitter() {
@@ -71,14 +71,14 @@ EventEmitter.init = function () {
 
 EventEmitter.prototype._stack = null; // Array
 EventEmitter.prototype._data = null;
-EventEmitter.prototype.event = '';
-EventEmitter.prototype.parentEvent = '';
+EventEmitter.prototype.event = "";
+EventEmitter.prototype.parentEvent = "";
 
 EventEmitter.prototype._getEvent = function () {
   let stackEntry = getStackEntry(this._stack, -1);
 
   if (stackEntry === null)
-    return '';
+    return "";
 
   return stackEntry._env.eventType;
 };
@@ -87,7 +87,7 @@ EventEmitter.prototype._getParentEvent = function () {
   let stackEntry = getStackEntry(this._stack, -2);
 
   if (stackEntry === null)
-    return '';
+    return "";
 
   return stackEntry._env.eventType;
 };
@@ -161,23 +161,23 @@ EventEmitter.prototype.env = function (key, value) {
 };
 
 EventEmitter.prototype.preventDefault = function () {
-  this.env('defaultPrevented', true);
+  this.env("defaultPrevented", true);
   return this;
 };
 
 EventEmitter.prototype.isDefaultPrevented = function () {
-  return !!this.env('defaultPrevented');
+  return !!this.env("defaultPrevented");
 };
 
 EventEmitter.prototype.hadListeners = function () {
-  return !!this.env('hadListeners');
+  return !!this.env("hadListeners");
 };
 
 // Obviously not all Emitters should be limited to 10. This function allows
 // that to be increased. Set to zero for unlimited.
 EventEmitter.prototype.setMaxListeners = function setMaxListeners(n) {
-  if (typeof n !== 'number' || n < 0 || isNaN(n))
-    throw new TypeError('n must be a positive number');
+  if (typeof n !== "number" || n < 0 || isNaN(n))
+    throw new TypeError("n must be a positive number");
   this._maxListeners = n;
   return this;
 };
@@ -254,7 +254,7 @@ EventEmitter.prototype.emit = function emit(type) {
     throw new Error("Unspecified event");
 
   let er, err, handler, len, args, i, events;
-  let doError = (type === 'error');
+  let doError = (type === "error");
 
   this._data = new DataEntry(type);
   this._pushStack(this._data);
@@ -264,23 +264,23 @@ EventEmitter.prototype.emit = function emit(type) {
   events = this._events;
   if (events) {
     doError = (doError && events.error === null);
-    this.env('hadListeners', true);
+    this.env("hadListeners", true);
   } else if (!doError)
     return this;
 
-  // If there is no 'error' event listener then throw.
+  // If there is no "error" event listener then throw.
   if (doError) {
     if (!arguments.length) {
-      err = new Error('Uncaught, undefined "error" event.');
+      err = new Error(`Uncaught, undefined "error" event.`);
       err.context = undefined;
       throw err;
     } else {
       er = arguments[1];
       if (er instanceof Error) {
-        throw er; // Unhandled 'error' event
+        throw er; // Unhandled "error" event
       } else {
         // At least give some kind of context to the user
-        err = new Error('Uncaught, unspecified "error" event. (' + er + ')');
+        err = new Error(`Uncaught, unspecified "error" event. ${(" + er + ")}`);
         err.context = er;
         throw err;
       }
@@ -292,7 +292,7 @@ EventEmitter.prototype.emit = function emit(type) {
   if (!handler)
     return this;
 
-  let isFn = typeof handler === 'function';
+  let isFn = typeof handler === "function";
   len = arguments.length;
   switch (len) {
     // fast cases
@@ -324,8 +324,8 @@ EventEmitter.prototype.addListener = function addListener(type, listener) {
   let events;
   let existing;
 
-  if (typeof listener !== 'function')
-    throw new TypeError('listener must be a function');
+  if (typeof listener !== "function")
+    throw new TypeError("listener must be a function");
 
   events = this._events;
   if (!events) {
@@ -335,7 +335,7 @@ EventEmitter.prototype.addListener = function addListener(type, listener) {
     // To avoid recursion in the case that type === "newListener"! Before
     // adding it to the listeners, first emit "newListener".
     if (events.newListener) {
-      this.emit('newListener', type,
+      this.emit("newListener", type,
                 listener.listener ? listener.listener : listener);
 
       // Re-assign `events` because a newListener handler could have caused the
@@ -346,15 +346,15 @@ EventEmitter.prototype.addListener = function addListener(type, listener) {
   }
 
   if (!existing) {
-    // Optimize the case of one listener. Don't need the extra array object.
+    // Optimize the case of one listener. Don"t need the extra array object.
     existing = events[type] = listener;
     ++this._eventsCount;
   } else {
-    if (typeof existing === 'function') {
+    if (typeof existing === "function") {
       // Adding the second element, need to change to array.
       existing = events[type] = [existing, listener];
     } else {
-      // If we've already got an array, just append.
+      // If we"ve already got an array, just append.
       existing.push(listener);
     }
 
@@ -363,9 +363,9 @@ EventEmitter.prototype.addListener = function addListener(type, listener) {
       m = $getMaxListeners(this);
       if (m && m > 0 && existing.length > m) {
         existing.warned = true;
-        console.error('(node) warning: possible EventEmitter memory ' +
-                      'leak detected. %d %s listeners added. ' +
-                      'Use emitter.setMaxListeners() to increase limit.',
+        console.error("(node) warning: possible EventEmitter memory " +
+                      "leak detected. %d %s listeners added. " +
+                      "Use emitter.setMaxListeners() to increase limit.",
                       existing.length, type);
         console.trace();
       }
@@ -378,8 +378,8 @@ EventEmitter.prototype.addListener = function addListener(type, listener) {
 EventEmitter.prototype.on = EventEmitter.prototype.addListener;
 
 EventEmitter.prototype.once = function once(type, listener) {
-  if (typeof listener !== 'function')
-    throw new TypeError('listener must be a function');
+  if (typeof listener !== "function")
+    throw new TypeError("listener must be a function");
 
   let fired = false;
 
@@ -398,13 +398,13 @@ EventEmitter.prototype.once = function once(type, listener) {
   return this;
 };
 
-// emits a 'removeListener' event iff the listener was removed
+// emits a "removeListener" event iff the listener was removed
 EventEmitter.prototype.removeListener =
     function removeListener(type, listener) {
       let list, events, position, i;
 
-      if (typeof listener !== 'function')
-        throw new TypeError('listener must be a function');
+      if (typeof listener !== "function")
+        throw new TypeError("listener must be a function");
 
       events = this._events;
       if (!events)
@@ -420,9 +420,9 @@ EventEmitter.prototype.removeListener =
         else {
           delete events[type];
           if (events.removeListener)
-            this.emit('removeListener', type, listener);
+            this.emit("removeListener", type, listener);
         }
-      } else if (typeof list !== 'function') {
+      } else if (typeof list !== "function") {
         position = -1;
 
         for (i = list.length; i-- > 0;) {
@@ -449,7 +449,7 @@ EventEmitter.prototype.removeListener =
         }
 
         if (events.removeListener)
-          this.emit('removeListener', type, listener);
+          this.emit("removeListener", type, listener);
       }
 
       return this;
@@ -484,10 +484,10 @@ EventEmitter.prototype.removeAllListeners =
         let keys = Object.keys(events);
         for (let i = 0, key; i < keys.length; ++i) {
           key = keys[i];
-          if (key === 'removeListener') continue;
+          if (key === "removeListener") continue;
           this.removeAllListeners(key);
         }
-        this.removeAllListeners('removeListener');
+        this.removeAllListeners("removeListener");
         this._events = {};
         this._eventsCount = 0;
         return this;
@@ -495,7 +495,7 @@ EventEmitter.prototype.removeAllListeners =
 
       listeners = events[type];
 
-      if (typeof listeners === 'function') {
+      if (typeof listeners === "function") {
         this.removeListener(type, listeners);
       } else if (listeners) {
         // LIFO order
@@ -518,7 +518,7 @@ EventEmitter.prototype.listeners = function listeners(type) {
     evlistener = events[type];
     if (!evlistener)
       ret = [];
-    else if (typeof evlistener === 'function')
+    else if (typeof evlistener === "function")
       ret = [evlistener];
     else
       ret = arrayClone(evlistener, evlistener.length);
@@ -528,7 +528,7 @@ EventEmitter.prototype.listeners = function listeners(type) {
 };
 
 EventEmitter.listenerCount = function (emitter, type) {
-  if (typeof emitter.listenerCount === 'function') {
+  if (typeof emitter.listenerCount === "function") {
     return emitter.listenerCount(type);
   } else {
     return listenerCount.call(emitter, type);
@@ -542,7 +542,7 @@ function listenerCount(type) {
   if (events) {
     const evlistener = events[type];
 
-    if (typeof evlistener === 'function') {
+    if (typeof evlistener === "function") {
       return 1;
     } else if (evlistener) {
       return evlistener.length;
@@ -576,7 +576,7 @@ EnvironmentEntry.prototype = Object.create(null, {
     configurable: true,
   },
   eventType: {
-    value: '',
+    value: "",
     enumerable: false,
     writable: true,
     configurable: true,
@@ -584,7 +584,7 @@ EnvironmentEntry.prototype = Object.create(null, {
 });
 
 function DataEntry(type) {
-  Object.defineProperty(this, '_env', {
+  Object.defineProperty(this, "_env", {
     value: new EnvironmentEntry(type),
     enumerable: false,
     writable: false,
@@ -622,11 +622,11 @@ function getStackEntry(stack, delta) {
 }
 
 function getStackLeakError(stack) {
-  return ['(node) warning: possible EventEmitter memory ' +
-  'leak detected. Stack is %d units long: %s. ' +
-  'Call EventEmitter#[getData|end|flush] exactly once ' +
-  'after each EventEmitter#emit call',
+  return ["(node) warning: possible EventEmitter memory " +
+  "leak detected. Stack is %d units long: %s. " +
+  "Call EventEmitter#[getData|end|flush] exactly once " +
+  "after each EventEmitter#emit call",
   stack.length, stack.map(function (entry) {
-    return entry ? entry._env.eventType : '#null';
+    return entry ? entry._env.eventType : "#null";
   }).join(", ")];
 }

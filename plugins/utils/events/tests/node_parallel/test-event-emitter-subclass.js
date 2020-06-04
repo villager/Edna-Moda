@@ -1,8 +1,8 @@
-'use strict';
-var common = require('../common');
-var assert = require('assert');
-var EventEmitter = require('events').EventEmitter;
-var util = require('util');
+"use strict";
+var common = require("../common");
+var assert = require("assert");
+var EventEmitter = require("events").EventEmitter;
+var util = require("util");
 
 util.inherits(MyEE, EventEmitter);
 
@@ -21,17 +21,17 @@ var myee = new MyEE(function() {
 
 util.inherits(ErrorEE, EventEmitter);
 function ErrorEE() {
-  this.emit('error', new Error('blerg'));
+  this.emit("error", new Error("blerg"));
 }
 
 assert.throws(function() {
   new ErrorEE();
 }, /blerg/);
 
-process.on('exit', function() {
+process.on("exit", function() {
   assert(called);
   assert.deepEqual(myee._events, {});
-  console.log('ok');
+  console.log("ok");
 });
 
 
@@ -44,6 +44,6 @@ MyEE2.prototype = new EventEmitter();
 var ee1 = new MyEE2();
 var ee2 = new MyEE2();
 
-ee1.on('x', function() {});
+ee1.on("x", function() {});
 
-assert.equal(ee2.listenerCount('x'), 0);
+assert.equal(ee2.listenerCount("x"), 0);

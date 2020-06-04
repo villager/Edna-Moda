@@ -11,12 +11,28 @@
 		"es6": true,
 		"node": true
 	},
+	"plugins": ["prettier"],
+	"extends": ["prettier"],
 	"globals": {
         "Config": false, "Monitor": false, "Plugins": false,
 		"Discord": false, "Bot": false, "Chat": false,
 		"toUserName": false, "toId": false, "splint": false
 	},
 	"rules": {
+		"prettier/prettier": [
+			"error",
+			{
+			  "semi": true,
+			  "singleQuote": false,
+			  "useTabs": true,
+			  "trailingComma": "all",
+			  "printWidth": 120,
+			  "proseWrap": "always",
+			  "arrowParens": "avoid",
+			  "endOfLine": "auto",
+			  "bracketSpacing": false
+			}
+		],
 		"comma-dangle": [2, "always-multiline"],
 		"no-cond-assign": [2, "except-parens"],
 		"no-console": 0,
@@ -126,7 +142,6 @@
 		"func-style": 0,
 		"id-length": 0,
 		"id-match": 0,
-	//	"indent": [2, "tab"],
 		"key-spacing": 0,
 		"lines-around-comment": 0,
 		"max-nested-callbacks": 0,

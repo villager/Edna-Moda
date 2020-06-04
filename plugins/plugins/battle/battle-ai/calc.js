@@ -1,9 +1,9 @@
 "use strict";
 
-const TypeChart = require('./typechart');
+const TypeChart = require("./typechart");
 
 class Pokemon {
-    constructor(template, properties) {
+	constructor(template, properties) {
 		if (!template || typeof template !== "object") throw new Error("Invalid pokemon template");
 		this.template = template;
 		this.name = this.template.species;
@@ -56,7 +56,7 @@ class Pokemon {
 
 	getStats(gen) {
 		if (!gen) gen = 8;
-		let stats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
+		let stats = ["hp", "atk", "def", "spa", "spd", "spe"];
 		let res = {};
 		for (let i = 0; i < stats.length; i++) {
 			if (this.stats[stats[i]]) {
@@ -64,16 +64,42 @@ class Pokemon {
 				continue;
 			}
 			if (gen <= 2) {
-				if (stats[i] === 'hp') {
-					res[stats[i]] = Math.floor(((this.getBaseStat(stats[i]) + this.getDV(stats[i])) * 2 + Math.floor((Math.sqrt(65024) + 1) / 4)) * this.level / 100) + 10 + this.level;
+				if (stats[i] === "hp") {
+					res[stats[i]] =
+						Math.floor(
+							(((this.getBaseStat(stats[i]) + this.getDV(stats[i])) * 2 +
+								Math.floor((Math.sqrt(65024) + 1) / 4)) *
+								this.level) /
+								100,
+						) +
+						10 +
+						this.level;
 				} else {
-					res[stats[i]] = Math.floor(((this.getBaseStat(stats[i]) + this.getDV(stats[i])) * 2 + Math.floor((Math.sqrt(65024) + 1) / 4)) * this.level / 100) + 5;
+					res[stats[i]] =
+						Math.floor(
+							(((this.getBaseStat(stats[i]) + this.getDV(stats[i])) * 2 +
+								Math.floor((Math.sqrt(65024) + 1) / 4)) *
+								this.level) /
+								100,
+						) + 5;
 				}
 			} else {
-				if (stats[i] === 'hp') {
-					res[stats[i]] = Math.floor((2 * this.getBaseStat(stats[i]) + this.getIV(stats[i]) + this.getEV(stats[i])) * this.level / 100 + this.level + 10);
+				if (stats[i] === "hp") {
+					res[stats[i]] = Math.floor(
+						((2 * this.getBaseStat(stats[i]) + this.getIV(stats[i]) + this.getEV(stats[i])) * this.level) /
+							100 +
+							this.level +
+							10,
+					);
 				} else {
-					res[stats[i]] = Math.floor(Math.floor((2 * this.getBaseStat(stats[i]) + this.getIV(stats[i]) + this.getEV(stats[i])) * this.level / 100 + 5) * (this.nature ? (this.nature.value || 1) : 1));
+					res[stats[i]] = Math.floor(
+						Math.floor(
+							((2 * this.getBaseStat(stats[i]) + this.getIV(stats[i]) + this.getEV(stats[i])) *
+								this.level) /
+								100 +
+								5,
+						) * (this.nature ? this.nature.value || 1 : 1),
+					);
 				}
 			}
 		}
@@ -82,7 +108,7 @@ class Pokemon {
 }
 
 class Conditions {
-    constructor(data) {
+	constructor(data) {
 		if (typeof data !== "object") throw new Error("Invalid conditions data");
 		this.volatiles = {};
 		this.boosts = {};
@@ -105,7 +131,7 @@ class Damage {
 				this.percents.push(100);
 				continue;
 			}
-			this.percents.push(this.rolls[i] * 100 / hp);
+			this.percents.push((this.rolls[i] * 100) / hp);
 		}
 	}
 
@@ -116,7 +142,7 @@ class Damage {
 		for (let i = 0; i < this.percents.length; i++) {
 			if (this.percents[i] >= p) s++;
 		}
-		return (s * 100 / this.percents.length);
+		return (s * 100) / this.percents.length;
 	}
 
 	getMax() {
@@ -129,7 +155,6 @@ class Damage {
 		return this.percents[0];
 	}
 }
-
 
 function getRolls(n, p) {
 	if (!p) p = 0.85;
@@ -148,7 +173,10 @@ function getHazardsDamage(poke, conditions, gen, inverse) {
 		dmg += (100 / 8) * TypeChart.getMultipleEff("Rock", poke.template.types, gen, inverse);
 	}
 	if (side["spikes"]) {
-		if (TypeChart.getMultipleEff("Ground", poke.template.types, gen, inverse) !== 0 && (gen < 3 || !poke.ability || poke.ability.id !== "levitate")) {
+		if (
+			TypeChart.getMultipleEff("Ground", poke.template.types, gen, inverse) !== 0 &&
+			(gen < 3 || !poke.ability || poke.ability.id !== "levitate")
+		) {
 			dmg += (100 / 24) * (side["spikes"] || 1);
 		}
 	}
@@ -167,7 +195,7 @@ function getHazardsDamage(poke, conditions, gen, inverse) {
  *  - conditionsA, conditionsB (Conditions)
  *  - gconditions (Global conditions)
  *  - gen (6 by default)
-*/
+ */
 
 function calculate(pokeA, pokeB, move, conditionsA, conditionsB, gconditions, gen) {
 	if (!gen) gen = 7;
@@ -175,14 +203,15 @@ function calculate(pokeA, pokeB, move, conditionsA, conditionsB, gconditions, ge
 	if (!conditionsA) conditionsA = {};
 	if (!conditionsB) conditionsB = {};
 
-	let statsA = pokeA.getStats(gen), statsB = pokeB.getStats(gen);
+	let statsA = pokeA.getStats(gen),
+		statsB = pokeB.getStats(gen);
 
 	let atk, def, bp, atkStat, defStat;
 	let cat, defcat;
 
 	/******************************
-	* Attack and Defense Stats
-	*******************************/
+	 * Attack and Defense Stats
+	 *******************************/
 	if (gen > 3) {
 		if (move.category === "Special") {
 			atk = statsA.spa;
@@ -203,7 +232,16 @@ function calculate(pokeA, pokeB, move, conditionsA, conditionsB, gconditions, ge
 			defStat = "def";
 		}
 	} else {
-		let specialTypes = {Fire: 1, Water: 1, Grass: 1, Ice: 1, Electric: 1, Dark: 1, Psychic: 1, Dragon: 1};
+		let specialTypes = {
+			Fire: 1,
+			Water: 1,
+			Grass: 1,
+			Ice: 1,
+			Electric: 1,
+			Dark: 1,
+			Psychic: 1,
+			Dragon: 1,
+		};
 		if (move.type && move.type in specialTypes) {
 			cat = defcat = "Special";
 			atk = statsA.spa;
@@ -228,85 +266,88 @@ function calculate(pokeA, pokeB, move, conditionsA, conditionsB, gconditions, ge
 	}
 
 	/******************************
-	* Inmunity (0 damage)
-	* Types (effectiveness)
-	*******************************/
+	 * Inmunity (0 damage)
+	 * Types (effectiveness)
+	 *******************************/
 
 	let typesMux = 1;
 	let moveType = move.type;
 	let inmune = false;
 	let noLevitation = false;
 
-	if (gconditions['gravity'] || conditionsB.volatiles['smackdown']) {
+	if (gconditions["gravity"] || conditionsB.volatiles["smackdown"]) {
 		noLevitation = true;
 	}
 
 	switch (move.id) {
-	case "naturalgift":
-		if (pokeA.item && pokeA.item.naturalGift && pokeA.item.naturalGift.type) moveType = pokeA.item.naturalGift.type;
-		else moveType = "Normal";
-		break;
-	case "judgment":
-		if (pokeA.item && pokeA.item.onPlate) moveType = pokeA.item.onPlate;
-		else moveType = "Normal";
-		break;
-	case "weatherball":
-		if (gconditions.weather === "primordialsea" || gconditions.weather === "raindance") moveType = "Water";
-		else if (gconditions.weather === "desolateland" || gconditions.weather === "sunnyday") moveType = "Fire";
-		else if (gconditions.weather === "sandstorm") moveType = "Rock";
-		else if (gconditions.weather === "hail") moveType = "Ice";
-		else moveType = "Normal";
-		break;
-	case "thousandarrows":
-		noLevitation = true;
-		break;
+		case "naturalgift":
+			let item = pokeA.item;
+			if (item && item.naturalGift && item.naturalGift.type) moveType = pokeA.item.naturalGift.type;
+			else moveType = "Normal";
+			break;
+		case "judgment":
+			if (pokeA.item && pokeA.item.onPlate) moveType = pokeA.item.onPlate;
+			else moveType = "Normal";
+			break;
+		case "weatherball":
+			if (gconditions.weather === "primordialsea" || gconditions.weather === "raindance") moveType = "Water";
+			else if (gconditions.weather === "desolateland" || gconditions.weather === "sunnyday") moveType = "Fire";
+			else if (gconditions.weather === "sandstorm") moveType = "Rock";
+			else if (gconditions.weather === "hail") moveType = "Ice";
+			else moveType = "Normal";
+			break;
+		case "thousandarrows":
+			noLevitation = true;
+			break;
 	}
 
 	if (gen >= 3 && pokeA.ability) {
 		switch (pokeA.ability.id) {
-		case "normalize":
-			moveType = "Normal";
-			break;
-		case "aerilate":
-			if (moveType === "Normal") moveType = "Flying";
-			break;
-		case "pixilate":
-			if (moveType === "Normal") moveType = "Fairy";
-			break;
-		case "refrigerate":
-			if (moveType === "Normal") moveType = "Ice";
-			break;
-		case "blaze":
-			if (moveType === "Fire" && pokeA.hp <= (100 / 3)) atk = Math.floor(atk * 1.5);
-			break;
-		case "defeatist":
-			if (pokeA.hp < 50 && cat === "Physical") atk = Math.floor(atk * 0.5);
-			break;
-		case "guts":
-			if (pokeA.status && cat === "Physical") atk = Math.floor(atk * 1.5);
-			break;
-		case "hugepower":
-		case "purepower":
-			if (cat === "Physical") atk = Math.floor(atk * 2);
-			break;
-		case "hustle":
-			if (cat === "Physical") atk = Math.floor(atk * 1.5);
-			break;
-		case "overgrow":
-			if (moveType === "Grass" && pokeA.hp <= (100 / 3)) atk = Math.floor(atk * 1.5);
-			break;
-		case "swarm":
-			if (moveType === "Bug" && pokeA.hp <= (100 / 3)) atk = Math.floor(atk * 1.5);
-			break;
-		case "torrent":
-			if (moveType === "Water" && pokeA.hp <= (100 / 3)) atk = Math.floor(atk * 1.5);
-			break;
+			case "normalize":
+				moveType = "Normal";
+				break;
+			case "aerilate":
+				if (moveType === "Normal") moveType = "Flying";
+				break;
+			case "pixilate":
+				if (moveType === "Normal") moveType = "Fairy";
+				break;
+			case "refrigerate":
+				if (moveType === "Normal") moveType = "Ice";
+				break;
+			case "blaze":
+				if (moveType === "Fire" && pokeA.hp <= 100 / 3) atk = Math.floor(atk * 1.5);
+				break;
+			case "defeatist":
+				if (pokeA.hp < 50 && cat === "Physical") atk = Math.floor(atk * 0.5);
+				break;
+			case "guts":
+				if (pokeA.status && cat === "Physical") atk = Math.floor(atk * 1.5);
+				break;
+			case "hugepower":
+			case "purepower":
+				if (cat === "Physical") atk = Math.floor(atk * 2);
+				break;
+			case "hustle":
+				if (cat === "Physical") atk = Math.floor(atk * 1.5);
+				break;
+			case "overgrow":
+				if (moveType === "Grass" && pokeA.hp <= 100 / 3) atk = Math.floor(atk * 1.5);
+				break;
+			case "swarm":
+				if (moveType === "Bug" && pokeA.hp <= 100 / 3) atk = Math.floor(atk * 1.5);
+				break;
+			case "torrent":
+				if (moveType === "Water" && pokeA.hp <= 100 / 3) atk = Math.floor(atk * 1.5);
+				break;
 		}
 	}
 
 	let eff;
 	let defTypes = pokeB.template.types.slice();
-	if (conditionsB.volatiles["typechange"] && conditionsB.volatiles["typechange"].length) defTypes = conditionsB.volatiles["typechange"].slice();
+	if (conditionsB.volatiles["typechange"] && conditionsB.volatiles["typechange"].length) {
+		defTypes = conditionsB.volatiles["typechange"].slice();
+	}
 	if (conditionsB.volatiles["typeadd"]) defTypes.push(conditionsB.volatiles["typeadd"]);
 	//debug(defTypes);
 	for (let t = 0; t < defTypes.length; t++) {
@@ -325,238 +366,264 @@ function calculate(pokeA, pokeB, move, conditionsA, conditionsB, gconditions, ge
 		typesMux *= eff;
 	}
 
-	if (move.id === 'thousandarrows' && !gconditions['gravity'] && !conditionsB.volatiles['smackdown'] && !pokeB.isGrounded()) {
+	if (
+		move.id === "thousandarrows" &&
+		!gconditions["gravity"] &&
+		!conditionsB.volatiles["smackdown"] &&
+		!pokeB.isGrounded()
+	) {
 		typesMux = 1; /* Hit neutral */
 	}
 
-	if (gen >= 3 && pokeB.ability && (!pokeA.ability || !(pokeA.ability.id in {"moldbreaker": 1, "turboblaze": 1, "teravolt": 1}))) {
+	if (
+		gen >= 3 &&
+		pokeB.ability &&
+		(!pokeA.ability || !(pokeA.ability.id in {moldbreaker: 1, turboblaze: 1, teravolt: 1}))
+	) {
 		switch (pokeB.ability.id) {
-		case "dryskin":
-		case "stormdrain":
-		case "waterabsorb":
-			if (moveType === "Water") inmune = true;
-			break;
-		case "flashfire":
-			if (moveType === "Fire") inmune = true;
-			break;
-		case "levitate":
-			if (moveType === "Ground" && !noLevitation) inmune = true;
-			break;
-		case "lightningrod":
-		case "motordrive":
-		case "voltabsorb":
-			if (moveType === "Electric") inmune = true;
-			break;
-		case "sapsipper":
-			if (moveType === "Grass") inmune = true;
-			break;
-		case "thickfat":
-			if (moveType === "Ice" || moveType === "Fire") atk = Math.floor(atk * 0.5);
-			break;
-		case "wonderguard":
-			if (typesMux < 2) typesMux = 0;
-			break;
-		case "bulletproof":
-			if (move.flags && move.flags['bullet']) typesMux = 0;
-			break;
+			case "dryskin":
+			case "stormdrain":
+			case "waterabsorb":
+				if (moveType === "Water") inmune = true;
+				break;
+			case "flashfire":
+				if (moveType === "Fire") inmune = true;
+				break;
+			case "levitate":
+				if (moveType === "Ground" && !noLevitation) inmune = true;
+				break;
+			case "lightningrod":
+			case "motordrive":
+			case "voltabsorb":
+				if (moveType === "Electric") inmune = true;
+				break;
+			case "sapsipper":
+				if (moveType === "Grass") inmune = true;
+				break;
+			case "thickfat":
+				if (moveType === "Ice" || moveType === "Fire") atk = Math.floor(atk * 0.5);
+				break;
+			case "wonderguard":
+				if (typesMux < 2) typesMux = 0;
+				break;
+			case "bulletproof":
+				if (move.flags && move.flags["bullet"]) typesMux = 0;
+				break;
 		}
 	}
 
 	if (inmune || typesMux === 0) return new Damage(statsB.hp);
 
 	/******************************
-	* Base power
-	*******************************/
+	 * Base power
+	 *******************************/
 
 	bp = move.basePower || 0;
 
 	switch (move.id) {
-	case "frustration":
-		bp = Math.floor(((255 - pokeA.happiness) * 10) / 25) || 1;
-		break;
-	case "return":
-		bp = Math.floor((pokeA.happiness * 10) / 25) || 1;
-		break;
-	case "fling":
-		if (pokeA.item && pokeA.item.fling) bp = pokeA.item.fling.basePower || 0;
-		else bp = 0;
-		break;
-	case "naturalgift":
-		if (pokeA.item && pokeA.item.naturalGift && pokeA.item.naturalGift.basePower) bp = pokeA.item.naturalGift.basePower;
-		else bp = 0;
-		break;
-	case "grassknot":
-		if (pokeB.template.weightkg) {
-			if (pokeB.template.weightkg >= 200) {
-				bp = 120;
-			} else if (pokeB.template.weightkg >= 100) {
-				bp = 100;
-			} else if (pokeB.template.weightkg >= 50) {
-				bp = 80;
-			} else if (pokeB.template.weightkg >= 25) {
-				bp = 60;
-			} else if (pokeB.template.weightkg >= 10) {
-				bp = 40;
+		case "frustration":
+			bp = Math.floor(((255 - pokeA.happiness) * 10) / 25) || 1;
+			break;
+		case "return":
+			bp = Math.floor((pokeA.happiness * 10) / 25) || 1;
+			break;
+		case "fling":
+			if (pokeA.item && pokeA.item.fling) bp = pokeA.item.fling.basePower || 0;
+			else bp = 0;
+			break;
+		case "naturalgift":
+			if (pokeA.item && pokeA.item.naturalGift && pokeA.item.naturalGift.basePower) {
+				bp = pokeA.item.naturalGift.basePower;
 			} else {
-				bp = 20;
+				bp = 0;
 			}
-		}
-		break;
-	case "heavyslam":
-		if (pokeB.template.weightkg && pokeA.template.weightkg) {
-			let relW = pokeB.template.weightkg / pokeA.template.weightkg;
-			if (relW >= 0.5) {
-				bp = 40;
-			} else if (relW >= 0.33) {
-				bp = 60;
-			} else if (relW >= 0.25) {
-				bp = 80;
-			} else if (relW >= 0.2) {
-				bp = 100;
-			} else {
-				bp = 120;
+			break;
+		case "grassknot":
+			if (pokeB.template.weightkg) {
+				if (pokeB.template.weightkg >= 200) {
+					bp = 120;
+				} else if (pokeB.template.weightkg >= 100) {
+					bp = 100;
+				} else if (pokeB.template.weightkg >= 50) {
+					bp = 80;
+				} else if (pokeB.template.weightkg >= 25) {
+					bp = 60;
+				} else if (pokeB.template.weightkg >= 10) {
+					bp = 40;
+				} else {
+					bp = 20;
+				}
 			}
-		}
-		break;
-	case "gyroball":
-		bp = (Math.floor(25 * statsB.spe / statsA.spe) || 1);
-		if (bp > 150) bp = 150;
-		break;
-	case "snore":
-		if (pokeA.status !== 'slp') bp = 0;
-		break;
-	case "dreameater":
-		if (pokeB.status !== 'slp') bp = 0;
-		break;
+			break;
+		case "heavyslam":
+			if (pokeB.template.weightkg && pokeA.template.weightkg) {
+				let relW = pokeB.template.weightkg / pokeA.template.weightkg;
+				if (relW >= 0.5) {
+					bp = 40;
+				} else if (relW >= 0.33) {
+					bp = 60;
+				} else if (relW >= 0.25) {
+					bp = 80;
+				} else if (relW >= 0.2) {
+					bp = 100;
+				} else {
+					bp = 120;
+				}
+			}
+			break;
+		case "gyroball":
+			bp = Math.floor((25 * statsB.spe) / statsA.spe) || 1;
+			if (bp > 150) bp = 150;
+			break;
+		case "snore":
+			if (pokeA.status !== "slp") bp = 0;
+			break;
+		case "dreameater":
+			if (pokeB.status !== "slp") bp = 0;
+			break;
 	}
 
 	if (!bp) {
-		if (move.id === "naturesmadness" || move.id === "superfang") return new Damage(statsB.hp, [Math.floor((statsB.hp * (pokeB.hp / 2)) / 100)]);
-		if (move.id === "guardianofalola") return new Damage(statsB.hp, [Math.floor((statsB.hp * (pokeB.hp / 2)) / 100)]);
-		if (move.damage === "level") return new Damage(statsB.hp, [pokeA.level]);
-		if (typeof move.damage === "number") return new Damage(statsB.hp, [move.damage]);
-		return new Damage(statsB.hp);
+		let hpB = statsB.hp;
+		if (move.id === "naturesmadness" || move.id === "superfang") {
+			return new Damage(hpB, [Math.floor((hpB * (pokeB.hp / 2)) / 100)]);
+		}
+		if (move.id === "guardianofalola") return new Damage(hpB, [Math.floor((hpB * (pokeB.hp / 2)) / 100)]);
+		if (move.damage === "level") return new Damage(hpB, [pokeA.level]);
+		if (typeof move.damage === "number") return new Damage(hpB, [move.damage]);
+		return new Damage(hpB);
 	}
 
 	switch (move.id) {
-	case "venoshock":
-		if (pokeB.status === 'psn' || pokeB.status === 'tox') bp = Math.floor(bp * 2);
-		break;
-	case "brine":
-		if (pokeB.hp < 50) bp = Math.floor(bp * 2);
-		break;
-	case "facade":
-		if (pokeA.status && pokeA.status !== 'slp') bp = Math.floor(bp * 2);
-		break;
-	case "knockoff":
-		if (pokeB.item && !pokeB.onTakeItem) bp = Math.floor(bp * 1.5);
-		break;
-	case "retaliate":
-		if (conditionsA.side.faintedLastTurn) bp = Math.floor(bp * 2);
-		break;
-	case "solarbeam":
-		if (gconditions.weather === "primordialsea" || gconditions.weather === "raindance" || gconditions.weather === "sandstorm" || gconditions.weather === "hail") bp = Math.floor(bp * 0.5);
-		break;
-	case "hyperspacefury":
-		if (pokeA.template.species !== "Hoopa-Unbound") bp = 0;
-		break;
-	case "waterspout":
-	case "eruption":
-		bp *= pokeA.hp / 100;
-		break;
+		case "venoshock":
+			if (pokeB.status === "psn" || pokeB.status === "tox") bp = Math.floor(bp * 2);
+			break;
+		case "brine":
+			if (pokeB.hp < 50) bp = Math.floor(bp * 2);
+			break;
+		case "facade":
+			if (pokeA.status && pokeA.status !== "slp") bp = Math.floor(bp * 2);
+			break;
+		case "knockoff":
+			if (pokeB.item && !pokeB.onTakeItem) bp = Math.floor(bp * 1.5);
+			break;
+		case "retaliate":
+			if (conditionsA.side.faintedLastTurn) bp = Math.floor(bp * 2);
+			break;
+		case "solarbeam":
+			if (
+				gconditions.weather === "primordialsea" ||
+				gconditions.weather === "raindance" ||
+				gconditions.weather === "sandstorm" ||
+				gconditions.weather === "hail"
+			) {
+				bp = Math.floor(bp * 0.5);
+			}
+			break;
+		case "hyperspacefury":
+			if (pokeA.template.species !== "Hoopa-Unbound") bp = 0;
+			break;
+		case "waterspout":
+		case "eruption":
+			bp *= pokeA.hp / 100;
+			break;
 	}
 
 	if (gen >= 3 && pokeA.ability) {
 		switch (pokeA.ability.id) {
-		case "technician":
-			if (bp <= 60) bp = Math.floor(bp * 1.5);
-			break;
-		case "toxicboost":
-			if (cat === "Physical" && (pokeA.status === "psn" || pokeA.status === "tox")) bp = Math.floor(bp * 1.5);
-			break;
-		case "toughclaws":
-			if (move.flags && move.flags['contact']) bp = Math.floor(bp * 1.3);
-			break;
-		case "aerilate":
-		case "pixilate":
-		case "refrigerate":
-			if (move.type === "Normal") bp = Math.floor(bp * 1.3);
-			break;
-		case "flareboost":
-			if (cat === "Special" && pokeA.status === "brn") bp = Math.floor(bp * 1.5);
-			break;
-		case "ironfist":
-			if (move.flags && move.flags['punch']) bp = Math.floor(bp * 1.2);
-			break;
-		case "megalauncher":
-			if (move.flags && move.flags['pulse']) bp = Math.floor(bp * 1.5);
-			break;
-		case "parentalbond":
-			if (!move.selfdestruct && !move.multihit && (!move.flags || !move.flags['charge']) && !move.spreadHit) {
-				bp = Math.floor(bp * 1.5); //Multi Hit
-			}
-			break;
-		case "reckless":
-			if (move.recoil || move.hasCustomRecoil) bp = Math.floor(bp * 1.2);
-			break;
-		case "rivalry":
-			if (pokeA.gender && pokeB.gender) {
-				if (pokeA.gender === pokeB.gender) {
-					bp = Math.floor(bp * 1.25);
-				} else {
-					bp = Math.floor(bp * 0.75);
+			case "technician":
+				if (bp <= 60) bp = Math.floor(bp * 1.5);
+				break;
+			case "toxicboost":
+				if (cat === "Physical" && (pokeA.status === "psn" || pokeA.status === "tox")) bp = Math.floor(bp * 1.5);
+				break;
+			case "toughclaws":
+				if (move.flags && move.flags["contact"]) bp = Math.floor(bp * 1.3);
+				break;
+			case "aerilate":
+			case "pixilate":
+			case "refrigerate":
+				if (move.type === "Normal") bp = Math.floor(bp * 1.3);
+				break;
+			case "flareboost":
+				if (cat === "Special" && pokeA.status === "brn") bp = Math.floor(bp * 1.5);
+				break;
+			case "ironfist":
+				if (move.flags && move.flags["punch"]) bp = Math.floor(bp * 1.2);
+				break;
+			case "megalauncher":
+				if (move.flags && move.flags["pulse"]) bp = Math.floor(bp * 1.5);
+				break;
+			case "parentalbond":
+				if (!move.selfdestruct && !move.multihit && (!move.flags || !move.flags["charge"]) && !move.spreadHit) {
+					bp = Math.floor(bp * 1.5); //Multi Hit
 				}
-			}
-			break;
-		case "sandforce":
-			if (gconditions.weather === "sandstorm") {
-				if (moveType === 'Rock' || moveType === 'Ground' || moveType === 'Steel') {
-					bp = Math.floor(bp * 1.3);
+				break;
+			case "reckless":
+				if (move.recoil || move.hasCustomRecoil) bp = Math.floor(bp * 1.2);
+				break;
+			case "rivalry":
+				if (pokeA.gender && pokeB.gender) {
+					if (pokeA.gender === pokeB.gender) {
+						bp = Math.floor(bp * 1.25);
+					} else {
+						bp = Math.floor(bp * 0.75);
+					}
 				}
-			}
-			break;
-		case "sheerforce":
-			if (move.secondaries) bp = Math.floor(bp * 1.5);
-			break;
-		case "strongjaw":
-			if (move.flags && move.flags['bite']) bp = Math.floor(bp * 1.5);
-			break;
+				break;
+			case "sandforce":
+				if (gconditions.weather === "sandstorm") {
+					if (moveType === "Rock" || moveType === "Ground" || moveType === "Steel") {
+						bp = Math.floor(bp * 1.3);
+					}
+				}
+				break;
+			case "sheerforce":
+				if (move.secondaries) bp = Math.floor(bp * 1.5);
+				break;
+			case "strongjaw":
+				if (move.flags && move.flags["bite"]) bp = Math.floor(bp * 1.5);
+				break;
 		}
 	}
 
-	if (gen >= 3 && pokeB.ability && (!pokeA.ability || !(pokeA.ability.id in {"moldbreaker": 1, "turboblaze": 1, "teravolt": 1}))) {
+	if (
+		gen >= 3 &&
+		pokeB.ability &&
+		(!pokeA.ability || !(pokeA.ability.id in {moldbreaker: 1, turboblaze: 1, teravolt: 1}))
+	) {
 		switch (pokeB.ability.id) {
-		case "dryskin":
-			if (moveType === "Fire") bp = Math.floor(bp * 1.3);
-			break;
-		case "heatproof":
-			if (moveType === "Fire") bp = Math.floor(bp * 0.5);
-			break;
+			case "dryskin":
+				if (moveType === "Fire") bp = Math.floor(bp * 1.3);
+				break;
+			case "heatproof":
+				if (moveType === "Fire") bp = Math.floor(bp * 0.5);
+				break;
 		}
 	}
 
 	if (pokeA.item) {
 		switch (pokeA.item.id) {
-		case "choiceband":
-			if (atkStat === "atk") atk = Math.floor(atk * 1.5);
-			break;
-		case "choicespecs":
-			if (atkStat === "spa") atk = Math.floor(atk * 1.5);
-			break;
+			case "choiceband":
+				if (atkStat === "atk") atk = Math.floor(atk * 1.5);
+				break;
+			case "choicespecs":
+				if (atkStat === "spa") atk = Math.floor(atk * 1.5);
+				break;
 		}
 	}
 
 	if (pokeB.item) {
 		switch (pokeB.item.id) {
-		case "airballoon":
-			if (moveType === "Ground" && !noLevitation) bp = 0;
-			break;
+			case "airballoon":
+				if (moveType === "Ground" && !noLevitation) bp = 0;
+				break;
 		}
 	}
 
 	/******************************
-	* Modifiers
-	*******************************/
+	 * Modifiers
+	 *******************************/
 
 	let modifier = 1;
 
@@ -569,11 +636,13 @@ function calculate(pokeA, pokeB, move, conditionsA, conditionsB, gconditions, ge
 	}
 
 	/* Weather */
-	if (gen < 3 || !pokeA.ability || pokeA.supressedAbility || !(pokeA.ability.id in {'airlock': 1, 'cloudnine': 1})) {
-		if (move.type === "Water" && (gconditions.weather === "primordialsea" || gconditions.weather === "raindance")) modifier *= 2;
-
-		if (move.type === "Fire" && (gconditions.weather === "desolateland" || gconditions.weather === "sunnyday")) modifier *= 2;
-
+	if (gen < 3 || !pokeA.ability || pokeA.supressedAbility || !(pokeA.ability.id in {airlock: 1, cloudnine: 1})) {
+		if (move.type === "Water" && (gconditions.weather === "primordialsea" || gconditions.weather === "raindance")) {
+			modifier *= 2;
+		}
+		if (move.type === "Fire" && (gconditions.weather === "desolateland" || gconditions.weather === "sunnyday")) {
+			modifier *= 2;
+		}
 		if (gconditions.weather === "desolateland" && move.type === "Water") modifier = 0;
 		if (gconditions.weather === "primordialsea" && move.type === "Fire") modifier = 0;
 	}
@@ -586,15 +655,20 @@ function calculate(pokeA, pokeB, move, conditionsA, conditionsB, gconditions, ge
 
 	if (conditionsA.boosts[atkStat]) {
 		if (!pokeB.ability || pokeB.ability.id !== "unaware") {
-			let muxOff = 1 + (0.5) * Math.abs(conditionsA.boosts[atkStat]);
+			let muxOff = 1 + 0.5 * Math.abs(conditionsA.boosts[atkStat]);
 			if (conditionsA.boosts[atkStat] < 0) muxOff = 1 / muxOff;
 			atk = Math.floor(atk * muxOff);
 		}
 	}
 
 	if (conditionsB.boosts[defStat]) {
-		if (!conditionsA.inmediate["crit"] && !move.willCrit && !move.ignoreDefensive && (!pokeA.ability || pokeA.ability.id !== "unaware")) {
-			let muxDef = 1 + (0.5) * Math.abs(conditionsB.boosts[defStat]);
+		if (
+			!conditionsA.inmediate["crit"] &&
+			!move.willCrit &&
+			!move.ignoreDefensive &&
+			(!pokeA.ability || pokeA.ability.id !== "unaware")
+		) {
+			let muxDef = 1 + 0.5 * Math.abs(conditionsB.boosts[defStat]);
 			if (conditionsB.boosts[defStat] < 0) muxDef = 1 / muxDef;
 			def = Math.floor(def * muxDef);
 		}
@@ -603,8 +677,11 @@ function calculate(pokeA, pokeB, move, conditionsA, conditionsB, gconditions, ge
 	/* Inmediate */
 
 	if (conditionsA.inmediate["crit"] || move.willCrit) {
-		if (gen > 5) modifier *= 1.5;
-		else modifier *= 2;
+		if (gen > 5) {
+			modifier *= 1.5;
+		} else {
+			modifier *= 2;
+		}
 	}
 
 	if (conditionsA.inmediate["helpinghand"]) modifier *= 1.5;
@@ -620,15 +697,17 @@ function calculate(pokeA, pokeB, move, conditionsA, conditionsB, gconditions, ge
 
 	/* Field */
 
-	if (pokeA.isGrounded() || conditionsA.volatiles['smackdown'] || gconditions['gravity']) {
+	if (pokeA.isGrounded() || conditionsA.volatiles["smackdown"] || gconditions["gravity"]) {
 		if (gconditions["electricterrain"] && moveType === "Electric") bp = Math.floor(bp * 1.5);
 		if (gconditions["grassyterrain"] && moveType === "Grass") bp = Math.floor(bp * 1.5);
 		if (gconditions["psychicterrain"] && moveType === "Psychic") bp = Math.floor(bp * 1.5);
 	}
 
-	if (pokeB.isGrounded() || conditionsB.volatiles['smackdown'] || gconditions['gravity']) {
+	if (pokeB.isGrounded() || conditionsB.volatiles["smackdown"] || gconditions["gravity"]) {
 		if (gconditions["psychicterrain"] && move.priority > 0) bp = 0;
-		if (gconditions["grassyterrain"] && (move.id in {"bulldoze": 1, "earthquake": 1, "magnitude": 1})) bp = Math.floor(bp * 1.5);
+		if (gconditions["grassyterrain"] && move.id in {bulldoze: 1, earthquake: 1, magnitude: 1}) {
+			bp = Math.floor(bp * 1.5);
+		}
 		if (gconditions["mistyterrain"] && moveType === "Dragon") bp = Math.floor(bp * 0.5);
 	}
 
@@ -637,10 +716,10 @@ function calculate(pokeA, pokeB, move, conditionsA, conditionsB, gconditions, ge
 	}
 
 	/******************************
-	* Damage
-	*******************************/
+	 * Damage
+	 *******************************/
 
-	let dmg = (((((2 * pokeA.level / 5) + 2) * atk * bp / def) / 50) + 2) * typesMux * modifier;
+	let dmg = ((((2 * pokeA.level) / 5 + 2) * atk * bp) / def / 50 + 2) * typesMux * modifier;
 	if (bp === 0) dmg = 0;
 
 	return new Damage(statsB.hp, getRolls(dmg));

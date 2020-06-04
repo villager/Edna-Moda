@@ -1,8 +1,8 @@
 "use strict";
 
 const DEFAULT_ACTIVITY = {
-    every: 10,
-    cmd: '/noonewillusethisthingever',
+	every: 10,
+	cmd: "/noonewillusethisthingever",
 };
 const DEFAULT_DELAY = Config.reconnectingDelay || 1000 * 30;
 
@@ -51,16 +51,16 @@ class ConnectionManager extends Plugins.Timers {
 		this.conntime = 0;
 	}
 	onBegin() {
-        console.log(`Retrying connection to ${this.server.id} in ${this.time / 1000} seconds`);
+		console.log(`Retrying connection to ${this.server.id} in ${this.time / 1000} seconds`);
 		this.start(() => {
 			if (this.closed) return;
-            this.server.connect();
-            this.attemps++;
-            if (this.attemps > this.maxAttemps) {
-                this.activity.clear();
-                this.closed = true;
-                console.log(`Connection closed to ${this.server.id}`);
-            }
+			this.server.connect();
+			this.attemps++;
+			if (this.attemps > this.maxAttemps) {
+				this.activity.clear();
+				this.closed = true;
+				console.log(`Connection closed to ${this.server.id}`);
+			}
 		});
 	}
 }
@@ -75,7 +75,7 @@ class SendManager {
 		this.data = data;
 		this.msgMaxLines = msgMaxLines;
 		this.sendFunc = sendFunc;
-		this.status = 'sending';
+		this.status = "sending";
 		this.callback = null;
 		this.destroyHandler = destroyHandler;
 		this.err = null;
@@ -100,26 +100,26 @@ class SendManager {
 			let firstMsg = data.shift();
 			toSend.push(firstMsg);
 			let roomToSend = "";
-			if (firstMsg.indexOf('|') >= 0) {
-				roomToSend = firstMsg.split('|')[0];
+			if (firstMsg.indexOf("|") >= 0) {
+				roomToSend = firstMsg.split("|")[0];
 			}
 			while (data.length > 0 && toSend.length < this.msgMaxLines) {
 				let subMsg = data[0];
-				if (subMsg.split('|')[0] !== roomToSend) {
+				if (subMsg.split("|")[0] !== roomToSend) {
 					break;
 				} else {
-					toSend.push(subMsg.split('|').slice(1).join('|'));
+					toSend.push(subMsg.split("|").slice(1).join("|"));
 					data.shift();
 				}
 			}
-			this.sendFunc(toSend.join('\n'));
+			this.sendFunc(toSend.join("\n"));
 		};
 		this.interval = setInterval(nextToSend.bind(this), 2000);
 		nextToSend.call(this);
 	}
 
 	finalize() {
-		this.status = 'finalized';
+		this.status = "finalized";
 		if (typeof this.callback === "function") this.callback(this.err);
 		if (typeof this.destroyHandler === "function") this.destroyHandler(this);
 	}
@@ -128,7 +128,7 @@ class SendManager {
 	 * @param {function} callback
 	 */
 	then(callback) {
-		if (this.status !== 'sending') {
+		if (this.status !== "sending") {
 			return callback(this.err);
 		} else {
 			this.callback = callback;
