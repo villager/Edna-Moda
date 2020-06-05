@@ -5,7 +5,7 @@
     "scripts": {
         "start": "node app",
         "build": "node build",
-        "test": "mocha",
+        "test": "mocha && jest",
         "format": "prettier --write \"*.{js,md}\" \"**/**/*.js\"",
         "lint": "eslint . --config .eslintrc.json --cache --ext .js",
         "full-lint": "eslint . --config .eslintrc.json --cache --cache-location .eslintfullcache --ext .js,.ts"
@@ -29,6 +29,11 @@
         "reporter": "spec",
         "slow": 75,
         "timeout": 2000
+    },
+    "jest": {
+        "testEnvironment": "node",
+        "coverageDirectory": "coverage",
+        "coveragePathIgnorePatterns": ["/node_modules/","/plugins/utils/events/" ]  
     },
     "prettier": {
         "semi": true,

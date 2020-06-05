@@ -5,7 +5,7 @@
 [![devDependency Status](https://david-dm.org/villager/Edna-Moda/dev-status.svg)](https://david-dm.org/villager/Edna-Moda?type=dev)
 [![optionalDependency Status](https://david-dm.org/villager/Edna-Moda/optional-status.svg)](https://david-dm.org/villager/Edna-Moda?type=optional)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-
+[![jest](https://jestjs.io/img/jest-badge.svg)](https://github.com/facebook/jest)
 Edna is a Cross-Server (Pokemon Showdown) and Cross-Plataform (Showdown and Discord)
 
 ---
