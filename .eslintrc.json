@@ -196,6 +196,12 @@
 			"globals": {
 			  "Plugins": false
 			}
-		  }
+		},
+		{
+			"env": {
+				"jest": true
+			},
+			"files": ["*.js"]
+		}
 	]
 }

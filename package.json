@@ -68,8 +68,8 @@
         "jest": "^26.0.1",
         "mocha": "^7.1.1",
         "prettier": "2.0.5",
-        "eslint-config-prettier": "6.11.0",
-        "eslint-plugin-prettier": "3.1.3"
+        "eslint-config-prettier": "^6.11.0",
+        "eslint-plugin-prettier": "^3.1.3"
     },
     "url": "https://github.com/villager/Edna-Moda",
     "bugs": {
