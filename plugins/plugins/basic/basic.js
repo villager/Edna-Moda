@@ -68,14 +68,14 @@ exports.globalCommands = {
 		if (!this.can("hotpatch", true)) return false;
 		let result = eval(target);
 		try {
-			if (this.bot.id !== "discord") {
+			if (this.serverType !== "Discord") {
 				this.sendReply(`!code ${result}`);
 			} else {
 				this.sendReply(result);
 			}
 		} catch (e) {
 			const message = ("" + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, "").replace(/\n/g, "\n||");
-			if (this.bot.id !== "discord") {
+			if (this.serverType !== "Discord") {
 				this.sendReply(`!code ${message}`);
 			} else {
 				this.sendReply(message);

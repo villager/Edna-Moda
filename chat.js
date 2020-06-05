@@ -23,14 +23,14 @@ Chat.loadPlugins = function () {
 
 Chat.hasAuth = function (id, user, perm) {
 	let group;
-	let userId = id === "discord" ? toUserName(user) : toId(user);
+	let userId = id === "Discord" ? toUserName(user) : toId(user);
 	for (const owner of Config.owners) {
 		if (owner.id === userId) return true;
 		for (const aliases of owner.aliases) {
 			if (aliases === userId) return true;
 		}
 	}
-	if (id === "discord") {
+	if (id === "Discord") {
 		return true; // I"ll do this latter
 	} else {
 		let rank = Config.permissions[perm];

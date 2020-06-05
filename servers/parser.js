@@ -119,7 +119,7 @@ class BaseParser {
 		return commandHandler;
 	}
 	can(permission, broadcast) {
-		if (Chat.hasAuth(this.id, this.user, permission)) return true;
+		if (Chat.hasAuth(this.serverType, this.user, permission)) return true;
 		if (broadcast) this.sendReply("Acceso Denegado");
 		return false;
 	}

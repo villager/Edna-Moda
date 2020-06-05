@@ -1,33 +1,19 @@
 "use strict";
 
 const BaseClient = require("discord.js").Client;
-const Parser = require("./parser");
+const Server = require("./server");
 
 class DiscordClient extends BaseClient {
 	constructor() {
 		super();
 		this.activity = `Usame con: ${Config.triggers.join(" o ")}`;
-		this.parser = new Parser(this);
-		this.lastUser = "";
-		this.id = "discord";
-		this.lastMessage = "";
-		this.commands = Object.create(null);
-		this.language = "english";
+		this.servers = new Map();
 		this.name = Config.name;
-		this.initPlugins();
 	}
-	loadCommands() {
-		Chat.loadPlugins();
-		Plugins.eventEmitter.emit("onDynamic", this).flush();
-		Object.assign(this.commands, Chat.discordCommands);
-	}
-	initPlugins() {
-		Plugins.forEach(plugin => {
-			if (typeof plugin.init === "function") {
-				plugin.init(this);
-			}
-		});
-		this.loadCommands();
+	get(name) {
+		name = name.name ? toId(name.name) : toId(name);
+		if (!this.servers.has(name)) return false;
+		return this.servers.get(name);
 	}
 	status() {
 		this.on("ready", () => {
@@ -73,8 +59,12 @@ class DiscordClient extends BaseClient {
 	connect() {
 		this.status();
 		this.logs();
+		console.log(this.servers);
 		this.on("message", async message => {
-			this.parser.parse(message);
+			if (!this.get(message.guild)) {
+				this.servers.set(toId(message.guild.name), new Server(message.guild));
+			}
+			this.get(message.guild).parser.parse(message);
 		});
 		// Connection to discord
 		this.login(Config.token)

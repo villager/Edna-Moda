@@ -11,7 +11,6 @@ class Parser extends BaseParser {
 		this.bot.lastMessage = message.content;
 		this.bot.lastUser = message.author;
 		this.channel = message.channel;
-		this.guild = message.guild;
 		this.messageId = message.id;
 		//		console.log(this.channel);
 		let commandHandler = this.splitCommand(message.content);
@@ -25,7 +24,7 @@ class Parser extends BaseParser {
 		}
 	}
 	sendReply(data) {
-		this.channel.send(data);
+		this.channel.send(data).catch(() => {});
 	}
 }
 module.exports = Parser;
