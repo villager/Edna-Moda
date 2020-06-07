@@ -1,15 +1,15 @@
-"use strict";
+'use strict';
 
-const psData = require("ps-data");
+const psData = require('ps-data');
 
 function getEffect(effect, gen) {
-	if (!effect || typeof effect === "string") {
-		let name = (effect || "").trim();
-		if (name.substr(0, 5) === "item:") {
+	if (!effect || typeof effect === 'string') {
+		let name = (effect || '').trim();
+		if (name.substr(0, 5) === 'item:') {
 			return getItem(name.substr(5), gen);
-		} else if (name.substr(0, 8) === "ability:") {
+		} else if (name.substr(0, 8) === 'ability:') {
 			return getAbility(name.substr(8), gen);
-		} else if (name.substr(0, 5) === "move:") {
+		} else if (name.substr(0, 5) === 'move:') {
 			return getMove(name.substr(5), gen);
 		}
 
@@ -33,28 +33,28 @@ function getEffect(effect, gen) {
 		} else if (id && pItem.effect) {
 			effect = pItem.effect;
 			effect.exists = true;
-		} else if (id === "recoil") {
+		} else if (id === 'recoil') {
 			effect = {
-				effectType: "Recoil",
+				effectType: 'Recoil',
 			};
 			effect.exists = true;
-		} else if (id === "drain") {
+		} else if (id === 'drain') {
 			effect = {
-				effectType: "Drain",
+				effectType: 'Drain',
 			};
 			effect.exists = true;
 		}
 		if (!effect.id) effect.id = id;
 		if (!effect.name) effect.name = Plugins.Utils.escapeHTML(name);
-		if (!effect.category) effect.category = "Effect";
-		if (!effect.effectType) effect.effectType = "Effect";
+		if (!effect.category) effect.category = 'Effect';
+		if (!effect.effectType) effect.effectType = 'Effect';
 	}
 	return effect;
 }
 
 function getTemplate(poke, gen) {
 	if (!gen || gen > 8 || gen < 1) gen = 8;
-	poke = toId(poke || "");
+	poke = toId(poke || '');
 	let pokemon = {};
 	let temp;
 	for (let i = 8; i >= gen; i--) {
@@ -70,14 +70,14 @@ function getTemplate(poke, gen) {
 	if (!pokemon.species) {
 		return {
 			num: 235,
-			species: "Smeargle",
-			types: ["Normal"],
+			species: 'Smeargle',
+			types: ['Normal'],
 			baseStats: {hp: 55, atk: 20, def: 35, spa: 20, spd: 45, spe: 75},
-			abilities: {0: "Own Tempo", 1: "Technician", H: "Moody"},
+			abilities: {0: 'Own Tempo', 1: 'Technician', H: 'Moody'},
 			heightm: 1.2,
 			weightkg: 58,
-			color: "White",
-			eggGroups: ["Field"],
+			color: 'White',
+			eggGroups: ['Field'],
 		};
 	}
 	return pokemon;
@@ -85,9 +85,9 @@ function getTemplate(poke, gen) {
 
 function getMove(move, gen) {
 	if (!gen || gen > 8 || gen < 1) gen = 8;
-	move = toId(move || "");
-	if (move.indexOf("hiddenpower") === 0) {
-		move = move.replace(/[0-9]/g, "");
+	move = toId(move || '');
+	if (move.indexOf('hiddenpower') === 0) {
+		move = move.replace(/[0-9]/g, '');
 	}
 	let moveData = {};
 	let temp;
@@ -100,33 +100,33 @@ function getMove(move, gen) {
 		}
 		for (let i in temp) moveData[i] = temp[i];
 	}
-	if (!moveData.id && move.length > 0 && move.charAt(move.length - 1) === "z") {
+	if (!moveData.id && move.length > 0 && move.charAt(move.length - 1) === 'z') {
 		return getMove(move.substr(0, move.length - 1), gen);
 	} else if (!moveData.id) {
 		return {
 			num: 165,
 			accuracy: true,
 			basePower: 50,
-			category: "Physical",
+			category: 'Physical',
 			desc: `Deals typeless damage to one adjacent foe at random. If this move was successful, the user loses 1/4 of its maximum HP, rounded half up; the Ability Rock Head does not prevent this. This move can only be used if none of the user"s known moves can be selected.`,
-			shortDesc: "User loses 25% of its max HP as recoil.",
-			id: "struggle",
-			name: "Struggle",
+			shortDesc: 'User loses 25% of its max HP as recoil.',
+			id: 'struggle',
+			name: 'Struggle',
 			pp: 1,
 			noPPBoosts: true,
 			priority: 0,
 			flags: {contact: 1, protect: 1},
 			noSketch: true,
-			effectType: "Move",
+			effectType: 'Move',
 		};
 	}
-	if (!moveData.effectType) moveData.effectType = "Move";
+	if (!moveData.effectType) moveData.effectType = 'Move';
 	return moveData;
 }
 
 function getItem(item, gen) {
 	if (!gen || gen > 8 || gen < 1) gen = 8;
-	item = toId(item || "");
+	item = toId(item || '');
 	let itemData = {};
 	let temp;
 	for (let i = 8; i >= gen; i--) {
@@ -140,24 +140,24 @@ function getItem(item, gen) {
 	}
 	if (!itemData.id) {
 		return {
-			id: "pokeball",
-			name: "Poke Ball",
+			id: 'pokeball',
+			name: 'Poke Ball',
 			spritenum: 345,
 			num: 4,
 			gen: 1,
-			desc: "A device for catching wild Pokemon. It is designed as a capsule system.",
-			category: "Effect",
-			effectType: "Item",
+			desc: 'A device for catching wild Pokemon. It is designed as a capsule system.',
+			category: 'Effect',
+			effectType: 'Item',
 		};
 	}
-	if (!itemData.category) itemData.category = "Effect";
-	if (!itemData.effectType) itemData.effectType = "Item";
+	if (!itemData.category) itemData.category = 'Effect';
+	if (!itemData.effectType) itemData.effectType = 'Item';
 	return itemData;
 }
 
 function getAbility(ab, gen) {
 	if (!gen || gen > 8 || gen < 1) gen = 8;
-	ab = toId(ab || "");
+	ab = toId(ab || '');
 	let ability = {};
 	let temp;
 	for (let i = 8; i >= gen; i--) {
@@ -171,24 +171,24 @@ function getAbility(ab, gen) {
 	}
 	if (!ability.id) {
 		return {
-			desc: "This Pokemon has no ability.",
-			shortDesc: "This Pokemon has no ability.",
-			id: "none",
-			name: "None",
+			desc: 'This Pokemon has no ability.',
+			shortDesc: 'This Pokemon has no ability.',
+			id: 'none',
+			name: 'None',
 			rating: 1,
 			num: 1,
-			category: "Effect",
-			effectType: "Ability",
+			category: 'Effect',
+			effectType: 'Ability',
 		};
 	}
-	if (!ability.category) ability.category = "Effect";
-	if (!ability.effectType) ability.effectType = "Ability";
+	if (!ability.category) ability.category = 'Effect';
+	if (!ability.effectType) ability.effectType = 'Ability';
 	return ability;
 }
 
 class Move {
 	constructor(template) {
-		if (!template || typeof template !== "object") throw new Error("Invalid move template");
+		if (!template || typeof template !== 'object') throw new Error('Invalid move template');
 		this.template = template;
 		this.name = this.template.name;
 		this.id = this.template.id;
@@ -208,7 +208,7 @@ class Move {
 
 class Pokemon {
 	constructor(template, properties) {
-		if (!template || typeof template !== "object") throw new Error("Invalid pokemon template");
+		if (!template || typeof template !== 'object') throw new Error('Invalid pokemon template');
 
 		this.template = template;
 		this.species = this.template.species;
@@ -221,14 +221,14 @@ class Pokemon {
 		this.level = 100;
 		this.shiny = false;
 
-		this.item = "&unknown";
-		this.itemEffect = "";
+		this.item = '&unknown';
+		this.itemEffect = '';
 		this.prevItem = null;
-		this.prevItemEffect = "";
+		this.prevItemEffect = '';
 
-		this.ability = "&unknown";
+		this.ability = '&unknown';
 		this.supressedAbility = false;
-		this.baseAbility = "&unknown";
+		this.baseAbility = '&unknown';
 		this.abilityStack = [];
 
 		this.moves = [];
@@ -248,8 +248,8 @@ class Pokemon {
 		this.helpers = {};
 
 		for (let i in properties) {
-			if (typeof this[i] === "undefined" || typeof this[i] === "function") continue;
-			if (i === "template") continue;
+			if (typeof this[i] === 'undefined' || typeof this[i] === 'function') continue;
+			if (i === 'template') continue;
 			this[i] = properties[i];
 		}
 	}
@@ -289,10 +289,10 @@ class Pokemon {
 
 	markAbility(id, isNotBase) {
 		this.ability = getAbility(id);
-		if ((!this.baseAbility || this.baseAbility === "&unknown") && !isNotBase) {
+		if ((!this.baseAbility || this.baseAbility === '&unknown') && !isNotBase) {
 			this.baseAbility = this.ability;
 			this.abilityStack.push(this.ability.id);
-		} else if (isNotBase && this.baseAbility && this.baseAbility !== "&unknown") {
+		} else if (isNotBase && this.baseAbility && this.baseAbility !== '&unknown') {
 			if (this.ability.id === this.baseAbility.id) {
 				if (this.abilityStack[this.abilityStack.length - 1] === this.ability.id) {
 					this.abilityStack.pop();
@@ -300,7 +300,7 @@ class Pokemon {
 				if (this.abilityStack[this.abilityStack.length - 1]) {
 					this.baseAbility = getAbility(this.abilityStack[this.abilityStack.length - 1]);
 				} else {
-					this.baseAbility = "&unknown";
+					this.baseAbility = '&unknown';
 				}
 			}
 		}
@@ -353,8 +353,8 @@ class Pokemon {
 		this.transformed = true;
 		this.removeAllBoosts();
 		for (let i in pokemon.boosts) this.boosts[i] = pokemon.boosts[i];
-		this.addVolatile("transform");
-		this.addVolatile("formechange");
+		this.addVolatile('transform');
+		this.addVolatile('formechange');
 		this.volatiles.formechange = pokemon.volatiles.formechange ? pokemon.volatiles.formechange : pokemon.species;
 	}
 
@@ -375,9 +375,9 @@ class Pokemon {
 
 class Player {
 	constructor(id, name, avatar) {
-		this.id = id || "p0";
-		this.name = name || "";
-		this.userid = toId(name || "");
+		this.id = id || 'p0';
+		this.name = name || '';
+		this.userid = toId(name || '');
 		this.avatar = avatar || 0;
 		this.active = [];
 		this.side = {};
@@ -415,7 +415,7 @@ function getFormatsData(gen) {
 	try {
 		return psData.getFormatsData(gen);
 	} catch (e) {
-		Monitor.log(e, "Format Data Not Found", "Globaal");
+		Monitor.log(e, 'Format Data Not Found', 'Globaal');
 	}
 }
 

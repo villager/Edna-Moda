@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const Storage = require("./storage");
+const Storage = require('./storage');
 
 let teams = Object.create(null);
 
@@ -35,12 +35,12 @@ function getTeam(format) {
 	let teamStuff = teams[formatId];
 	if (!teamStuff || !teamStuff.length) return false;
 	let teamChosen = teamStuff[Math.floor(Math.random() * teamStuff.length)]; //choose team
-	let teamStr = "";
+	let teamStr = '';
 	try {
-		if (typeof teamChosen === "string") {
+		if (typeof teamChosen === 'string') {
 			//already parsed
 			teamStr = teamChosen;
-		} else if (typeof teamChosen === "object") {
+		} else if (typeof teamChosen === 'object') {
 			if (teamChosen.maxPokemon && teamChosen.pokemon) {
 				//generate random team
 				let team = [];
@@ -50,17 +50,17 @@ function getTeam(format) {
 					if (k++ >= teamChosen.maxPokemon) break;
 					team.push(pokes[i]);
 				}
-				if (Config.debug.debug) console.log("Packed Team: " + JSON.stringify(team));
+				if (Config.debug.debug) console.log('Packed Team: ' + JSON.stringify(team));
 				teamStr = packTeam(team);
 			} else if (teamChosen.length) {
 				//parse team
 				teamStr = packTeam(teamChosen);
 			} else {
-				console.log("invalid team data type: " + JSON.stringify(teamChosen));
+				console.log('invalid team data type: ' + JSON.stringify(teamChosen));
 				return false;
 			}
 		} else {
-			console.log("invalid team data type: " + JSON.stringify(teamChosen));
+			console.log('invalid team data type: ' + JSON.stringify(teamChosen));
 			return false;
 		}
 		return teamStr;

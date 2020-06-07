@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 
 class LoadLang {
 	/**
 	 * @param {string} path
 	 */
 	constructor(path) {
-		if (!path) path = "./base-lang.json";
+		if (!path) path = './base-lang.json';
 		this.translations = Object.create(null);
 		this.path = path;
 	}
@@ -54,5 +54,5 @@ function loadLang(langPath) {
 exports.load = loadLang;
 
 exports.loadHelp = function () {
-	return new LoadLang("./helps.json");
+	return new LoadLang('./helps.json');
 };

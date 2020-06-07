@@ -1,12 +1,12 @@
-"use strict";
+'use strict';
 
-const BaseClient = require("discord.js").Client;
-const Server = require("./server");
+const BaseClient = require('discord.js').Client;
+const Server = require('./server');
 
 class DiscordClient extends BaseClient {
 	constructor() {
 		super();
-		this.activity = `Usame con: ${Config.triggers.join(" o ")}`;
+		this.activity = `Usame con: ${Config.triggers.join(' o ')}`;
 		this.servers = new Map();
 		this.name = Config.name;
 	}
@@ -16,7 +16,7 @@ class DiscordClient extends BaseClient {
 		return this.servers.get(name);
 	}
 	status() {
-		this.on("ready", () => {
+		this.on('ready', () => {
 			this.user.setUsername(Config.name);
 			this.user.setActivity(this.activity);
 		});
@@ -52,15 +52,15 @@ class DiscordClient extends BaseClient {
 		}
 	}
 	logs() {
-		this.on("error", e => new Error(`${e} \n`));
-		this.on("warn", e => new Error(`WARN STATUS: ${e}\n`));
+		this.on('error', e => new Error(`${e} \n`));
+		this.on('warn', e => new Error(`WARN STATUS: ${e}\n`));
 		//this.on("debug", e => console.log(`DEBUG STATUS: ${e}\n`)); -- No spam
 	}
 	connect() {
 		this.status();
 		this.logs();
 		console.log(this.servers);
-		this.on("message", async message => {
+		this.on('message', async message => {
 			if (!this.get(message.guild)) {
 				this.servers.set(toId(message.guild.name), new Server(message.guild));
 			}
@@ -72,7 +72,7 @@ class DiscordClient extends BaseClient {
 				console.log(`${Config.name} conectado correctamente a Discord`);
 			})
 			.catch(() => {
-				console.log("No se pudo conectar a Discord");
+				console.log('No se pudo conectar a Discord');
 			});
 	}
 }

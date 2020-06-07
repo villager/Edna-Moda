@@ -1,17 +1,17 @@
-"use strict";
+'use strict';
 /**
  * Random Move
  */
 exports.setup = function (Data) {
 	const BattleModule = {};
-	BattleModule.id = "randommove";
+	BattleModule.id = 'randommove';
 
 	function getDecisionValue(des) {
-		if (des.type === "team") {
+		if (des.type === 'team') {
 			return 5000;
-		} else if (des.type === "move") {
+		} else if (des.type === 'move') {
 			return 1000;
-		} else if (des.type === "switch") {
+		} else if (des.type === 'switch') {
 			return 100;
 		} else {
 			return -1000; // Pass, Shift

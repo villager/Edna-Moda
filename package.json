@@ -6,20 +6,14 @@
         "start": "node app",
         "build": "node build",
         "test": "mocha && jest",
-        "format": "prettier --write \"*.{js,md}\" \"**/**/*.js\"",
+        "clean": "prettier --write \"*.{js,md}\" \"**/**/*.js\"",
         "lint": "eslint . --config .eslintrc.json --cache --ext .js",
-        "full-lint": "eslint . --config .eslintrc.json --cache --cache-location .eslintfullcache --ext .js,.ts"
+        "lint-fix": "eslint . --config .eslintrc.json --ext .js --fix"
     },
     "husky": {
         "hooks": {
             "pre-push": "npm run lint"
         }
-    },
-    "lint-staged": {
-        "**/*.{js,ts,md}": [
-            "prettier --write"
-        ],
-        "*.{js,ts}": "eslint --fix"
     },
     "mocha": {
         "diff": true,
@@ -33,11 +27,14 @@
     "jest": {
         "testEnvironment": "node",
         "coverageDirectory": "coverage",
-        "coveragePathIgnorePatterns": ["/node_modules/","/plugins/utils/events/" ]  
+        "coveragePathIgnorePatterns": [
+            "/node_modules/",
+            "/plugins/utils/events/"
+        ]
     },
     "prettier": {
         "semi": true,
-        "singleQuote": false,
+        "singleQuote": true,
         "useTabs": true,
         "trailingComma": "all",
         "printWidth": 120,
@@ -56,7 +53,8 @@
         "discord.js": "^12.2.0",
         "ps-data": "git://github.com/spaceshowdown/ps-data.git",
         "request": "^2.88.2",
-        "sockjs-client": "^1.1.4"
+        "sockjs-client": "^1.1.4",
+        "ytdl-core": "^2.1.7"
     },
     "optionalDependencies": {
         "githubhook": "^1.9.3",

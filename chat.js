@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 const Chat = (module.exports = {});
 
@@ -11,7 +11,7 @@ Chat.discordCommands = Object.create(null);
 Chat.packageData = {};
 
 Chat.loadPlugins = function () {
-	Plugins.FS("./package.json")
+	Plugins.FS('./package.json')
 		.readTextIfExists()
 		.then(data => {
 			if (data) Chat.packageData = JSON.parse(data);
@@ -23,14 +23,14 @@ Chat.loadPlugins = function () {
 
 Chat.hasAuth = function (id, user, perm) {
 	let group;
-	let userId = id === "Discord" ? toUserName(user) : toId(user);
+	let userId = id === 'Discord' ? toUserName(user) : toId(user);
 	for (const owner of Config.owners) {
 		if (owner.id === userId) return true;
 		for (const aliases of owner.aliases) {
 			if (aliases === userId) return true;
 		}
 	}
-	if (id === "Discord") {
+	if (id === 'Discord') {
 		return true; // I"ll do this latter
 	} else {
 		let rank = Config.permissions[perm];

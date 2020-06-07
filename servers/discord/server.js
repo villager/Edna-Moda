@@ -1,25 +1,26 @@
-"use strict";
+'use strict';
 
-const Parser = require("./parser");
+const Parser = require('./parser');
 
 class Server {
 	constructor(guild) {
 		this.idNum = guild.id;
 		this.name = guild.name;
 		this.id = toId(this.name);
-		this.language = "english";
+		this.language = 'english';
 		this.commands = Object.create(null);
 		this.parser = new Parser(this);
 		this.initPlugins();
 	}
 	loadCommands() {
 		Chat.loadPlugins();
-		Plugins.eventEmitter.emit("onDynamic", this).flush();
+		Plugins.eventEmitter.emit('onDynamic', this).flush();
 		Object.assign(this.commands, Chat.discordCommands);
+		this.parser.loadTopics();
 	}
 	initPlugins() {
 		Plugins.forEach(plugin => {
-			if (typeof plugin.init === "function") {
+			if (typeof plugin.init === 'function') {
 				plugin.init(this);
 			}
 		});

@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-const Hastebin = require("./hastebin");
-const Pastie = require("./pastie");
+const Hastebin = require('./hastebin');
+const Pastie = require('./pastie');
 
 function upload(toUpload, callback) {
 	try {

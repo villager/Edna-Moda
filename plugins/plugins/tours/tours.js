@@ -1,28 +1,28 @@
-"use strict";
+'use strict';
 
 /*
 	Tournaments Manager Feature
 */
-const path = require("path");
+const path = require('path');
 
-const LANG_DIR = path.resolve(__dirname, "langs.json");
+const LANG_DIR = path.resolve(__dirname, 'langs.json');
 let tournaments = (exports.tournaments = {});
 let tourData = (exports.tourData = {});
 let winners = Object.create(null);
 const Lang = Plugins.Language.load(LANG_DIR);
 
-const Leaderboards = (exports.Leaderboards = require("./leaderboards"));
-exports.key = "showdown";
+const Leaderboards = (exports.Leaderboards = require('./leaderboards'));
+exports.key = 'showdown';
 class Tournament {
 	constructor(server, room, details) {
-		this.format = details.format || "gen8randombattle";
-		this.type = details.type || "elimination";
+		this.format = details.format || 'gen8randombattle';
+		this.type = details.type || 'elimination';
 		this.users = 0;
 		this.maxUsers = details.maxUsers || null;
 		this.signups = false;
 		this.started = false;
 		this.startTimer = null;
-		this.room = room || "lobby";
+		this.room = room || 'lobby';
 		this.timeToStart = details.timeToStart || 30 * 1000;
 		this.autoDq = details.autodq || false;
 		this.scoutProtect = details.scoutProtect || false;
@@ -38,7 +38,7 @@ class Tournament {
 	startTimeout() {
 		if (!this.timeToStart) return;
 		this.signups = true;
-		if (this.scoutProtect) this.send("/tournament setscouting disallow"); // WTF
+		if (this.scoutProtect) this.send('/tournament setscouting disallow'); // WTF
 		this.startTimer = setTimeout(() => {
 			this.startTour();
 			this.started = true;
@@ -47,7 +47,7 @@ class Tournament {
 	}
 	startTour() {
 		this.signups = false;
-		this.send("/tournament start");
+		this.send('/tournament start');
 	}
 	checkUsers() {
 		if (!this.maxUsers) return;
@@ -69,12 +69,12 @@ exports.newTour = newTour;
 function parseTournament(server, room, message, isIntro, spl) {
 	if (!winners[server.id]) winners[server.id] = {};
 	if (!winners[server.id][room]) winners[server.id][room] = {};
-	if (spl[0] === "c:" && toId(spl[2]) === toId(winners[server.id][room])) {
+	if (spl[0] === 'c:' && toId(spl[2]) === toId(winners[server.id][room])) {
 		for (let i in server.formats) {
 			if (toId(message).indexOf(i) > -1 || toId(message).indexOf(toId(server.formats[i].name)) > -1) {
 				let details = {
 					format: toId(server.formats[i].name),
-					type: "elimination",
+					type: 'elimination',
 					maxUsers: null,
 					timeToStart: 30 * 1000,
 					autodq: 1.5,
@@ -83,35 +83,35 @@ function parseTournament(server, room, message, isIntro, spl) {
 			}
 		}
 	}
-	if (spl[0] !== "tournament") return;
+	if (spl[0] !== 'tournament') return;
 	if (isIntro) return;
 	if (!tourData[server.id]) tourData[server.id] = {};
 	if (!tourData[server.id][room]) tourData[server.id][room] = {};
 	if (!tournaments[server.id]) tournaments[server.id] = {};
 	let tourRoom = tournaments[server.id][room];
 	switch (spl[1]) {
-		case "create":
+		case 'create':
 			if (!tourRoom) break;
 			tourRoom.startTimeout();
 			break;
-		case "join":
+		case 'join':
 			if (!tourRoom) break;
 			tourRoom.users++;
 			tourRoom.checkUsers();
 			break;
-		case "leave":
+		case 'leave':
 			if (!tourRoom) break;
 			tourRoom.users--;
 			tourRoom.checkUsers();
 			break;
-		case "start":
+		case 'start':
 			if (!tourRoom) break;
 			if (tourRoom.signups) {
 				clearTimeout(tourRoom.startTimer);
 				tourRoom.setAutodq();
 			}
 			break;
-		case "update":
+		case 'update':
 			try {
 				let data = JSON.parse(spl[2]);
 				for (let i in data) {
@@ -119,13 +119,13 @@ function parseTournament(server, room, message, isIntro, spl) {
 				}
 			} catch (e) {}
 			break;
-		case "updateEnd":
+		case 'updateEnd':
 			if (!tourRoom) break;
 			if (tourRoom.started && !tourRoom.isStarted) {
 				tourRoom.startTour();
 			}
 			break;
-		case "end":
+		case 'end':
 			try {
 				let data = JSON.parse(spl[2]);
 				for (let i in data) tourData[server.id][room][i] = data[i];
@@ -137,13 +137,13 @@ function parseTournament(server, room, message, isIntro, spl) {
 			} catch (e) {}
 			// Validar que pueda vocear la felicitacion
 			let lang = room.language ? room.language : server.language;
-			server.send(Lang.replace(lang, "congrats", winners[server.id][room]));
+			server.send(Lang.replace(lang, 'congrats', winners[server.id][room]));
 			Leaderboards.onTournamentEnd(server, room, tourData[server.id][room]);
 			delete tourData[server.id][room];
 			if (tourRoom && tourRoom.startTimer) clearTimeout(tourRoom.startTimer);
 			if (tourRoom) delete tournaments[server.id][room];
 			break;
-		case "forceend":
+		case 'forceend':
 			delete tourData[server.id][room];
 			if (tourRoom && tourRoom.startTimer) clearTimeout(tourRoom.startTimer);
 			if (tournaments[server.id][room.id]) delete tournaments[server.id][room];
@@ -154,7 +154,7 @@ function parseTournament(server, room, message, isIntro, spl) {
 exports.loadData = Leaderboards.load;
 
 exports.init = function () {
-	Plugins.eventEmitter.on("PS_PARSE", parseTournament);
+	Plugins.eventEmitter.on('PS_PARSE', parseTournament);
 	for (let i in tournaments) {
 		for (let x in tournaments[i]) {
 			if (tournaments[i][x].startTimer) clearTimeout(tournaments[i][x].startTimer);
@@ -169,36 +169,37 @@ exports.init = function () {
 };
 exports.commands = {
 	tourhelp: true,
-
-	tourstart: "tourend",
+	tourendtopic: 'tour',
+	tourstart: 'tourend',
 	tourend(target, room, user) {
-		if (/**this.roomType !== "chat" || */ !this.can("games", true)) return false;
+		if (/**this.roomType !== "chat" || */ !this.can('games', true)) return false;
 		if (!tourData[this.id]) tourData[this.id] = {};
-		if (!tourData[this.id][room.id]) return this.sendReply(Lang.getSub(this.lang, "tourend", "err"));
-		if (this.cmd === "tourstart" && !tourData[this.id][room.id].signups) {
-			return this.sendReply(Lang.getSub(this.lang, "tourend", "err2"));
+		if (!tourData[this.id][room.id]) return this.sendReply(Lang.getSub(this.lang, 'tourend', 'err'));
+		if (this.cmd === 'tourstart' && !tourData[this.id][room.id].signups) {
+			return this.sendReply(Lang.getSub(this.lang, 'tourend', 'err2'));
 		}
-		this.sendReply("/tournament " + (this.cmd === "tourend" ? "end" : "start"));
+		this.sendReply('/tournament ' + (this.cmd === 'tourend' ? 'end' : 'start'));
 	},
-	maketour: "tournament",
-	newtour: "tournament",
-	tour: "tournament",
+	tournamenttopic: 'tour',
+	maketour: 'tournament',
+	newtour: 'tournament',
+	tour: 'tournament',
 	tournament(target, room, user) {
-		if (this.room.type !== "chat" || !this.can("games", true)) return false;
+		if (this.room.type !== 'chat' || !this.can('games', true)) return false;
 		if (!tourData[this.id]) tourData[this.id] = {};
 		if (tourData[this.id][room.id]) {
-			if (toId(target) === "end") return this.runCmd("tourend");
-			if (toId(target) === "start") return this.runCmd("tourstart");
-			return this.sendReply(Lang.getSub(this.lang, "tour", "e2"));
+			if (toId(target) === 'end') return this.runCmd('tourend');
+			if (toId(target) === 'start') return this.runCmd('tourstart');
+			return this.sendReply(Lang.getSub(this.lang, 'tour', 'e2'));
 		}
 		let details = {
-			format: "ou",
-			type: "elimination",
+			format: 'ou',
+			type: 'elimination',
 			maxUsers: null,
 			timeToStart: 30 * 1000,
 			autodq: 1.5,
 		};
-		if (typeof Config.tourDefault === "object") {
+		if (typeof Config.tourDefault === 'object') {
 			for (let i in Config.tourDefault) {
 				details[i] = Config.tourDefault[i];
 			}
@@ -216,7 +217,7 @@ exports.commands = {
 			let splArg;
 			for (let i = 0; i < target.length; i++) {
 				if (!target[i]) continue;
-				splArg = target[i].split("=");
+				splArg = target[i].split('=');
 				if (splArg.length < 2) {
 					switch (i) {
 						case 0:
@@ -239,36 +240,36 @@ exports.commands = {
 					let idArg = toId(splArg[0]);
 					let valueArg = splArg[1].trim();
 					switch (idArg) {
-						case "format":
-						case "tier":
+						case 'format':
+						case 'tier':
 							params.format = valueArg;
 							break;
-						case "time":
-						case "singups":
-						case "timer":
+						case 'time':
+						case 'singups':
+						case 'timer':
 							params.timeToStart = valueArg;
 							break;
-						case "autodq":
-						case "dq":
+						case 'autodq':
+						case 'dq':
 							params.autodq = valueArg;
 							break;
-						case "maxusers":
-						case "users":
+						case 'maxusers':
+						case 'users':
 							params.maxUsers = valueArg;
 							break;
-						case "generator":
-						case "type":
+						case 'generator':
+						case 'type':
 							params.type = valueArg;
 							break;
-						case "scouting":
-						case "scout":
-						case "setscout":
-						case "setscouting":
+						case 'scouting':
+						case 'scout':
+						case 'setscout':
+						case 'setscouting':
 							params.scout = valueArg;
 							break;
 						default:
 							return this.sendReply(
-								Lang.replaceSub(this.lang, "paramerror", idArg, " tier, timer, dq, users, type, scout"),
+								Lang.replaceSub(this.lang, 'paramerror', idArg, ' tier, timer, dq, users, type, scout'),
 							);
 					}
 				}
@@ -276,41 +277,41 @@ exports.commands = {
 			if (params.format) {
 				let format = this.bot.parseAliases(params.format);
 				if (!this.bot.formats[format] || !this.bot.formats[format].chall) {
-					return this.sendReply(Lang.replaceSub(this.lang, "tour", "invalid_format", format));
+					return this.sendReply(Lang.replaceSub(this.lang, 'tour', 'invalid_format', format));
 				}
 				details.format = format;
 			}
 			if (params.timeToStart) {
-				if (toId(params.timeToStart) === "off") {
+				if (toId(params.timeToStart) === 'off') {
 					details.timeToStart = null;
 				} else {
 					let time = parseInt(params.timeToStart);
-					if (!time || time < 10) return this.sendReply(Lang.getSub(this.lang, "tour", "e4"));
+					if (!time || time < 10) return this.sendReply(Lang.getSub(this.lang, 'tour', 'e4'));
 					details.timeToStart = time * 1000;
 				}
 			}
 			if (params.autodq) {
-				if (toId(params.autodq) === "off") {
+				if (toId(params.autodq) === 'off') {
 					details.autodq = false;
 				} else {
 					let dq = parseFloat(params.autodq);
-					if (!dq || dq < 0) return this.sendReply(Lang.getSub(this.lang, "tour", "e5"));
+					if (!dq || dq < 0) return this.sendReply(Lang.getSub(this.lang, 'tour', 'e5'));
 					details.autodq = dq;
 				}
 			}
 			if (params.maxUsers) {
-				if (toId(params.maxUsers) === "off") {
+				if (toId(params.maxUsers) === 'off') {
 					details.maxUsers = null;
 				} else {
 					let musers = parseInt(params.maxUsers);
-					if (!musers || musers < 4) return this.sendReply(Lang.getSub(this.lang, "tour", "e6"));
+					if (!musers || musers < 4) return this.sendReply(Lang.getSub(this.lang, 'tour', 'e6'));
 					details.maxUsers = musers;
 				}
 			}
 			if (params.type) {
 				let type = toId(params.type);
-				if (type !== "elimination" && type !== "roundrobin") {
-					return this.sendReply(Lang.getSub(this.lang, "tour", "e7"));
+				if (type !== 'elimination' && type !== 'roundrobin') {
+					return this.sendReply(Lang.getSub(this.lang, 'tour', 'e7'));
 				}
 				details.type = type;
 			}
@@ -324,32 +325,33 @@ exports.commands = {
 		newTour(this.bot, room.id, details);
 		setTimeout(() => {
 			if (tournaments[this.id][room.id] && !tourData[this.id][room.id]) {
-				this.sendReply(Lang.getSub(this.lang, "tour", "notstarted"));
+				this.sendReply(Lang.getSub(this.lang, 'tour', 'notstarted'));
 				delete tournaments[this.id][room.id];
 			}
 		}, 2500);
 	},
-	unofficial: "official",
+	unofficial: 'official',
 	official(target, room, user) {
 		//if (!this.can("official")) return;
 		if (!Leaderboards.isConfigured(this.id, room.id)) {
-			return this.sendReply(Lang.replaceSub(this.lang, "official", "not", room.title));
+			return this.sendReply(Lang.replaceSub(this.lang, 'official', 'not', room.title));
 		}
-		if (!tourData[this.id][room.id]) return this.sendReply(Lang.getSub(this.lang, "official", "notour"));
-		if (this.cmd === "unofficial") {
+		if (!tourData[this.id][room.id]) return this.sendReply(Lang.getSub(this.lang, 'official', 'notour'));
+		if (this.cmd === 'unofficial') {
 			if (!tourData[this.id][room.id].isOfficialTour) {
-				return this.sendReply(Lang.getSub(this.lang, "official", "already-not"));
+				return this.sendReply(Lang.getSub(this.lang, 'official', 'already-not'));
 			}
 			tourData[this.id][room.id].isOfficialTour = false;
-			this.sendReply(Lang.getSub(this.lang, "official", "unofficial"));
+			this.sendReply(Lang.getSub(this.lang, 'official', 'unofficial'));
 		} else {
 			if (tourData[this.id][room.id].isOfficialTour) {
-				return this.sendReply(Lang.getSub(this.lang, "official", "already"));
+				return this.sendReply(Lang.getSub(this.lang, 'official', 'already'));
 			}
 			tourData[this.id][room.id].isOfficialTour = true;
-			this.sendReply(Lang.getSub(this.lang, "official", "official"));
+			this.sendReply(Lang.getSub(this.lang, 'official', 'official'));
 		}
 	},
+	officialtopic: 'tour',
 	/*
 	rank: "leaderboard",
 	ranking: "leaderboard",

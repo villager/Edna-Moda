@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 /**
  * Ingame (No Status)
  *
@@ -15,27 +15,27 @@
  *  - Priority -1000 - Switch / Shift / Pass
  *	- Priority -100000 - Moves 0 damage
  */
-const Calc = require("../calc");
+const Calc = require('../calc');
 const Pokemon = Calc.Pokemon;
 const Conditions = Calc.Conditions;
 
 exports.setup = function (Data) {
 	const BattleModule = {};
-	BattleModule.id = "ingame-nostatus";
+	BattleModule.id = 'ingame-nostatus';
 
 	/* Bad moves for 1v1 */
 	const BadMoves = [
-		"focuspunch",
-		"explosion",
-		"selfdestruct",
-		"lastresort",
-		"futuresight",
-		"firstimpression",
-		"synchronoise",
+		'focuspunch',
+		'explosion',
+		'selfdestruct',
+		'lastresort',
+		'futuresight',
+		'firstimpression',
+		'synchronoise',
 	];
 
 	/* Moves which require 2 turns without any protection */
-	const DoubleTurnMoves = ["solarbeam"];
+	const DoubleTurnMoves = ['solarbeam'];
 
 	/* Team and Switch Decisions */
 
@@ -44,7 +44,7 @@ exports.setup = function (Data) {
 
 		let p = battle.request.side.pokemon[s];
 		let pokeA = battle.getCalcRequestPokemon(s, true);
-		if (toId(battle.tier || "").indexOf("challengecup") >= 0) pokeA.happiness = 100;
+		if (toId(battle.tier || '').indexOf('challengecup') >= 0) pokeA.happiness = 100;
 
 		let final = 0;
 		let conditions = new Conditions({});
@@ -56,12 +56,12 @@ exports.setup = function (Data) {
 				gender: pokeView.gender,
 				evs: {hp: 192, def: 124, spd: 124},
 			});
-			if (toId(battle.tier || "").indexOf("challengecup") >= 0) poke.happiness = 100;
+			if (toId(battle.tier || '').indexOf('challengecup') >= 0) poke.happiness = 100;
 			if (template.abilities) poke.ability = Data.getAbility(template.abilities[0], battle.gen);
 			let calcVal = 0;
 			for (let j = 0; j < p.moves.length; j++) {
 				let move = Data.getMove(p.moves[j], battle.gen);
-				if (move.category === "Status") continue;
+				if (move.category === 'Status') continue;
 				if (BadMoves.indexOf(move.id) >= 0) continue;
 				let dmg = Calc.calculate(pokeA, poke, move, conditions, conditions, battle.conditions, battle.gen);
 				//debug("DMG [" + pokeA.species + ", " + poke.species + ", " + move.name + "] = " + dmg.getMax());
@@ -87,7 +87,7 @@ exports.setup = function (Data) {
 		let final = 0;
 		let p = battle.request.side.pokemon[s];
 		let pokeA = battle.getCalcRequestPokemon(s, true);
-		if (toId(battle.tier || "").indexOf("challengecup") >= 0) pokeA.happiness = 100;
+		if (toId(battle.tier || '').indexOf('challengecup') >= 0) pokeA.happiness = 100;
 		let conditionsA = new Conditions({
 			side: battle.self.side,
 			volatiles: {},
@@ -111,13 +111,13 @@ exports.setup = function (Data) {
 				});
 				pokeB.hp = targets[j].hp;
 				pokeB.status = targets[j].status;
-				if (targets[j].item === "&unknown") {
+				if (targets[j].item === '&unknown') {
 					pokeB.item = null;
 				} else {
 					pokeB.item = targets[j].item;
 				}
 				if (!targets[j].supressedAbility) {
-					if (targets[j].ability === "&unknown") {
+					if (targets[j].ability === '&unknown') {
 						pokeB.ability = pokeB.template.abilities ? pokeB.template.abilities[0] : null;
 					} else {
 						pokeB.ability = targets[j].ability;
@@ -153,7 +153,7 @@ exports.setup = function (Data) {
 			move = zmove;
 		}
 
-		if (move.category === "Status") return 0;
+		if (move.category === 'Status') return 0;
 		if (BadMoves.indexOf(move.id) >= 0) return 0;
 		if (des.target < 0) return 0; // Do not kill your own allies
 
@@ -165,7 +165,7 @@ exports.setup = function (Data) {
 			if (!des.ultra) return 0; // Ultra burst always
 		}
 
-		if (move.id === "fakeout") {
+		if (move.id === 'fakeout') {
 			if (
 				!(
 					battle.self.active[act].helpers.sw === battle.turn ||
@@ -177,7 +177,7 @@ exports.setup = function (Data) {
 		}
 
 		let pokeA = battle.getCalcRequestPokemon(act, true);
-		if (toId(battle.tier || "").indexOf("challengecup") >= 0) pokeA.happiness = 100; // Random
+		if (toId(battle.tier || '').indexOf('challengecup') >= 0) pokeA.happiness = 100; // Random
 		let conditionsA = new Conditions({
 			side: battle.self.side,
 			volatiles: battle.self.active[act].volatiles,
@@ -185,7 +185,7 @@ exports.setup = function (Data) {
 		});
 
 		let targets = [];
-		if (typeof des.target === "number") {
+		if (typeof des.target === 'number') {
 			targets = [battle.foe.active[des.target]];
 		} else {
 			targets = battle.foe.active;
@@ -194,7 +194,7 @@ exports.setup = function (Data) {
 		for (let i = 0; i < targets.length; i++) {
 			if (!targets[i]) continue;
 			if (targets[i].fainted) continue;
-			if (move.flags && move.flags["charge"] && targets[i].moves) {
+			if (move.flags && move.flags['charge'] && targets[i].moves) {
 				let hasDangerousMove = false;
 				for (let dangerousMove of targets[i].moves) {
 					if (dangerousMove.id in {protect: 1, detect: 1, kingsshield: 1, spikyshield: 1, dig: 1, fly: 1}) {
@@ -217,13 +217,13 @@ exports.setup = function (Data) {
 			});
 			pokeB.hp = targets[i].hp;
 			pokeB.status = targets[i].status;
-			if (targets[i].item === "&unknown") {
+			if (targets[i].item === '&unknown') {
 				pokeB.item = null;
 			} else {
 				pokeB.item = targets[i].item;
 			}
 			if (!targets[i].supressedAbility) {
-				if (targets[i].ability === "&unknown") {
+				if (targets[i].ability === '&unknown') {
 					pokeB.ability = pokeB.template.abilities ? Data.getAbility(pokeB.template.abilities[0]) : null;
 				} else {
 					pokeB.ability = targets[i].ability;
@@ -241,11 +241,11 @@ exports.setup = function (Data) {
 	/* Swapper */
 
 	function getDecisionValue(battle, decisions, desEnv, des, act) {
-		if (des.type === "team") {
+		if (des.type === 'team') {
 			return evaluateTeamDecision(battle, des);
-		} else if (des.type === "move") {
+		} else if (des.type === 'move') {
 			return evaluateMoveDecision(battle, desEnv, des, act);
-		} else if (des.type === "switch") {
+		} else if (des.type === 'switch') {
 			return evaluateSwitchDecision(battle, des);
 		} else {
 			return -1000; // Pass, Shift

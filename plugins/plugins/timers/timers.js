@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-exports.key = ["showdown", "discord"];
+exports.key = ['showdown', 'discord'];
 let timers = Object.create(null);
 
 class Timer extends Plugins.Timers {
@@ -17,7 +17,7 @@ class Timer extends Plugins.Timers {
 		this.run();
 	}
 	send(data) {
-		if (this.id === "discord") {
+		if (this.id === 'discord') {
 			this.room.send(data);
 		} else {
 			Bot(this.id).send(data, this.room);
@@ -46,11 +46,12 @@ exports.psCommands = {
 };
 
 exports.discordCommands = {
+	timertopic: 'dynamic',
 	timer: {
 		new(target, room, user) {
-			if (!target) return this.sendReply("Especifica un tiempo en minutos");
+			if (!target) return this.sendReply('Especifica un tiempo en minutos');
 			if (!timers[toId(room.guild.name)]) timers[toId(room.guild.name)] = {};
-			if (timers[toId(room.guild.name)][toId(room.name)]) return this.sendReply("Ya habia un timer en la sala");
+			if (timers[toId(room.guild.name)][toId(room.name)]) return this.sendReply('Ya habia un timer en la sala');
 			timers[toId(room.guild.name)][toId(room.name)] = new Timer(this.id, room, target);
 		},
 	},

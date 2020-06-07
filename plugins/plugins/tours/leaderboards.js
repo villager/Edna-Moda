@@ -1,21 +1,21 @@
 /*
  * Tournaments points system
  */
-"use strict";
+'use strict';
 
-const path = require("path");
-const TOURS_DATA = path.resolve(__dirname, "data", "leaderboards.json");
+const path = require('path');
+const TOURS_DATA = path.resolve(__dirname, 'data', 'leaderboards.json');
 
 let ladder = (exports.ladder = {});
 
 exports.load = function () {
 	try {
-		require.resolve("./data/leaderboards.json");
+		require.resolve('./data/leaderboards.json');
 	} catch (e) {
 		Monitor.log(e);
 	}
 	try {
-		let JSONdata = require("./data/leaderboards.json");
+		let JSONdata = require('./data/leaderboards.json');
 		Object.assign(ladder, JSONdata);
 	} catch (e) {
 		Monitor.log(e);
@@ -27,10 +27,10 @@ function isConfigured(server, room) {
 	return true;
 }
 function filterTier(tier, filter) {
-	tier = toId(tier || "");
-	if (typeof filter === "string") {
+	tier = toId(tier || '');
+	if (typeof filter === 'string') {
 		return tier === toId(filter);
-	} else if (filter !== null && typeof filter === "object") {
+	} else if (filter !== null && typeof filter === 'object') {
 		if (filter instanceof Array) {
 			if (filter.indexOf(tier) >= 0) return true;
 			return false;
@@ -70,7 +70,7 @@ function parseTourTree(tree) {
 	let children = tree.children;
 	if (!children) children = [];
 	if (!auxobj[team]) auxobj[team] = 0;
-	if (state && state === "finished") {
+	if (state && state === 'finished') {
 		auxobj[team] += 1;
 	}
 	for (const c of children) {
@@ -83,8 +83,8 @@ function parseTourTree(tree) {
 }
 
 function parseTournamentResults(data) {
-	let generator = toId(data.generator || "");
-	if (generator === "singleelimination") {
+	let generator = toId(data.generator || '');
+	if (generator === 'singleelimination') {
 		let res = {};
 		let parsedTree = parseTourTree(data.bracketData.rootNode);
 		res.players = Object.keys(parsedTree);
@@ -92,11 +92,11 @@ function parseTournamentResults(data) {
 		for (let i in parsedTree) res.general[toId(i)] = parsedTree[i];
 		//winners
 		res.winner = toId(data.results[0][0]);
-		res.finalist = "";
+		res.finalist = '';
 		res.semiFinalists = [];
 		if (data.bracketData.rootNode.children) {
 			for (const dataChildren of data.bracketData.rootNode.children) {
-				let aux = toId(dataChildren.team || "");
+				let aux = toId(dataChildren.team || '');
 				if (aux && aux !== res.winner) {
 					res.finalist = aux;
 				}
@@ -117,7 +117,7 @@ function parseTournamentResults(data) {
 		}
 		return res;
 	} else {
-		Monitor.debug("Incompatible generator: " + data.generator);
+		Monitor.debug('Incompatible generator: ' + data.generator);
 		return null; //Not compatible generator
 	}
 }
@@ -182,28 +182,28 @@ function getTable(server, room, n) {
 	if (!isConfigured(server, room)) return null;
 	let top = getTop(server, room);
 	if (!top) return null;
-	let table = "Room: " + room + "\n\n";
-	table += " N\u00BA | Name | Ranking | W | F | SF | Tours Played | Battles won\n";
-	table += "----|------|---------|---|---|----|-------------|-------------\n";
+	let table = 'Room: ' + room + '\n\n';
+	table += ' N\u00BA | Name | Ranking | W | F | SF | Tours Played | Battles won\n';
+	table += '----|------|---------|---|---|----|-------------|-------------\n';
 	for (let i = 0; i < n && i < top.length; i++) {
 		table +=
 			i +
 			1 +
-			" | " +
+			' | ' +
 			top[i][0] +
-			" | " +
+			' | ' +
 			top[i][6] +
-			" | " +
+			' | ' +
 			top[i][1] +
-			" | " +
+			' | ' +
 			top[i][2] +
-			" | " +
+			' | ' +
 			top[i][3] +
-			" | " +
+			' | ' +
 			top[i][5] +
-			" | " +
+			' | ' +
 			top[i][4];
-		table += "\n";
+		table += '\n';
 	}
 	return table;
 }
@@ -213,20 +213,20 @@ function addUser(server, room, user, type, auxData) {
 	let userid = toId(user);
 	if (!ladder[server.id][room][userid]) ladder[server.id][room][userid] = [user, 0, 0, 0, 0, 0];
 	switch (type) {
-		case "A":
+		case 'A':
 			ladder[server.id][room][userid][0] = user; //update user name
 			ladder[server.id][room][userid][5]++;
 			break;
-		case "W":
+		case 'W':
 			ladder[server.id][room][userid][1]++;
 			break;
-		case "F":
+		case 'F':
 			ladder[server.id][room][userid][2]++;
 			break;
-		case "S":
+		case 'S':
 			ladder[server.id][room][userid][3]++;
 			break;
-		case "B":
+		case 'B':
 			let val = parseInt(auxData);
 			if (!val) return;
 			ladder[server.id][room][userid][4] += val;
@@ -236,33 +236,33 @@ function addUser(server, room, user, type, auxData) {
 
 function writeResults(server, room, results) {
 	if (!results) return;
-	for (let i = 0; i < results.players.length; i++) addUser(server, room, results.players[i], "A");
-	if (results.winner) addUser(server, room, results.winner, "W");
-	if (results.finalist) addUser(server, room, results.finalist, "F");
-	for (let i = 0; i < results.semiFinalists.length; i++) addUser(server, room, results.semiFinalists[i], "S");
-	for (let user in results.general) addUser(server, room, user, "B", results.general[user]);
+	for (let i = 0; i < results.players.length; i++) addUser(server, room, results.players[i], 'A');
+	if (results.winner) addUser(server, room, results.winner, 'W');
+	if (results.finalist) addUser(server, room, results.finalist, 'F');
+	for (let i = 0; i < results.semiFinalists.length; i++) addUser(server, room, results.semiFinalists[i], 'S');
+	for (let user in results.general) addUser(server, room, user, 'B', results.general[user]);
 }
 function onTournamentEnd(server, room, data) {
 	if (!isConfigured(server, room)) return;
 	if (!data.isOfficialTour) {
 		//debug(JSON.stringify(getConfig(room)));
 		if (getConfig(server, room).onlyOfficial) {
-			Monitor.debug("Discarded tour because it is not official. Tier: " + data.format + " | Room: " + room);
+			Monitor.debug('Discarded tour because it is not official. Tier: ' + data.format + ' | Room: ' + room);
 			return;
 		}
 		let filter = getConfig(server, room).tierFilter;
 		if (!filterTier(data.format, filter)) {
-			Monitor.debug("Discarded tour because of tier filter. Tier: " + data.format + " | Room: " + room);
+			Monitor.debug('Discarded tour because of tier filter. Tier: ' + data.format + ' | Room: ' + room);
 			return;
 		}
 	}
 	let results = parseTournamentResults(data);
 	//console.log(JSON.stringify(results));
 	if (!results) return;
-	Monitor.debug("Updating leaderboard...");
+	Monitor.debug('Updating leaderboard...');
 	writeResults(server, room, results);
 	Plugins.FS(TOURS_DATA).writeUpdate(() => JSON.stringify(ladder));
-	Monitor.debug("Leaderboard updated. " + Plugins.getDateString());
+	Monitor.debug('Leaderboard updated. ' + Plugins.getDateString());
 }
 
 let resetCodes = (exports.resetCodes = {});

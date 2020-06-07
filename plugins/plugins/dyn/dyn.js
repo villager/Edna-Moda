@@ -1,14 +1,14 @@
-"use strict";
+'use strict';
 
-const path = require("path");
+const path = require('path');
 let dyns = Object.create(null);
-const {MessageEmbed} = require("discord.js");
+const {MessageEmbed} = require('discord.js');
 
-const PHRASES_DIR = path.resolve(__dirname, "data", "dyn.json");
-const Lang = Plugins.Language.load(path.resolve(__dirname, "dyn-language.json"));
+const PHRASES_DIR = path.resolve(__dirname, 'data', 'dyn.json');
+const Lang = Plugins.Language.load(path.resolve(__dirname, 'dyn-language.json'));
 let saveDyns = () => Plugins.FS(PHRASES_DIR).writeUpdate(() => JSON.stringify(dyns));
 
-exports.key = ["global", "discord", "showdown"];
+exports.key = ['global', 'discord', 'showdown'];
 
 function loadCmdDyns(list, commandsHandler) {
 	for (let i in list) {
@@ -24,34 +24,34 @@ function initDyns(server) {
 }
 exports.loadData = function () {
 	try {
-		require.resolve("./data/dyn.json");
+		require.resolve('./data/dyn.json');
 	} catch (e) {
 		Monitor.log(e);
 	}
 	try {
-		let JSONdata = require("./data/dyn.json");
+		let JSONdata = require('./data/dyn.json');
 		Object.assign(dyns, JSONdata);
 	} catch (e) {
 		Monitor.log(e);
 	}
 };
 exports.init = function (server) {
-	Plugins.eventEmitter.on("onDynamic", initDyns);
+	Plugins.eventEmitter.on('onDynamic', initDyns);
 };
 exports.globalCommands = {
 	dyn(target) {
-		if (!dyns[this.id]) return this.sendReply(Lang.get(this.lang, "non_server_exist"));
-		if (!dyns[this.id][target]) return this.sendReply(Lang.get(this.lang, "non_exist"));
+		if (!dyns[this.id]) return this.sendReply(Lang.get(this.lang, 'non_server_exist'));
+		if (!dyns[this.id][target]) return this.sendReply(Lang.get(this.lang, 'non_exist'));
 		this.sendReply(`Dyn: ${dyns[this.id][target].action}`);
 	},
 	setdyn(target) {
-		if (!this.can("mute", true)) return false;
+		if (!this.can('mute', true)) return false;
 		if (!dyns[this.id]) dyns[this.id] = {};
 		console.log(target);
 		target = this.splitOne(target);
 		console.log(target);
-		if (dyns[this.id][target[0]]) return this.sendReply("Ya existe el comando indicado");
-		if (!target[1]) return this.sendReply("especifica la accion");
+		if (dyns[this.id][target[0]]) return this.sendReply('Ya existe el comando indicado');
+		if (!target[1]) return this.sendReply('especifica la accion');
 		dyns[this.id][target[0]] = {
 			action: target[1],
 			aliases: [],
@@ -63,9 +63,9 @@ exports.globalCommands = {
 		this.sendReply(`Dynamic command saved as ${target[0]}`);
 	},
 	deletedyn(target) {
-		if (!this.can("mute", true)) return false;
+		if (!this.can('mute', true)) return false;
 		if (!dyns[this.id]) return false;
-		if (!dyns[this.id][target]) return this.sendReply("El comando no existe");
+		if (!dyns[this.id][target]) return this.sendReply('El comando no existe');
 		delete dyns[this.id][target];
 		delete this.bot.commands[target]; // Delete handler
 		saveDyns();
@@ -73,60 +73,60 @@ exports.globalCommands = {
 	},
 };
 exports.discordCommands = {
-	dynlist: "listdyn",
+	dynlist: 'listdyn',
 	listdyn() {
-		if (!dyns[this.id]) return this.sendReply(Lang.getSub(this.lang, "non_server_exist"));
-		let data = "";
-		data += Lang.get(this.lang, "header") + "\n";
+		if (!dyns[this.id]) return this.sendReply(Lang.getSub(this.lang, 'non_server_exist'));
+		let data = '';
+		data += Lang.get(this.lang, 'header') + '\n';
 		for (let i in dyns[this.id]) {
 			let dyn = dyns[this.id][i];
 			data += `${i} -> ${dyn.action} `;
 			if (dyn.aliases.length > 0) {
-				data += "(";
+				data += '(';
 				for (const alias of dyn.aliases) {
-					data += alias + ", ";
+					data += alias + ', ';
 				}
-				data += ")";
+				data += ')';
 			}
-			data += "\n";
+			data += '\n';
 		}
 		Plugins.Hastebin.upload(data, (r, link) => {
 			if (r) {
-				let fullLink = "https://" + link;
+				let fullLink = 'https://' + link;
 				let embed = new MessageEmbed({
-					title: Lang.get(this.lang, "header"),
+					title: Lang.get(this.lang, 'header'),
 					url: fullLink,
 				});
 				this.sendReply(embed);
 			} else {
-				this.sendReply(`${Lang.get(this.lang, "list_error")}`);
+				this.sendReply(`${Lang.get(this.lang, 'list_error')}`);
 			}
 		});
 	},
 };
 exports.psCommands = {
-	dynlist: "listdyn",
+	dynlist: 'listdyn',
 	listdyn() {
-		if (!dyns[this.id]) return this.sendReply(Lang.getSub(this.lang, "non_server_exist"));
-		let data = "";
-		data += Lang.get(this.lang, "header") + "\n";
+		if (!dyns[this.id]) return this.sendReply(Lang.getSub(this.lang, 'non_server_exist'));
+		let data = '';
+		data += Lang.get(this.lang, 'header') + '\n';
 		for (let i in dyns[this.id]) {
 			let dyn = dyns[this.id][i];
 			data += `${i} -> ${dyn.action} `;
 			if (dyn.aliases.length > 0) {
-				data += "(";
+				data += '(';
 				for (const alias of dyn.aliases) {
-					data += alias + ", ";
+					data += alias + ', ';
 				}
-				data += ")";
+				data += ')';
 			}
-			data += "\n";
+			data += '\n';
 		}
 		Plugins.Hastebin.upload(data, (r, link) => {
 			if (r) {
-				this.sendReply(`${Lang.get(this.lang, "header")}: ${link}`);
+				this.sendReply(`${Lang.get(this.lang, 'header')}: ${link}`);
 			} else {
-				this.sendReply(`${Lang.get(this.lang, "list_error")}`);
+				this.sendReply(`${Lang.get(this.lang, 'list_error')}`);
 			}
 		});
 	},

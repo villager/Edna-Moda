@@ -23,7 +23,7 @@
 			"error",
 			{
 			  "semi": true,
-			  "singleQuote": false,
+			  "singleQuote": true,
 			  "useTabs": true,
 			  "trailingComma": "all",
 			  "printWidth": 120,

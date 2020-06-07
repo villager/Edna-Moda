@@ -1,23 +1,23 @@
-"use strict";
+'use strict';
 
 const MAX_RECURSIVE = 5;
 const MIN_TIME_LOCK = 3 * 1000; // 3 secods to avoid send spam
 
-const util = require("util");
-const minors = require("./minors.js");
-const majors = require("./majors");
-const BattleData = require("./battle-data");
+const util = require('util');
+const minors = require('./minors.js');
+const majors = require('./majors');
+const BattleData = require('./battle-data');
 const Player = BattleData.Player;
-const Calc = require("./calc.js");
-const decisionMaker = require("./decision");
-const Modules = require("./modules");
+const Calc = require('./calc.js');
+const decisionMaker = require('./decision');
+const Modules = require('./modules');
 class Battle {
 	constructor(server, room) {
 		this.id = room;
-		this.title = "";
+		this.title = '';
 		this.players = {
-			p1: new Player("p1"),
-			p2: new Player("p2"),
+			p1: new Player('p1'),
+			p2: new Player('p2'),
 		};
 		this.server = server;
 		this.users = {};
@@ -25,9 +25,9 @@ class Battle {
 		this.self = null;
 		this.foe = null;
 
-		this.gametype = "singles";
+		this.gametype = 'singles';
 		this.gen = 8;
-		this.tier = "ou";
+		this.tier = 'ou';
 		this.rules = [];
 		this.variations = [];
 
@@ -70,11 +70,11 @@ class Battle {
 
 	sendDecision(decision, retry) {
 		if (!decision || !decision.length) return;
-		this.debug("Send Decision: " + JSON.stringify(decision));
-		let str = "/choose ";
+		this.debug('Send Decision: ' + JSON.stringify(decision));
+		let str = '/choose ';
 		for (let i = 0; i < decision.length; i++) {
 			switch (decision[i].type) {
-				case "team":
+				case 'team':
 					let team = [];
 					for (let j = 0; j < decision[i].team.length; j++) {
 						team.push(decision[i].team[j] + 1);
@@ -92,29 +92,29 @@ class Battle {
 							}
 						}
 					}
-					str += "team " + team.join("");
+					str += 'team ' + team.join('');
 					break;
-				case "move":
-					str += "move " + (decision[i].moveId + 1);
-					if (decision[i].mega) str += " mega";
-					if (decision[i].zmove) str += " zmove";
-					if (decision[i].ultra) str += " ultra";
+				case 'move':
+					str += 'move ' + (decision[i].moveId + 1);
+					if (decision[i].mega) str += ' mega';
+					if (decision[i].zmove) str += ' zmove';
+					if (decision[i].ultra) str += ' ultra';
 					if (decision[i].target !== null) {
-						if (decision[i].target >= 0) str += " " + (decision[i].target + 1);
-						else str += " " + decision[i].target;
+						if (decision[i].target >= 0) str += ' ' + (decision[i].target + 1);
+						else str += ' ' + decision[i].target;
 					}
 					break;
-				case "switch":
-					str += "switch " + (decision[i].pokeId + 1);
+				case 'switch':
+					str += 'switch ' + (decision[i].pokeId + 1);
 					break;
-				case "pass":
-					str += "pass";
+				case 'pass':
+					str += 'pass';
 					break;
-				case "shift":
-					str += "shift";
+				case 'shift':
+					str += 'shift';
 					break;
 			}
-			if (i < decision.length - 1) str += ", ";
+			if (i < decision.length - 1) str += ', ';
 		}
 		this.lastSend = {
 			rqid: this.rqid,
@@ -123,9 +123,9 @@ class Battle {
 		};
 		let cmds = [];
 		if (retry) {
-			cmds.push("/undo");
+			cmds.push('/undo');
 		}
-		cmds.push(str + "|" + this.rqid);
+		cmds.push(str + '|' + this.rqid);
 		for (const cmd of cmds) {
 			this.send(cmd);
 		}
@@ -136,7 +136,7 @@ class Battle {
 		if (!this.timer) {
 			if (this.sentTimerReq && Date.now() - this.sentTimerReq < MIN_TIME_LOCK) return; // Do not spam timer commands
 			this.sentTimerReq = Date.now();
-			this.send("/timer on");
+			this.send('/timer on');
 		}
 	}
 
@@ -144,12 +144,12 @@ class Battle {
 		if (!this.leaveInterval) {
 			this.leaveInterval = setInterval(
 				function () {
-					this.send("/leave");
+					this.send('/leave');
 				}.bind(this),
 				5000,
 			);
 		}
-		this.send("/leave");
+		this.send('/leave');
 	}
 
 	start() {
@@ -174,10 +174,10 @@ class Battle {
 		if (!this.self) return; // Not playing
 		if (!Config.battleMessages || !Config.battleMessages[type]) return;
 		if (!player) {
-			if (Config.battleMessages[type]["self"]) {
+			if (Config.battleMessages[type]['self']) {
 				this.send(
-					Config.battleMessages[type]["self"][
-						Math.floor(Math.random() * Config.battleMessages[type]["self"].length)
+					Config.battleMessages[type]['self'][
+						Math.floor(Math.random() * Config.battleMessages[type]['self'].length)
 					],
 				);
 				return;
@@ -185,7 +185,7 @@ class Battle {
 			this.send(Config.battleMessages[type][Math.floor(Math.random() * Config.battleMessages[type].length)]);
 			return;
 		}
-		let side = player === this.self.id ? "self" : "foe";
+		let side = player === this.self.id ? 'self' : 'foe';
 		if (Config.battleMessages[type][side]) {
 			let msg =
 				Config.battleMessages[type][side][Math.floor(Math.random() * Config.battleMessages[type][side].length)];
@@ -196,10 +196,10 @@ class Battle {
 
 	makeDecision(forced) {
 		if (!this.self) return; // Not playing
-		this.debug(this.id + "->MakeDecision");
+		this.debug(this.id + '->MakeDecision');
 		if (Config.maxTurns && this.turn > Config.maxTurns) {
-			this.debug(this.id + "->Forfeit (Turns limit reached)");
-			this.send("/forfeit");
+			this.debug(this.id + '->Forfeit (Turns limit reached)');
+			this.send('/forfeit');
 			return;
 		}
 		if (!forced && this.lastSend.rqid >= 0 && this.lastSend.rqid === this.rqid) {
@@ -211,19 +211,19 @@ class Battle {
 		}
 		if (this.lock) return;
 		this.lock = true;
-		this.debug("Making decisions - " + this.id);
+		this.debug('Making decisions - ' + this.id);
 		let decisions, mod;
 		try {
 			decisions = decisionMaker.getDecisions(this);
 		} catch (e) {
 			this.debug(e.stack);
-			this.debug("Decision maker crashed: " + e.message);
-			Monitor.log(e, null, "Battles");
+			this.debug('Decision maker crashed: ' + e.message);
+			Monitor.log(e, null, 'Battles');
 			this.lock = false;
 			return;
 		}
 		if (!decisions || !decisions.length) {
-			this.debug("Nothing to do: " + this.id);
+			this.debug('Nothing to do: ' + this.id);
 			this.lock = false;
 			return;
 		}
@@ -239,8 +239,8 @@ class Battle {
 			}
 		} catch (ex) {
 			this.debug(ex.stack);
-			this.debug("Module failed: " + mod.id + " | " + ex.message);
-			Monitor.log(ex, null, "BATTLES");
+			this.debug('Module failed: ' + mod.id + ' | ' + ex.message);
+			Monitor.log(ex, null, 'BATTLES');
 		}
 		this.lock = false;
 		this.sendDecision(decisions[Math.floor(Math.random() * decisions.length)]);
@@ -254,25 +254,25 @@ class Battle {
 	run(str, isIntro) {
 		if (!str) return;
 		if (this.nextIsRequest) {
-			str = "|request|" + str;
+			str = '|request|' + str;
 			this.nextIsRequest = false;
 		}
-		if (str.charAt(0) !== "|" || str.substr(0, 2) === "||") {
+		if (str.charAt(0) !== '|' || str.substr(0, 2) === '||') {
 			return;
 		} else {
-			let args = ["done"],
+			let args = ['done'],
 				kwargs = {};
-			if (str !== "|") {
-				args = str.substr(1).split("|");
+			if (str !== '|') {
+				args = str.substr(1).split('|');
 			}
-			while (args[args.length - 1] && args[args.length - 1].substr(0, 1) === "[") {
-				let bracketPos = args[args.length - 1].indexOf("]");
+			while (args[args.length - 1] && args[args.length - 1].substr(0, 1) === '[') {
+				let bracketPos = args[args.length - 1].indexOf(']');
 				if (bracketPos <= 0) break;
 				let argstr = args.pop();
 				// default to "." so it evaluates to boolean true
-				kwargs[argstr.substr(1, bracketPos - 1)] = argstr.substr(bracketPos + 1).trim() || ".";
+				kwargs[argstr.substr(1, bracketPos - 1)] = argstr.substr(bracketPos + 1).trim() || '.';
 			}
-			if (args[0].substr(0, 1) === "-") {
+			if (args[0].substr(0, 1) === '-') {
 				this.runMinor(args, kwargs, isIntro);
 			} else {
 				this.runMajor(args, kwargs, isIntro);
@@ -282,25 +282,25 @@ class Battle {
 
 	runMinor(args, kwargs, isIntro) {
 		if (args) {
-			if (args[2] === "Sturdy" && args[0] === "-activate") args[2] = "ability: Sturdy";
+			if (args[2] === 'Sturdy' && args[0] === '-activate') args[2] = 'ability: Sturdy';
 		}
 		if (minors[args[0]]) {
 			let minor = minors[args[0]];
 			let r = 0;
-			while (typeof minor === "string" && r <= MAX_RECURSIVE) {
+			while (typeof minor === 'string' && r <= MAX_RECURSIVE) {
 				minor = minors[minor];
 				r++;
 			}
-			if (typeof minor !== "function") {
-				this.debug("Unknown minor type: " + args[0] + " - " + util.inspect(minor) + "");
+			if (typeof minor !== 'function') {
+				this.debug('Unknown minor type: ' + args[0] + ' - ' + util.inspect(minor) + '');
 			} else {
 				try {
 					minor.call(this, args, kwargs, isIntro);
 				} catch (e) {
 					this.debug(e.message);
 					this.debug(e.stack);
-					this.debug("Minor failed | Battle id: " + this.id + " | Minor: " + args[0]);
-					Monitor.log(e, "MINOR FAILED", "Global");
+					this.debug('Minor failed | Battle id: ' + this.id + ' | Minor: ' + args[0]);
+					Monitor.log(e, 'MINOR FAILED', 'Global');
 				}
 			}
 		}
@@ -310,20 +310,20 @@ class Battle {
 		if (majors[args[0]]) {
 			let major = majors[args[0]];
 			let r = 0;
-			while (typeof major === "string" && r <= MAX_RECURSIVE) {
+			while (typeof major === 'string' && r <= MAX_RECURSIVE) {
 				major = majors[major];
 				r++;
 			}
-			if (typeof major !== "function") {
-				this.debug("Unknown major type: " + args[0] + " - " + util.inspect(major) + "");
+			if (typeof major !== 'function') {
+				this.debug('Unknown major type: ' + args[0] + ' - ' + util.inspect(major) + '');
 			} else {
 				try {
 					major.call(this, args, kwargs, isIntro);
 				} catch (e) {
 					this.debug(e.message);
 					this.debug(e.stack);
-					this.debug("Major failed | Battle id: " + this.id + " | Major: " + args[0]);
-					Monitor.log(e, "MAJOR FAILED", "Global");
+					this.debug('Major failed | Battle id: ' + this.id + ' | Major: ' + args[0]);
+					Monitor.log(e, 'MAJOR FAILED', 'Global');
 				}
 			}
 		}
@@ -331,21 +331,21 @@ class Battle {
 
 	parseDetails(str) {
 		if (!str) return null;
-		let details = str.split(",");
+		let details = str.split(',');
 		for (let d = 0; d < details.length; d++) {
 			details[d] = details[d].trim();
 		}
 		let poke = {
-			species: "",
+			species: '',
 			level: 100,
 			shiny: false,
 			gender: false,
 		};
-		if (details[details.length - 1] === "shiny") {
+		if (details[details.length - 1] === 'shiny') {
 			poke.shiny = true;
 			details.pop();
 		}
-		if (details[details.length - 1] === "M" || details[details.length - 1] === "F") {
+		if (details[details.length - 1] === 'M' || details[details.length - 1] === 'F') {
 			poke.gender = details[details.length - 1];
 			details.pop();
 		}
@@ -369,9 +369,9 @@ class Battle {
 			hp: 100,
 			status: false,
 		};
-		let sp = str.split(" ");
+		let sp = str.split(' ');
 		if (sp[1]) status.status = toId(sp[1]);
-		sp = sp[0].split("/");
+		sp = sp[0].split('/');
 		if (sp.length === 2) {
 			let d = parseInt(sp[1]);
 			if (d) {
@@ -385,8 +385,8 @@ class Battle {
 
 	parseHealth(str) {
 		let hp = 100;
-		let sp = str.split(" ");
-		sp = sp[0].split("/");
+		let sp = str.split(' ');
+		sp = sp[0].split('/');
 		if (sp.length === 2) {
 			let d = parseInt(sp[1]);
 			if (d) {
@@ -400,7 +400,7 @@ class Battle {
 
 	getSide(str) {
 		if (!str) return null;
-		str = str.split(":")[0];
+		str = str.split(':')[0];
 		return this.players[str];
 	}
 
@@ -411,7 +411,7 @@ class Battle {
 		let pokeId = str.substr(0, 1);
 		let slot = this.parseSlot(pokeId);
 		str = str.substr(1);
-		let name = (str.substr(1) || "").trim();
+		let name = (str.substr(1) || '').trim();
 		if (this.players[side] && this.players[side].active[slot]) {
 			this.players[side].active[slot].name = name;
 			return this.players[side].active[slot];
@@ -426,7 +426,7 @@ class Battle {
 		let pokeId = str.substr(0, 1);
 		let slot = this.parseSlot(pokeId);
 		str = str.substr(1);
-		let name = (str.substr(1) || "").trim();
+		let name = (str.substr(1) || '').trim();
 		return {
 			side: side,
 			slot: slot,

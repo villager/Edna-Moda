@@ -1,14 +1,14 @@
-"use strict";
+'use strict';
 
-const path = require("path");
+const path = require('path');
 
 let blacklist = Object.create(null);
-const BLACK_LIST_PATH = path.resolve(__dirname, "data", "blacklist.json");
+const BLACK_LIST_PATH = path.resolve(__dirname, 'data', 'blacklist.json');
 
 exports.saveBlack = () => Plugins.FS(BLACK_LIST_PATH).writeUpdate(() => JSON.stringify(blacklist));
 
 exports.loadData = function () {
-	let dataFiles = [["blacklist.json", blacklist]];
+	let dataFiles = [['blacklist.json', blacklist]];
 	for (const file of dataFiles) {
 		try {
 			require.resolve(`./data/${file[0]}`);

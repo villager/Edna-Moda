@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-const battleData = require("./battle-data");
+const battleData = require('./battle-data');
 
 const Move = battleData.Move;
 
@@ -11,8 +11,8 @@ module.exports = {
 
 	request: function (args, kwargs) {
 		args.shift();
-		let data = args.join("|");
-		if (!isNaN(data.substr(0, 1)) && data.substr(1, 1) === "|") {
+		let data = args.join('|');
+		if (!isNaN(data.substr(0, 1)) && data.substr(1, 1) === '|') {
 			this.nextIsRequest = true;
 			return;
 		}
@@ -36,29 +36,29 @@ module.exports = {
 	},
 
 	tier: function (args, kwargs) {
-		if (!args[1]) args[1] = "";
-		for (let i in kwargs) args[1] += "[" + i + "] " + kwargs[i];
+		if (!args[1]) args[1] = '';
+		for (let i in kwargs) args[1] += '[' + i + '] ' + kwargs[i];
 		this.tier = args[1];
-		if (toId(this.tier) === "inversebattle") {
-			this.conditions["inversebattle"] = true;
+		if (toId(this.tier) === 'inversebattle') {
+			this.conditions['inversebattle'] = true;
 		}
 		this.start();
 	},
 
 	gametype: function (args, kwargs) {
 		this.gametype = args[1];
-		this.conditions["gametype"] = args[1];
+		this.conditions['gametype'] = args[1];
 		switch (args[1]) {
 			default:
 				this.players.p1.active = [null];
 				this.players.p2.active = [null];
 				break;
-			case "doubles":
+			case 'doubles':
 				this.players.p1.active = [null, null];
 				this.players.p2.active = [null, null];
 				break;
-			case "triples":
-			case "rotation":
+			case 'triples':
+			case 'rotation':
 				this.players.p1.active = [null, null, null];
 				this.players.p2.active = [null, null, null];
 				break;
@@ -70,15 +70,15 @@ module.exports = {
 	},
 
 	rule: function (args, kwargs) {
-		this.rules.push(args[1].split(":")[0]);
+		this.rules.push(args[1].split(':')[0]);
 	},
 
 	inactive: function (args, kwargs) {
 		this.timer = true;
 		if (args[1]) {
 			if (
-				args[1].indexOf("Battle timer is now ON") === 0 ||
-				args[1].indexOf("You have") === 0 ||
+				args[1].indexOf('Battle timer is now ON') === 0 ||
+				args[1].indexOf('You have') === 0 ||
 				args[1].indexOf(this.server.name) >= 0
 			) {
 				this.makeDecision();
@@ -90,12 +90,12 @@ module.exports = {
 		this.timer = false;
 	},
 
-	j: "join",
+	j: 'join',
 	join: function (args, kwargs) {
 		this.users[toId(args[1])] = args[1];
 	},
 
-	l: "leave",
+	l: 'leave',
 	leave: function (args, kwargs) {
 		if (this.users[toId(args[1])]) delete this.users[toId(args[1])];
 	},
@@ -105,7 +105,7 @@ module.exports = {
 		let name = args[2];
 		let avatar = args[3];
 		if (this.players[id]) {
-			this.players[id].setName(name || "");
+			this.players[id].setName(name || '');
 			this.players[id].avatar = avatar || 0;
 			if (this.players[id].userid) {
 				if (this.players[id].userid === toId(this.server.name)) {
@@ -125,7 +125,7 @@ module.exports = {
 
 	tie: function (args, kwargs, isIntro) {
 		this.ended = true;
-		if (!isIntro) this.message("tie");
+		if (!isIntro) this.message('tie');
 		this.leave();
 	},
 
@@ -152,9 +152,9 @@ module.exports = {
 	detailschange: function (args, kwargs) {
 		let poke = this.getActive(args[1]);
 		let details = this.parseDetails(args[2]);
-		poke.removeVolatile("formechange");
-		poke.removeVolatile("typeadd");
-		poke.removeVolatile("typechange");
+		poke.removeVolatile('formechange');
+		poke.removeVolatile('typeadd');
+		poke.removeVolatile('typechange');
 		for (let i in details) poke[i] = details[i];
 		poke.template = battleData.getPokemon(details.species, this.gen);
 	},
@@ -165,10 +165,10 @@ module.exports = {
 		this.checkTimer();
 	},
 
-	drag: "switch",
-	replace: "switch",
+	drag: 'switch',
+	replace: 'switch',
 	switch: function (args, kwargs) {
-		let spl = args[1].split(": ");
+		let spl = args[1].split(': ');
 		let p = spl[0].substr(0, 2);
 		let slot = this.parseSlot(spl[0].substr(2, 1));
 		let name = Plugins.Utils.toName(spl[1]);
@@ -202,21 +202,21 @@ module.exports = {
 			/* Normal switch */
 			if (active.passing && active.passing === this.turn) {
 				/* Pass the boost and volatiles */
-				active.removeVolatile("airballoon");
-				active.removeVolatile("attract");
-				active.removeVolatile("autotomize");
-				active.removeVolatile("disable");
-				active.removeVolatile("foresight");
-				active.removeVolatile("imprison");
-				active.removeVolatile("mimic");
-				active.removeVolatile("miracleeye");
-				active.removeVolatile("smackdown");
-				active.removeVolatile("torment");
-				active.removeVolatile("typeadd");
-				active.removeVolatile("typechange");
-				active.removeVolatile("yawn");
-				active.removeVolatile("transform");
-				active.removeVolatile("formechange");
+				active.removeVolatile('airballoon');
+				active.removeVolatile('attract');
+				active.removeVolatile('autotomize');
+				active.removeVolatile('disable');
+				active.removeVolatile('foresight');
+				active.removeVolatile('imprison');
+				active.removeVolatile('mimic');
+				active.removeVolatile('miracleeye');
+				active.removeVolatile('smackdown');
+				active.removeVolatile('torment');
+				active.removeVolatile('typeadd');
+				active.removeVolatile('typechange');
+				active.removeVolatile('yawn');
+				active.removeVolatile('transform');
+				active.removeVolatile('formechange');
 				for (let vol in active.volatiles) poke.addVolatile(vol);
 				for (let b in active.boosts) poke.boosts[b] = active.boosts[b];
 				active.passing = false;
@@ -239,7 +239,7 @@ module.exports = {
 		poke.active = false;
 		poke.passing = false;
 		poke.hp = 0;
-		if (!isIntro) this.message("faint", det.side, poke.name);
+		if (!isIntro) this.message('faint', det.side, poke.name);
 	},
 
 	swap: function (args, kwargs) {
@@ -261,14 +261,14 @@ module.exports = {
 		if (kwargs.from) fromeffect = battleData.getEffect(kwargs.from, this.gen);
 		if (fromeffect) {
 			switch (fromeffect.id) {
-				case "snatch":
-				case "magicbounce":
-				case "magiccoat":
-				case "rebound":
-				case "metronome":
-				case "naturepower":
+				case 'snatch':
+				case 'magicbounce':
+				case 'magiccoat':
+				case 'rebound':
+				case 'metronome':
+				case 'naturepower':
 					return; // Not a real move
-				case "sleeptalk":
+				case 'sleeptalk':
 					noDeductPP = true; // Real move, but not really used
 					break;
 			}
@@ -285,18 +285,18 @@ module.exports = {
 			if (poke.transformed) move.pp = 5;
 			poke.moves.push(move);
 		}
-		if (move.id === "wish" || move.id === "healingwish" || move.id === "lunardance") {
+		if (move.id === 'wish' || move.id === 'healingwish' || move.id === 'lunardance') {
 			this.players[det.side].side.wish = {
 				move: move.id,
 				turn: this.turn,
 				poke: poke,
 			};
 		}
-		if (move.id === "batonpass") {
+		if (move.id === 'batonpass') {
 			poke.passing = this.turn;
 		}
-		if (!noDeductPP && kwargs.from !== "lockedmove") {
-			if (args[1] !== args[3] && poke2 && poke2.ability && poke2.ability.id === "pressure") {
+		if (!noDeductPP && kwargs.from !== 'lockedmove') {
+			if (args[1] !== args[3] && poke2 && poke2.ability && poke2.ability.id === 'pressure') {
 				move.pp -= 2;
 			} else {
 				move.pp--;
@@ -311,27 +311,27 @@ module.exports = {
 	cant: function (args, kwargs, isIntro) {
 		let poke = this.getActive(args[1]);
 		let effect = battleData.getEffect(args[2], this.gen);
-		let moveTemplate = battleData.getMove(args[3] || "", this.gen);
+		let moveTemplate = battleData.getMove(args[3] || '', this.gen);
 		let det = this.parsePokemonIdent(args[1]);
 		switch (effect.id) {
-			case "taunt":
-			case "gravity":
-			case "healblock":
-			case "imprison":
-			case "skydrop":
-			case "recharge":
-			case "focuspunch":
-			case "nopp":
+			case 'taunt':
+			case 'gravity':
+			case 'healblock':
+			case 'imprison':
+			case 'skydrop':
+			case 'recharge':
+			case 'focuspunch':
+			case 'nopp':
 				break;
-			case "slp":
+			case 'slp':
 				if (!poke.helpers.sleepCounter) poke.helpers.sleepCounter = 0;
 				poke.helpers.sleepCounter++;
 				if (!isIntro) this.message(effect.id, det.side, poke.name); // hax
 				return;
-			case "par":
-			case "frz":
-			case "flinch":
-			case "attract":
+			case 'par':
+			case 'frz':
+			case 'flinch':
+			case 'attract':
 				if (!isIntro) this.message(effect.id, det.side, poke.name); // hax
 				return; // No move
 		}
@@ -362,10 +362,10 @@ module.exports = {
 		let pokemon = isNaN(Number(args[1])) ? this.getActive(args[1]) : this.self.active[args[1]];
 		let requestData = this.request.active[pokemon.slot];
 		switch (args[0]) {
-			case "trapped":
+			case 'trapped':
 				requestData.trapped = true;
 				break;
-			case "cant":
+			case 'cant':
 				for (let i = 0; i < requestData.moves.length; i++) {
 					if (requestData.moves[i].id === args[3]) {
 						requestData.moves[i].disabled = true;

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 function getMultipleEff(typeA, typeB, gen, notInmmune) {
 	let mux = 1;
@@ -14,7 +14,7 @@ function getMultipleEff(typeA, typeB, gen, notInmmune) {
 function getEffectiveness(typeA, typeB, gen) {
 	if (!gen) gen = 8;
 	let chart = exports.gen8;
-	if (["gen" + gen]) chart = ["gen" + gen];
+	if (['gen' + gen]) chart = ['gen' + gen];
 	if (!chart[typeB] || !chart[typeB][typeA]) return 1;
 	switch (chart[typeB][typeA]) {
 		case 1:

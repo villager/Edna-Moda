@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-const cluster = require("cluster");
-const path = require("path");
+const cluster = require('cluster');
+const path = require('path');
 
 let plugins = Object.create(null);
 
@@ -15,9 +15,9 @@ const Plugins = (module.exports = getPlugin);
 Plugins.plugins = plugins;
 
 Plugins.load = function (pluginPath) {
-	const plugin = require("./plugins/" + pluginPath);
-	if (!plugin || (typeof plugin !== "object" && typeof plugin !== "function")) {
-		throw new Error("Plugin inválido: ´" + pluginPath + "´.");
+	const plugin = require('./plugins/' + pluginPath);
+	if (!plugin || (typeof plugin !== 'object' && typeof plugin !== 'function')) {
+		throw new Error('Plugin inválido: ´' + pluginPath + '´.');
 	}
 	plugin.id = pluginPath;
 	if (!cluster.isMaster && !plugin.multiProcess) {
@@ -37,18 +37,18 @@ Plugins.forEach = function (callback, thisArg) {
 };
 
 const COMMANDS_MAP = new Map([
-	["showdown", "psCommands"],
-	["discord", "discordCommands"],
-	["global", "globalCommands"],
+	['showdown', 'psCommands'],
+	['discord', 'discordCommands'],
+	['global', 'globalCommands'],
 ]);
 Plugins.init = function () {
-	let pluginsList = Plugins.FS("./plugins/plugins").readdirSync();
+	let pluginsList = Plugins.FS('./plugins/plugins').readdirSync();
 	for (const plugin of pluginsList) {
 		Plugins.load(plugin);
 	}
 	if (Config.isInitializacion) Plugins.initData();
 	Plugins.forEach(plugin => {
-		if (typeof plugin.loadData === "function") {
+		if (typeof plugin.loadData === 'function') {
 			if (!Config.testMode) plugin.loadData();
 		}
 	});
@@ -78,7 +78,7 @@ Plugins.loadPlugins = function () {
 					}
 				}
 			} else {
-				if (plugin.commands && typeof plugin.commands === "object") {
+				if (plugin.commands && typeof plugin.commands === 'object') {
 					Object.assign(Chat[COMMANDS_MAP.get(plugin.key)], plugin.commands);
 				}
 			}
@@ -90,33 +90,33 @@ function joinPath(...args) {
 	return path.resolve(__dirname, ...args);
 }
 Plugins.initData = function () {
-	const DATA_FOLDERS = ["data"];
+	const DATA_FOLDERS = ['data'];
 	Plugins.forEach(plugin => {
-		if (typeof plugin.initData === "function") {
+		if (typeof plugin.initData === 'function') {
 			plugin.initData();
 		}
 		for (const folder of DATA_FOLDERS) {
-			Plugins.FS(joinPath("plugins", plugin.id, folder))
+			Plugins.FS(joinPath('plugins', plugin.id, folder))
 				.readdir()
 				.then(files => {
 					let fileDict = Object.create(null);
 					let exampleFiles = [];
 					for (let fileName of files) {
 						let ext = path.extname(fileName);
-						let extFile = new Set([".json", ".js", ".txt", ".tsv", ".csv", ".pem"]);
+						let extFile = new Set(['.json', '.js', '.txt', '.tsv', '.csv', '.pem']);
 						if (!extFile.has(ext)) continue;
 						let name = fileName.slice(0, -ext.length);
 						if (!fileDict[name]) fileDict[name] = Object.create(null);
 						fileDict[name][ext] = 1;
-						if (name.slice(-8) === "-example") exampleFiles.push({name: name.slice(0, -8), ext: ext});
+						if (name.slice(-8) === '-example') exampleFiles.push({name: name.slice(0, -8), ext: ext});
 					}
 					for (let fileData of exampleFiles) {
-						let baseFile = joinPath("plugins", plugin.id, folder, fileData.name + fileData.ext);
+						let baseFile = joinPath('plugins', plugin.id, folder, fileData.name + fileData.ext);
 						let originalFile = joinPath(
-							"plugins",
+							'plugins',
 							plugin.id,
 							folder,
-							fileData.name + "-example" + fileData.ext,
+							fileData.name + '-example' + fileData.ext,
 						);
 						Plugins.FS(baseFile)
 							.isFile()
@@ -131,11 +131,11 @@ Plugins.initData = function () {
 	});
 };
 
-const events = require("./utils/events");
-Plugins.FS = require("../lib/fs");
-Plugins.Language = require("./utils/languages");
-Plugins.Timers = require("./utils/timers");
-Plugins.Bins = require("./utils/bins");
-Plugins.Utils = require("./utils/global");
-Plugins.Dex = require("./utils/dex");
+const events = require('./utils/events');
+Plugins.FS = require('../lib/fs');
+Plugins.Language = require('./utils/languages');
+Plugins.Timers = require('./utils/timers');
+Plugins.Bins = require('./utils/bins');
+Plugins.Utils = require('./utils/global');
+Plugins.Dex = require('./utils/dex');
 Plugins.eventEmitter = new events.EventEmitter();

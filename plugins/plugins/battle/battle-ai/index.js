@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-const Battle = require("./battle");
-const Storage = require("../storage");
+const Battle = require('./battle');
+const Storage = require('../storage');
 let battles = Object.create(null);
 
 function updateJoins() {
@@ -23,10 +23,10 @@ exports.init = function () {
 	}
 };
 exports.receive = function (server, room, data, isIntro) {
-	if (data.charAt(0) === ">") return;
-	let spl = data.substr(1).split("|");
+	if (data.charAt(0) === '>') return;
+	let spl = data.substr(1).split('|');
 	if (!battles[server.id]) battles[server.id] = {};
-	if (spl[0] === "init") {
+	if (spl[0] === 'init') {
 		if (battles[server.id][room]) {
 			try {
 				battles[server.id][room].destroy();
@@ -38,7 +38,7 @@ exports.receive = function (server, room, data, isIntro) {
 	if (battles[server.id][room]) {
 		battles[server.id][room].add(data, isIntro);
 	}
-	if (spl[0] === "deinit" || spl[0] === "expire") {
+	if (spl[0] === 'deinit' || spl[0] === 'expire') {
 		if (battles[server.id][room]) {
 			try {
 				battles[server.id][room].destroy();

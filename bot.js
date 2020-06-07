@@ -1,19 +1,26 @@
-"use strict";
+'use strict';
 /**
  *  Main File
  */
-if (!global.Config) global.Config = require("./config/config");
+if (!global.Config) global.Config = require('./config/config');
 
-global.Plugins = require("./plugins");
+global.Plugins = require('./plugins');
 
-global.Monitor = require("./lib/monitor");
+global.Monitor = require('./lib/monitor');
 
-global.Chat = require("./chat");
+global.Chat = require('./chat');
 
 let bots = Object.create(null);
 function getBot(bot) {
-	if (!bots[bot]) return false;
-	return bots[bot];
+	if (!bots[bot]) {
+		if (Discord && Discord.get(bot)) {
+			return Discord.get(bot);
+		} else {
+			return false;
+		}
+	} else {
+		return bots[bot];
+	}
 }
 global.Bot = getBot;
 
@@ -30,8 +37,8 @@ Plugins.init();
 let listeners = (Object.keys(Config.servers).length + 1) * Object.keys(Plugins.plugins).length;
 Plugins.eventEmitter.setMaxListeners(listeners);
 
-const PSBot = require("./servers/showdown");
-const DiscordBot = require("./servers/discord");
+const PSBot = require('./servers/showdown');
+const DiscordBot = require('./servers/discord');
 
 class GBot {
 	constructor() {
@@ -49,19 +56,19 @@ class GBot {
 			let Server = this.servers[i];
 			Server.connect();
 			/* Bot Status events */
-			Server.on("connecting", () => {
-				console.log("Connecting to server: " + Server.id + ":" + Server.port);
+			Server.on('connecting', () => {
+				console.log('Connecting to server: ' + Server.id + ':' + Server.port);
 			});
-			Server.on("connect", () => {
-				console.log("Bot connected to server: " + Server.id + ":" + Server.port);
+			Server.on('connect', () => {
+				console.log('Bot connected to server: ' + Server.id + ':' + Server.port);
 			});
-			Server.on("disconnect", err => {
-				console.log("Bot Disconnected" + (err ? " | " + err.code + ": " + err.message : ""));
+			Server.on('disconnect', err => {
+				console.log('Bot Disconnected' + (err ? ' | ' + err.code + ': ' + err.message : ''));
 				if (Server.manager.closed || Server.manager.connecting || Server.manager.status.connected) return;
 				if (!Config.testMode) {
 					Server.manager.onBegin();
 				} else {
-					console.log("Sever in a test mode");
+					console.log('Sever in a test mode');
 				}
 			});
 			Chat.loadPlugins();

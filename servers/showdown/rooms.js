@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
 class Room {
 	constructor(room, options = {}) {
 		this.id = toId(room);
-		this.type = options.type || "chat";
+		this.type = options.type || 'chat';
 		this.users = {};
 		this.title = room;
 		this.userCount = 0;
