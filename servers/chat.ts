@@ -1,27 +1,24 @@
-'use strict';
 
-const Chat = exports;
+export let psCommands = Object.create(null);
 
-Chat.psCommands = Object.create(null);
+export let globalCommands = Object.create(null);
 
-Chat.globalCommands = Object.create(null);
+export let discordCommands = Object.create(null);
 
-Chat.discordCommands = Object.create(null);
+export let packageData = {};
 
-Chat.packageData = {};
-
-Chat.loadPlugins = function () {
+export function loadPlugins() {
 	Plugins.FS('./package.json')
 		.readTextIfExists()
-		.then(data => {
+		.then((data: string) => {
 			if (data) Chat.packageData = JSON.parse(data);
 		});
 	Plugins.loadPlugins();
 	Object.assign(Chat.discordCommands, Chat.globalCommands);
 	Object.assign(Chat.psCommands, Chat.globalCommands);
-};
+}
 
-Chat.hasAuth = function (id, user, perm) {
+export function hasAuth(id: string, user: string | any, perm: string) {
 	let group;
 	let userId = id === 'Discord' ? toUserName(user) : toId(user);
 	for (const owner of Config.owners) {
@@ -34,8 +31,8 @@ Chat.hasAuth = function (id, user, perm) {
 		return true; // I"ll do this latter
 	} else {
 		let rank = Config.permissions[perm];
-		if (toId(Bot(id).name) === userId) {
-			group = Bot(id).group;
+		if (toId(Bot.get(id).name) === userId) {
+			group = Bot.get(id).group;
 		} else {
 			group = user.charAt(0);
 		}
@@ -43,4 +40,4 @@ Chat.hasAuth = function (id, user, perm) {
 		if (Config.rankList.indexOf(group) >= Config.rankList.indexOf(rank)) return true;
 	}
 	return false;
-};
+}

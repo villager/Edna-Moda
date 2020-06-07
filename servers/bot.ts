@@ -13,14 +13,15 @@ global.Plugins = Plugins;
 import * as Monitor from '../lib/monitor';
 global.Monitor = Monitor;
 
-import * as Chat from '../chat';
+import * as Chat from './chat';
 
 global.Chat = Chat;
 
 const Discord: any | null = null;
 
 const bots = Object.create(null);
-function getBot(bot) {
+
+function getBot(bot: string) {
 	if (!bots[bot]) {
 		if (Discord && Discord.get(bot)) {
 			return Discord.get(bot);
@@ -31,10 +32,10 @@ function getBot(bot) {
 		return bots[bot];
 	}
 }
-global.Bot = {
+export const Bot = global.Bot = {
 	bots: bots,
 	get: getBot,
-	forEach(callback, thisArg) {
+	forEach(callback:any, thisArg:any) {
 		Object.values(bots).forEach(callback, thisArg);
 	},
 };
@@ -54,9 +55,10 @@ interface ServerHolder {
 }
 
 class GBot {
-	discord: DiscordClient;
+	discord:  DiscordClient | null;
 	servers: ServerHolder;
 	constructor() {
+		this.discord = null;
 		if (Config.token && Config.name) {
 			this.discord = global.Discord = new DiscordClient();
 		}
