@@ -2,6 +2,7 @@
 !plugins/plugins/**/data/*-example*
 config/*
 logs/*
+.*-dist/*
 !logs/README.md
 /node_modules
 package-lock.json

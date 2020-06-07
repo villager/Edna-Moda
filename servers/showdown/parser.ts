@@ -1,8 +1,7 @@
-'use strict';
+const BaseParser = require('../parser').BaseParser;
 
-const BaseParser = require('../parser');
-
-class Parser extends BaseParser {
+export class Parser extends BaseParser {
+	readonly serverType: string;
 	constructor(bot) {
 		super(bot);
 		this.serverType = 'Showdown';
@@ -21,7 +20,7 @@ class Parser extends BaseParser {
 		}
 	}
 	get lang() {
-		let lang = this.room.language ? this.room.language : super.lang;
+		const lang = this.room.language ? this.room.language : super.lang;
 		return lang;
 	}
 	parse(room, user, message, pm) {
@@ -29,7 +28,7 @@ class Parser extends BaseParser {
 		this.bot.lastMessage = message;
 		if (toId(this.bot.name) === toId(user)) this.bot.group = user.charAt(0);
 		this.bot.lastUser = user;
-		let commandHandler = this.splitCommand(message);
+		const commandHandler = this.splitCommand(message);
 		if (typeof commandHandler === 'function') {
 			if (toId(this.bot.lastUser) === toId(this.bot.name)) return; // Ignorar los  comandos dichos por el mismo bot
 			this.user = user;
@@ -40,4 +39,3 @@ class Parser extends BaseParser {
 		}
 	}
 }
-module.exports = Parser;

@@ -24,7 +24,7 @@ Config.testMode = true;
 Config.token = 'ABCDEFGHIJKLMNOPQRSTUVWXZAS';
 Config.name = 'Edna Moda';
 
-require('../bot');
+require('../.servers-dist/bot');
 
 /**
  * @param {string} folder

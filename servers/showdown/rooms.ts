@@ -1,7 +1,11 @@
-'use strict';
-
-class Room {
-	constructor(room, options = {}) {
+export class Room {
+	id: string;
+	type: string;
+	users: any;
+	title: string;
+	userCount: number;
+	language: boolean | string;
+	constructor(room: string, options: any = {}) {
 		this.id = toId(room);
 		this.type = options.type || 'chat';
 		this.users = {};
@@ -9,10 +13,10 @@ class Room {
 		this.userCount = 0;
 		this.language = false;
 	}
-	updateTitle(title) {
+	updateTitle(title: string) {
 		this.title = title;
 	}
-	updateUsers(users) {
+	updateUsers(users: string[]) {
 		for (const user of users) {
 			if (!toId(user)) continue;
 			this.users[toId(user)] = toId(user);
@@ -21,4 +25,3 @@ class Room {
 	}
 	saveRooms() {}
 }
-module.exports = Room;

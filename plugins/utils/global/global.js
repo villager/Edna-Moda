@@ -1,6 +1,6 @@
 'use strict';
 
-const Tools = (module.exports = {});
+const Tools = exports;
 
 Tools.toId = function (text) {
 	if (text && text.id) {

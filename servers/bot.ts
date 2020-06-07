@@ -1,16 +1,25 @@
-'use strict';
 /**
  *  Main File
  */
-if (!global.Config) global.Config = require('./config/config');
 
-global.Plugins = require('./plugins');
+if (!global.Config) global.Config = require('../config/config');
 
-global.Monitor = require('./lib/monitor');
+declare const global: any;
 
-global.Chat = require('./chat');
+import * as Plugins from '../plugins';
 
-let bots = Object.create(null);
+global.Plugins = Plugins;
+
+import * as Monitor from '../lib/monitor';
+global.Monitor = Monitor;
+
+import * as Chat from '../chat';
+
+global.Chat = Chat;
+
+const Discord: any | null = null;
+
+const bots = Object.create(null);
 function getBot(bot) {
 	if (!bots[bot]) {
 		if (Discord && Discord.get(bot)) {
@@ -22,38 +31,44 @@ function getBot(bot) {
 		return bots[bot];
 	}
 }
-global.Bot = getBot;
-
-Bot.bots = bots;
-
-Bot.forEach = function (callback, thisArg) {
-	Object.values(bots).forEach(callback, thisArg);
+global.Bot = {
+	bots: bots,
+	get: getBot,
+	forEach(callback, thisArg) {
+		Object.values(bots).forEach(callback, thisArg);
+	},
 };
 
 global.toId = Plugins.Utils.toId;
 global.splint = Plugins.Utils.splint;
 global.toUserName = Plugins.Utils.toUserName;
 Plugins.init();
-let listeners = (Object.keys(Config.servers).length + 1) * Object.keys(Plugins.plugins).length;
+const listeners: number = (Object.keys(Config.servers).length + 1) * Object.keys(Plugins.plugins).length;
 Plugins.eventEmitter.setMaxListeners(listeners);
 
-const PSBot = require('./servers/showdown');
-const DiscordBot = require('./servers/discord');
+import {PSClient} from './showdown';
+import {DiscordClient} from './discord';
+
+interface ServerHolder {
+	[k: string]: PSClient;
+}
 
 class GBot {
+	discord: DiscordClient;
+	servers: ServerHolder;
 	constructor() {
 		if (Config.token && Config.name) {
-			this.discord = global.Discord = new DiscordBot();
+			this.discord = global.Discord = new DiscordClient();
 		}
 		this.servers = Object.create(null);
-		for (let i in Config.servers) {
-			let Server = Config.servers[i];
-			this.servers[i] = bots[i] = new PSBot(Server);
+		for (const i in Config.servers) {
+			const Server = Config.servers[i];
+			this.servers[i] = bots[i] = new PSClient(Server);
 		}
 	}
 	connect() {
-		for (let i in this.servers) {
-			let Server = this.servers[i];
+		for (const i in this.servers) {
+			const Server = this.servers[i];
 			Server.connect();
 			/* Bot Status events */
 			Server.on('connecting', () => {

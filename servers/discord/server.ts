@@ -1,8 +1,12 @@
-'use strict';
+import {Parser} from './parser';
 
-const Parser = require('./parser');
-
-class Server {
+export class Server {
+	idNum: number;
+	name: string;
+	id: string;
+	language: string;
+	commands: AnyObject;
+	parser: any;
 	constructor(guild) {
 		this.idNum = guild.id;
 		this.name = guild.name;
@@ -27,4 +31,3 @@ class Server {
 		this.loadCommands();
 	}
 }
-module.exports = Server;

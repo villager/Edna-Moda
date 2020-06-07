@@ -1,5 +1,3 @@
-'use strict';
-
 const DEFAULT_ACTIVITY = {
 	every: 10,
 	cmd: '/noonewillusethisthingever',
@@ -7,8 +5,9 @@ const DEFAULT_ACTIVITY = {
 const DEFAULT_DELAY = Config.reconnectingDelay || 1000 * 30;
 
 class Activity extends Plugins.Timers {
+	manager: typeof ConnectionManager;
 	constructor(manager) {
-		super(DEFAULT_ACTIVITY * 1000);
+		super(DEFAULT_ACTIVITY.every * 1000);
 		this.manager = manager;
 	}
 	onBegin() {
@@ -18,7 +17,9 @@ class Activity extends Plugins.Timers {
 	}
 	check() {}
 }
-class RoomManager extends Plugins.Timers {
+export class RoomManager extends Plugins.Timers {
+	baseRooms: string[];
+	server: AnyObject;
 	constructor(server) {
 		super(1000 * 15);
 		this.baseRooms = server.baseRooms;
@@ -38,7 +39,15 @@ class RoomManager extends Plugins.Timers {
 		});
 	}
 }
-class ConnectionManager extends Plugins.Timers {
+export class ConnectionManager extends Plugins.Timers {
+	connecting: boolean;
+	status: AnyObject;
+	closed: boolean;
+	maxAttemps: number;
+	attemps: number;
+	activity: any;
+	server: AnyObject;
+	conntime: number;
 	constructor(server) {
 		super(DEFAULT_DELAY);
 		this.connecting = false;
@@ -46,7 +55,7 @@ class ConnectionManager extends Plugins.Timers {
 		this.closed = false;
 		this.maxAttemps = Config.maxAttemps || 3;
 		this.attemps = 0;
-		this.activity = new Activity();
+		this.activity = new Activity(this);
 		this.server = server;
 		this.conntime = 0;
 	}
@@ -64,13 +73,21 @@ class ConnectionManager extends Plugins.Timers {
 		});
 	}
 }
-class SendManager {
+export class SendManager {
 	/**
 	 * @param {String|Array<String>} data
 	 * @param {Number} msgMaxLines
 	 * @param {function(String)} sendFunc
 	 * @param {function} destroyHandler
 	 */
+	data: string | string[] | any;
+	msgMaxLines: number;
+	sendFunc: any;
+	status: string;
+	callback: null | any;
+	destroyHandler: any;
+	err: any;
+	interval: any;
 	constructor(data, msgMaxLines, sendFunc, destroyHandler) {
 		this.data = data;
 		this.msgMaxLines = msgMaxLines;
@@ -89,22 +106,22 @@ class SendManager {
 		} else {
 			data = data.slice();
 		}
-		let nextToSend = function () {
+		const nextToSend = function () {
 			if (!data.length) {
 				clearInterval(this.interval);
 				this.interval = null;
 				this.finalize();
 				return;
 			}
-			let toSend = [];
-			let firstMsg = data.shift();
+			const toSend = [];
+			const firstMsg = data.shift();
 			toSend.push(firstMsg);
 			let roomToSend = '';
 			if (firstMsg.indexOf('|') >= 0) {
 				roomToSend = firstMsg.split('|')[0];
 			}
 			while (data.length > 0 && toSend.length < this.msgMaxLines) {
-				let subMsg = data[0];
+				const subMsg = data[0];
 				if (subMsg.split('|')[0] !== roomToSend) {
 					break;
 				} else {
@@ -142,6 +159,3 @@ class SendManager {
 		this.finalize();
 	}
 }
-exports.Send = SendManager;
-exports.Connection = ConnectionManager;
-exports.Room = RoomManager;

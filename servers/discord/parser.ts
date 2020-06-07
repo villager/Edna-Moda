@@ -1,19 +1,25 @@
-'use strict';
+import {BaseParser} from '../parser';
 
-const BaseParser = require('../parser');
-
-class Parser extends BaseParser {
+export class Parser extends BaseParser {
+	readonly serverType: string;
+	bot: AnyObject;
+	channel: null | AnyObject;
+	messageId: null | number;
+	guild: AnyObject | null;
 	constructor(bot) {
 		super(bot);
 		this.serverType = 'Discord';
+		this.channel = null;
+		this.messageId = null;
+		this.guild = null;
 	}
-	parse(message) {
+	parse(message: any) {
 		this.bot.lastMessage = message.content;
 		this.bot.lastUser = message.author;
 		this.channel = message.channel;
 		this.messageId = message.id;
 		this.guild = message.guild;
-		let commandHandler = this.splitCommand(message.content);
+		const commandHandler = this.splitCommand(message.content);
 		if (typeof commandHandler === 'function') {
 			if (toId(this.bot.lastUser.username) === toId(Config.name)) return; // Ignorar los  comandos dichos por el mismo bot
 			const channel = message.channel;
@@ -27,4 +33,3 @@ class Parser extends BaseParser {
 		this.channel.send(data).catch(() => {});
 	}
 }
-module.exports = Parser;

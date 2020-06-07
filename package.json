@@ -5,24 +5,15 @@
     "scripts": {
         "start": "node app",
         "build": "node build",
-        "test": "mocha && jest",
-        "clean": "prettier --write \"*.{js,md}\" \"**/**/*.js\"",
-        "lint": "eslint . --config .eslintrc.json --cache --ext .js",
-        "lint-fix": "eslint . --config .eslintrc.json --ext .js --fix"
+        "test": "jest",
+        "clean": "prettier --write \"*.{js,md,ts}\" \"**/**/*.{js,ts}\"",
+        "lint": "eslint . --config .eslintrc.json --cache --ext .js,.ts",
+        "lint-fix": "eslint . --config .eslintrc.json --ext .js,.ts --fix"
     },
     "husky": {
         "hooks": {
             "pre-push": "npm run lint"
         }
-    },
-    "mocha": {
-        "diff": true,
-        "extension": [
-            "js"
-        ],
-        "reporter": "spec",
-        "slow": 75,
-        "timeout": 2000
     },
     "jest": {
         "testEnvironment": "node",
@@ -54,6 +45,8 @@
         "ps-data": "git://github.com/spaceshowdown/ps-data.git",
         "request": "^2.88.2",
         "sockjs-client": "^1.1.4",
+        "sucrase": "^3.15.0",
+        "typescript": "^3.9.5",
         "ytdl-core": "^2.1.7"
     },
     "optionalDependencies": {
@@ -61,13 +54,18 @@
         "node-static": "^0.7.11"
     },
     "devDependencies": {
+        "@types/request": "^2.48.5",
+        "@types/sockjs-client": "^1.1.1",
+        "@typescript-eslint/eslint-plugin": "^3.1.0",
+        "@typescript-eslint/parser": "^3.1.0",
         "eslint": "^7.1.0",
+        "eslint-config-prettier": "^6.11.0",
+        "eslint-plugin-import": "^2.20.2",
+        "eslint-plugin-prettier": "^3.1.3",
         "husky": "^4.2.3",
         "jest": "^26.0.1",
         "mocha": "^7.1.1",
-        "prettier": "2.0.5",
-        "eslint-config-prettier": "^6.11.0",
-        "eslint-plugin-prettier": "^3.1.3"
+        "prettier": "2.0.5"
     },
     "url": "https://github.com/villager/Edna-Moda",
     "bugs": {

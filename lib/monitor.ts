@@ -1,11 +1,9 @@
-'use strict';
-
-const FS = require('./fs');
+import * as FS from './fs';
 
 const logPath = './logs/errors.log';
 const debugPath = './logs/debug.log';
 
-exports.log = function (error, data, server) {
+export function log(error: Error, data: AnyObject, server: string) {
 	let stack = typeof error === 'string' ? error : error.stack;
 	stack += '\nServer ID: ' + server;
 	if (data) {
@@ -22,7 +20,8 @@ exports.log = function (error, data, server) {
 	}).on('error', err => {
 		console.error(`\nSUBCRASH: ${err.stack}\n`);
 	});
-};
+}
+
 exports.debug = function (description) {
 	const Stream = FS(debugPath).createWriteStream({flags: 'a'});
 	Stream.on('open', () => {

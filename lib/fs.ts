@@ -21,10 +21,10 @@
  * @license MIT
  */
 
-'use strict';
+/* eslint-disable */
 
-const pathModule = require('path');
-const fs = require('fs');
+import * as pathModule from 'path';
+import * as fs from 'fs';
 
 const ROOT_PATH = pathModule.resolve(__dirname, '..');
 
@@ -34,6 +34,7 @@ class FSPath {
 	/**
 	 * @param {string} path
 	 */
+	path: string;
 	constructor(path) {
 		this.path = pathModule.resolve(ROOT_PATH, path);
 	}
@@ -154,7 +155,7 @@ class FSPath {
 	 * @param {() => string | Buffer} dataFetcher
 	 * @param {Object} options
 	 */
-	async writeUpdate(dataFetcher, options = {}) {
+	async writeUpdate(dataFetcher, options: AnyObject) {
 		if (Config.nofswriting) return;
 		const pendingUpdate = FS.pendingUpdates.get(this.path);
 		if (pendingUpdate) {
@@ -162,7 +163,7 @@ class FSPath {
 			pendingUpdate[2] = options;
 			return;
 		}
-		let pendingFetcher = /** @type {(() => string | Buffer)?} */ (dataFetcher);
+		let pendingFetcher = /** @type {(() => string | Buffer)?} */ dataFetcher;
 		while (pendingFetcher) {
 			let updatePromise = this.safeWrite(pendingFetcher(), options);
 			FS.pendingUpdates.set(this.path, [updatePromise, null, options]);
@@ -170,7 +171,6 @@ class FSPath {
 			if (options.throttle) {
 				await new Promise(resolve => setTimeout(resolve, options.throttle));
 			}
-			const pendingUpdate = FS.pendingUpdates.get(this.path);
 			if (!pendingUpdate) return;
 			[updatePromise, pendingFetcher, options] = pendingUpdate;
 		}
@@ -378,11 +378,11 @@ function getFs(path) {
 	return new FSPath(path);
 }
 
-const FS = Object.assign(getFs, {
+export const FS = Object.assign(getFs, {
 	/**
 	 * @type {Map<string, [Promise, (() => string | Buffer)?, Object]>}
 	 */
 	pendingUpdates: new Map(),
 });
 
-module.exports = FS;
+/* eslint-enable */

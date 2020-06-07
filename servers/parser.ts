@@ -1,8 +1,16 @@
-'use strict';
-
-class BaseParser {
+export class BaseParser {
+	cmd: string;
+	cmdToken: string;
+	target: string;
+	bot: any;
+	fullCmd: string;
+	room: any | AnyObject | null;
+	topics: AnyObject;
+	user: string | any;
+	pmTarget: string | any;
+	message: string | any;
+	serverType: string;
 	constructor(bot) {
-		this.cmd = '';
 		this.cmd = '';
 		this.cmdToken = '';
 		this.target = '';
@@ -21,18 +29,19 @@ class BaseParser {
 	get lang() {
 		return this.bot.language;
 	}
-	splitToken(message) {
+	sendReply(data: string) {}
+	splitToken(message: string[]) {
 		message = splint(message, ' ');
 		return message;
 	}
-	splitOne(target) {
+	splitOne(target: string) {
 		const commaIndex = target.indexOf(',');
 		if (commaIndex < 0) {
 			return [target.trim(), ''];
 		}
 		return [target.slice(0, commaIndex).trim(), target.slice(commaIndex + 1).trim()];
 	}
-	splitCommand(message) {
+	splitCommand(message: any) {
 		this.cmd = '';
 		this.cmdToken = '';
 		this.target = '';
@@ -40,9 +49,9 @@ class BaseParser {
 		let isWord = false;
 		if (!message || !message.trim().length) return;
 		let cmdToken = message.charAt(0);
-		if (Config.triggers.indexOf(cmdToken) === -1) {
-			let maybeToken = this.splitToken(message);
-			if (Config.triggers.indexOf(maybeToken[0]) > -1) {
+		if (!Config.triggers.includes(cmdToken)) {
+			const maybeToken = this.splitToken(message);
+			if (Config.triggers.includes(maybeToken[0])) {
 				cmdToken = maybeToken[0];
 				isWord = true;
 			} else {
@@ -52,7 +61,7 @@ class BaseParser {
 		let cmd = '',
 			target = '';
 		if (isWord) {
-			let splitWords = this.splitToken(message);
+			const splitWords = this.splitToken(message);
 			if (cmdToken === splitWords[1]) return;
 			if (splitWords.length > 2) {
 				cmd = splitWords[1];
@@ -66,7 +75,7 @@ class BaseParser {
 			}
 		} else {
 			if (cmdToken === message.charAt(1)) return;
-			let spaceIndex = message.indexOf(' ');
+			const spaceIndex = message.indexOf(' ');
 			if (spaceIndex > 0) {
 				cmd = message.slice(1, spaceIndex).toLowerCase();
 				target = message.slice(spaceIndex + 1);
@@ -92,7 +101,7 @@ class BaseParser {
 				return this.splitCommand(cmdToken + 'help ' + fullCmd.slice(0, -4));
 			}
 			if (commandHandler && typeof commandHandler === 'object') {
-				let spaceIndex = target.indexOf(' ');
+				const spaceIndex = target.indexOf(' ');
 				if (spaceIndex > 0) {
 					cmd = target.substr(0, spaceIndex).toLowerCase();
 					target = target.substr(spaceIndex + 1);
@@ -125,16 +134,16 @@ class BaseParser {
 		return false;
 	}
 	runHelp(help) {
-		let commandHandler = this.splitCommand(`${this.cmdToken}help ${help}`);
+		const commandHandler = this.splitCommand(`${this.cmdToken}help ${help}`);
 		this.run(commandHandler);
 	}
 	runCmd(command) {
-		let commandHandler = this.splitCommand(`${this.cmdToken}${command}`);
+		const commandHandler = this.splitCommand(`${this.cmdToken}${command}`);
 		this.run(commandHandler);
 	}
 	loadTopics() {
-		for (let i in this.bot.commands) {
-			let commandHandler = this.bot.commands[i];
+		for (const i in this.bot.commands) {
+			const commandHandler = this.bot.commands[i];
 			if (typeof commandHandler === 'function' || typeof commandHandler === 'object') {
 				if (typeof this.bot.commands[`${i}topic`] === 'string') {
 					if (!this.topics[this.bot.commands[`${i}topic`]]) {
@@ -174,5 +183,3 @@ class BaseParser {
 		return result;
 	}
 }
-
-module.exports = BaseParser;

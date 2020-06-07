@@ -1,6 +1,6 @@
 'use strict';
 
-const Chart = require('./lib/chart');
+const Chart = require('./util/chart');
 const psData = require('ps-data');
 
 exports.Chart = Chart;

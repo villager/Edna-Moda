@@ -1,6 +1,6 @@
 'use strict';
 
-const Chat = (module.exports = {});
+const Chat = exports;
 
 Chat.psCommands = Object.create(null);
 

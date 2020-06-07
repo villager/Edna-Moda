@@ -10,7 +10,9 @@ function getPlugin(plugin) {
 	return plugins[plugin];
 }
 
-const Plugins = (module.exports = getPlugin);
+const Plugins = exports;
+
+Plugins.get = getPlugin;
 
 Plugins.plugins = plugins;
 
@@ -132,7 +134,7 @@ Plugins.initData = function () {
 };
 
 const events = require('./utils/events');
-Plugins.FS = require('../lib/fs');
+Plugins.FS = require('../.lib-dist/fs').FS;
 Plugins.Language = require('./utils/languages');
 Plugins.Timers = require('./utils/timers');
 Plugins.Bins = require('./utils/bins');

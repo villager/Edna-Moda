@@ -1,9 +1,10 @@
-'use strict';
+import {Client} from 'discord.js';
+import {Server} from './server';
 
-const BaseClient = require('discord.js').Client;
-const Server = require('./server');
-
-class DiscordClient extends BaseClient {
+export class DiscordClient extends Client {
+	activity: string;
+	servers: any;
+	name: string;
 	constructor() {
 		super();
 		this.activity = `Usame con: ${Config.triggers.join(' o ')}`;
@@ -76,4 +77,3 @@ class DiscordClient extends BaseClient {
 			});
 	}
 }
-module.exports = DiscordClient;
