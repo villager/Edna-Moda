@@ -2,11 +2,9 @@
 
 const modFiles = ['singles-eff', 'ingame-nostatus', 'random', 'random-move', 'random-switch'];
 
-const Data = require('./battle-data');
+import * as Data from './battle-data';
 
-let modules = Object.create(null);
-
-exports.modules = modules;
+export let modules = Object.create(null);
 
 modFiles.forEach(function (file) {
 	let mod;
@@ -19,7 +17,7 @@ modFiles.forEach(function (file) {
 	}
 });
 
-function choose(battle) {
+export function choose(battle: any) {
 	if (!battle.tier) return null;
 
 	/* Configured Modules */
@@ -61,4 +59,3 @@ function choose(battle) {
 	console.log('Battle module [' + battle.id + '] - Not found, using random');
 	return null;
 }
-exports.choose = choose;

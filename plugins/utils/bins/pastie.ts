@@ -1,4 +1,3 @@
-
 import * as https from 'https';
 
 export function upload(toUpload: string, callback: any) {

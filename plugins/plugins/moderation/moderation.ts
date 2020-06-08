@@ -1,4 +1,3 @@
-
 import * as Storage from './storage';
 
 export const loadData = Storage.loadData;

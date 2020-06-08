@@ -1,4 +1,4 @@
-export function toId (text: string | any) {
+export function toId(text: string | any) {
 	if (text && text.id) {
 		text = text.id;
 	} else if (text && text.username) {
@@ -6,14 +6,14 @@ export function toId (text: string | any) {
 	}
 	if (typeof text !== 'string' && typeof text !== 'number') return '';
 	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
-};
+}
 
-export function toUserName (name: string | any) {
+export function toUserName(name: string | any) {
 	if (name && name.username) {
 		name = name.username;
 	}
 	return ('' + name).toLowerCase().replace(/[^a-z0-9]+/g, '');
-};
+}
 
 export function splint(target: string, separator: string, length: number) {
 	if (!separator) separator = ',';
@@ -59,7 +59,7 @@ export function splint(target: string, separator: string, length: number) {
 export function toName(text: string) {
 	if (!text) return '';
 	return text.trim();
-};
+}
 
 export function escapeHTML(str: string) {
 	if (!str) return '';
@@ -70,7 +70,7 @@ export function escapeHTML(str: string) {
 		.replace(/"/g, '&quot;')
 		.replace(/"/g, '&apos;')
 		.replace(/\//g, '&#x2f;');
-};
+}
 
 export function toDurationString(val: string | number | Date, options: AnyObject = {}) {
 	// TODO: replace by Intl.DurationFormat or equivalent when it becomes available (ECMA-402)

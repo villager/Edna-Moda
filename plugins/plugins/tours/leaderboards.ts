@@ -1,14 +1,13 @@
 /*
  * Tournaments points system
  */
-'use strict';
 
-const path = require('path');
+import * as path from 'path';
 const TOURS_DATA = path.resolve(__dirname, 'data', 'leaderboards.json');
 
-let ladder = (exports.ladder = {});
+export let ladder = Object.create(null);
 
-exports.load = function () {
+export function load() {
 	try {
 		require.resolve('./data/leaderboards.json');
 	} catch (e) {
@@ -20,13 +19,13 @@ exports.load = function () {
 	} catch (e) {
 		Monitor.log(e);
 	}
-};
+}
 
-function isConfigured(server, room) {
+export function isConfigured(server: any, room: string) {
 	if (!server.leaderboards || !server.leaderboards[room]) return false;
 	return true;
 }
-function filterTier(tier, filter) {
+export function filterTier(tier: string, filter: any) {
 	tier = toId(tier || '');
 	if (typeof filter === 'string') {
 		return tier === toId(filter);
@@ -45,7 +44,7 @@ function filterTier(tier, filter) {
 	}
 }
 
-function getConfig(server, room) {
+export function getConfig(server, room) {
 	let res = {
 		tierFilter: null,
 		onlyOfficial: false,
@@ -63,7 +62,7 @@ function getConfig(server, room) {
 	return res;
 }
 
-function parseTourTree(tree) {
+export function parseTourTree(tree) {
 	let auxobj = {};
 	let team = tree.team;
 	let state = tree.state;
@@ -82,10 +81,10 @@ function parseTourTree(tree) {
 	return auxobj;
 }
 
-function parseTournamentResults(data) {
+export function parseTournamentResults(data) {
 	let generator = toId(data.generator || '');
 	if (generator === 'singleelimination') {
-		let res = {};
+		let res: any = {};
 		let parsedTree = parseTourTree(data.bracketData.rootNode);
 		res.players = Object.keys(parsedTree);
 		res.general = {};
@@ -122,7 +121,7 @@ function parseTournamentResults(data) {
 	}
 }
 
-function getPoints(server, room, user) {
+export function getPoints(server, room, user) {
 	let userid = toId(user);
 	let roomConfig = getConfig(server, room);
 	let pWin = roomConfig.winnerPoints;
@@ -149,7 +148,7 @@ function getPoints(server, room, user) {
 	res.points = pWin * res.wins + res.finals * pFinal + res.semis * pSemiFinal + res.battles * pBattle;
 	return res;
 }
-function getTop(server, room) {
+export function getTop(server, room) {
 	if (!isConfigured(server, room)) return null;
 	let roomConfig = getConfig(server, room);
 	let pWin = roomConfig.winnerPoints;
@@ -178,7 +177,7 @@ function getTop(server, room) {
 	});
 }
 
-function getTable(server, room, n) {
+export function getTable(server, room, n) {
 	if (!isConfigured(server, room)) return null;
 	let top = getTop(server, room);
 	if (!top) return null;
@@ -207,7 +206,7 @@ function getTable(server, room, n) {
 	}
 	return table;
 }
-function addUser(server, room, user, type, auxData) {
+export function addUser(server, room, user, type, auxData?) {
 	if (!ladder[server.id]) ladder[server.id] = {};
 	if (!ladder[server.id][room]) ladder[server.id][room] = {};
 	let userid = toId(user);
@@ -234,7 +233,7 @@ function addUser(server, room, user, type, auxData) {
 	}
 }
 
-function writeResults(server, room, results) {
+export function writeResults(server, room, results) {
 	if (!results) return;
 	for (let i = 0; i < results.players.length; i++) addUser(server, room, results.players[i], 'A');
 	if (results.winner) addUser(server, room, results.winner, 'W');
@@ -242,7 +241,7 @@ function writeResults(server, room, results) {
 	for (let i = 0; i < results.semiFinalists.length; i++) addUser(server, room, results.semiFinalists[i], 'S');
 	for (let user in results.general) addUser(server, room, user, 'B', results.general[user]);
 }
-function onTournamentEnd(server, room, data) {
+export function onTournamentEnd(server, room, data) {
 	if (!isConfigured(server, room)) return;
 	if (!data.isOfficialTour) {
 		//debug(JSON.stringify(getConfig(room)));
@@ -262,12 +261,12 @@ function onTournamentEnd(server, room, data) {
 	Monitor.debug('Updating leaderboard...');
 	writeResults(server, room, results);
 	Plugins.FS(TOURS_DATA).writeUpdate(() => JSON.stringify(ladder));
-	Monitor.debug('Leaderboard updated. ' + Plugins.getDateString());
+	Monitor.debug('Leaderboard updated. ' + Plugins.Utils.getDateString());
 }
 
-let resetCodes = (exports.resetCodes = {});
+export let resetCodes = Object.create(null);
 
-function getResetHashCode(server, room) {
+export function getResetHashCode(server, room) {
 	if (!ladder[server.id][room]) return null;
 	for (let i in resetCodes) {
 		if (resetCodes[server.id][i] === room) delete resetCodes[server.id][i];
@@ -276,7 +275,7 @@ function getResetHashCode(server, room) {
 	resetCodes[server.id][code] = room;
 	return code;
 }
-function execResetHashCode(server, code) {
+export function execResetHashCode(server, code) {
 	if (resetCodes[server.id][code]) {
 		let room = resetCodes[code];
 		if (ladder[server.id][room]) {
@@ -288,16 +287,3 @@ function execResetHashCode(server, code) {
 	}
 	return false;
 }
-exports.isConfigured = isConfigured;
-exports.filterTier = filterTier;
-exports.parseTourTree = parseTourTree;
-exports.getConfig = getConfig;
-exports.parseTournamentResults = parseTournamentResults;
-exports.getPoints = getPoints;
-exports.getTop = getTop;
-exports.getTable = getTable;
-exports.addUser = addUser;
-exports.writeResults = writeResults;
-exports.onTournamentEnd = onTournamentEnd;
-exports.getResetHashCode = getResetHashCode;
-exports.execResetHashCode = execResetHashCode;

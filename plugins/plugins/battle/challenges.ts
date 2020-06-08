@@ -1,13 +1,10 @@
-'use strict';
+export let challenges: any = {};
 
-let challenges = {};
-exports.challenges = challenges;
+import * as Teams from './teams';
 
-const Teams = require('./teams');
+import * as Battle from './';
 
-const Battle = require('./');
-
-function canChallenge(server, i, nBattles) {
+function canChallenge(server: any, i: string, nBattles: number) {
 	if (!nBattles) return true; //If it is not busy, accept the challenge
 	if (Config.battles.disable) return false;
 	if (Config.battles.all) return true; //Acept all challenges if "aceptAll" is enabled
@@ -16,7 +13,7 @@ function canChallenge(server, i, nBattles) {
 	return false;
 }
 
-exports.parse = function (server, room, message, isIntro, spl) {
+export function parse(server, room, message, isIntro, spl) {
 	if (spl[0] !== 'updatechallenges') return;
 	//let nBattles = Object.keys(Battle.countBattles[server]).length;
 	let nBattles = Battle.countBattles[server.id];
@@ -51,4 +48,4 @@ exports.parse = function (server, room, message, isIntro, spl) {
 			}
 		}
 	}
-};
+}

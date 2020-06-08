@@ -1,4 +1,3 @@
-
 import * as path from 'path';
 
 let dyns = Object.create(null);

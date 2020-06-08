@@ -1,4 +1,3 @@
-
 export class UtilTimer {
 	timer: null | any;
 	time: number;

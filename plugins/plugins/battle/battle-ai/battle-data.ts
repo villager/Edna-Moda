@@ -1,8 +1,7 @@
-'use strict';
 
-const psData = require('ps-data');
+import * as psData from 'ps-data';
 
-function getEffect(effect, gen) {
+export function getEffect(effect: string | any, gen?: number) {
 	if (!effect || typeof effect === 'string') {
 		let name = (effect || '').trim();
 		if (name.substr(0, 5) === 'item:') {
@@ -14,12 +13,12 @@ function getEffect(effect, gen) {
 		}
 
 		let id = toId(name);
-		effect = {};
+		effect= {};
 
-		let pMove = getMove(id, gen);
-		let pAbility = getAbility(id, gen);
-		let pItem = getItem(id, gen);
-		let statuses = psData.getStatuses();
+		let pMove: any = getMove(id, gen);
+		let pAbility: any = getAbility(id, gen);
+		let pItem: any = getItem(id, gen);
+		let statuses: any = psData.getStatuses();
 
 		if (id && statuses && statuses[id]) {
 			effect = statuses[id];
@@ -52,10 +51,10 @@ function getEffect(effect, gen) {
 	return effect;
 }
 
-function getTemplate(poke, gen) {
+export function getTemplate(poke: string, gen?:number) {
 	if (!gen || gen > 8 || gen < 1) gen = 8;
 	poke = toId(poke || '');
-	let pokemon = {};
+	let pokemon: any = {};
 	let temp;
 	for (let i = 8; i >= gen; i--) {
 		try {
@@ -82,14 +81,14 @@ function getTemplate(poke, gen) {
 	}
 	return pokemon;
 }
-
-function getMove(move, gen) {
+export const getPokemon = getTemplate;
+export function getMove(move: string, gen?:number) {
 	if (!gen || gen > 8 || gen < 1) gen = 8;
 	move = toId(move || '');
 	if (move.indexOf('hiddenpower') === 0) {
 		move = move.replace(/[0-9]/g, '');
 	}
-	let moveData = {};
+	let moveData: any = {};
 	let temp;
 	for (let i = 8; i >= gen; i--) {
 		try {
@@ -124,10 +123,10 @@ function getMove(move, gen) {
 	return moveData;
 }
 
-function getItem(item, gen) {
+export function getItem(item:string, gen?: number) {
 	if (!gen || gen > 8 || gen < 1) gen = 8;
 	item = toId(item || '');
-	let itemData = {};
+	let itemData: any = {};
 	let temp;
 	for (let i = 8; i >= gen; i--) {
 		try {
@@ -155,10 +154,10 @@ function getItem(item, gen) {
 	return itemData;
 }
 
-function getAbility(ab, gen) {
+export function getAbility(ab: string, gen?:number) {
 	if (!gen || gen > 8 || gen < 1) gen = 8;
 	ab = toId(ab || '');
-	let ability = {};
+	let ability: any = {};
 	let temp;
 	for (let i = 8; i >= gen; i--) {
 		try {
@@ -186,7 +185,13 @@ function getAbility(ab, gen) {
 	return ability;
 }
 
-class Move {
+export class Move {
+	template: any;
+	name: string;
+	id: string;
+	pp: number;
+	disabled: Boolean;
+	helpers: any;
 	constructor(template) {
 		if (!template || typeof template !== 'object') throw new Error('Invalid move template');
 		this.template = template;
@@ -206,7 +211,34 @@ class Move {
 	}
 }
 
-class Pokemon {
+export class Pokemon {
+	template: any;
+	species: string;
+	name: string;
+	transformed: Boolean;
+	transformPrev: string | null | any;
+	gender: Boolean | string;
+	level: number;
+	item: string | any;
+	shiny: Boolean;
+	itemEffect: string;
+	prevItem: null | string | any;
+	prevItemEffect: string;
+	ability: string | any;
+	supressedAbility: Boolean;
+	baseAbility: string | any;
+	abilityStack: string[]
+	moves: any[];
+	active: Boolean;
+	slot: number;
+	hp: number;
+	fainted: Boolean;
+	status: Boolean;
+	volatiles: any;
+	boosts: any;
+	passing: Boolean;
+	prepared: null | any;
+	helpers: any;
 	constructor(template, properties) {
 		if (!template || typeof template !== 'object') throw new Error('Invalid pokemon template');
 
@@ -373,7 +405,15 @@ class Pokemon {
 	}
 }
 
-class Player {
+export class Player {
+	id: string;
+	name: string;
+	userid: string;
+	avatar: number | string;
+	side: any;
+	pokemon: any;
+	teamPv: any;
+	active: any;
 	constructor(id, name, avatar) {
 		this.id = id || 'p0';
 		this.name = name || '';
@@ -410,7 +450,7 @@ class Player {
 	}
 }
 
-function getFormatsData(gen) {
+export function getFormatsData(gen) {
 	if (!gen || gen > 8 || gen < 1) gen = 8;
 	try {
 		return psData.getFormatsData(gen);
@@ -418,13 +458,3 @@ function getFormatsData(gen) {
 		Monitor.log(e, 'Format Data Not Found', 'Globaal');
 	}
 }
-
-exports.getFormatsData = getFormatsData;
-exports.Player = Player;
-exports.Pokemon = Pokemon;
-exports.Move = Move;
-exports.getAbility = getAbility;
-exports.getItem = getItem;
-exports.getMove = getMove;
-exports.getTemplate = exports.getPokemon = getTemplate;
-exports.getEffect = getEffect;

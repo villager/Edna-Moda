@@ -1,5 +1,3 @@
-
-
 const Lang = Plugins.Language.load();
 
 const LANG_LIST = new Set(['en', 'es']);

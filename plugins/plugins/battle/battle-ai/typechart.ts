@@ -1,6 +1,4 @@
-'use strict';
-
-function getMultipleEff(typeA, typeB, gen, notInmmune) {
+export function getMultipleEff(typeA: string, typeB: string, gen: number, notInmmune: Boolean) {
 	let mux = 1;
 	let tmp;
 	for (let i = 0; i < typeB.length; i++) {
@@ -11,7 +9,7 @@ function getMultipleEff(typeA, typeB, gen, notInmmune) {
 	return mux;
 }
 
-function getEffectiveness(typeA, typeB, gen) {
+export function getEffectiveness(typeA: string, typeB: string, gen: number) {
 	if (!gen) gen = 8;
 	let chart = exports.gen8;
 	if (['gen' + gen]) chart = ['gen' + gen];
@@ -28,7 +26,7 @@ function getEffectiveness(typeA, typeB, gen) {
 	}
 }
 
-const gen8 = {
+export const gen8 = {
 	Bug: {
 		Bug: 0,
 		Dark: 0,
@@ -390,13 +388,10 @@ const gen8 = {
 		Water: 2,
 	},
 };
-exports.gen8 = gen8;
-const gen6 = exports.gen8;
-exports.gen6 = gen6;
-const gen7 = exports.gen8;
-exports.gen7 = gen7;
+export const gen6 = gen8;
+export const gen7 = gen8;
 
-const gen2 = {
+export const gen2 = {
 	Bug: {
 		Bug: 0,
 		Dark: 0,
@@ -758,15 +753,11 @@ const gen2 = {
 		Water: 2,
 	},
 };
-exports.gen2 = gen2;
-const gen3 = exports.gen2;
-exports.gen3 = gen3;
-const gen4 = exports.gen2;
-exports.gen4 = gen4;
-const gen5 = exports.gen2;
-exports.gen5 = gen5;
+export const gen5 = gen2;
+export const gen4 = gen2;
+export const gen3 = gen2;
 
-const gen1 = {
+export const gen1 = {
 	Bug: {
 		Bug: 0,
 		Dark: 0,
@@ -1128,7 +1119,3 @@ const gen1 = {
 		Water: 2,
 	},
 };
-
-exports.gen1 = gen1;
-exports.getEffectiveness = getEffectiveness;
-exports.getMultipleEff = getMultipleEff;

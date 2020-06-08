@@ -27,7 +27,7 @@ export function load(pluginPath: string) {
 	}
 	return (plugins[pluginPath] = plugin);
 }
-export function forEach(callback:any, thisArg?: any) {
+export function forEach(callback: any, thisArg?: any) {
 	return Object.values(plugins).forEach(callback, thisArg);
 }
 

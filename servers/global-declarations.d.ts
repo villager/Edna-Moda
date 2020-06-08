@@ -19,7 +19,7 @@ declare global {
 			Server: any;
 			Monitor: any;
 			toId(input: any): string;
-			toUserName(input:any): string;
+			toUserName(input: any): string;
 			splint(target: string, param?: string, len?: number): string[];
 			Plugins: any;
 			Chat: any;

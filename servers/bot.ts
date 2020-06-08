@@ -32,13 +32,13 @@ function getBot(bot: string) {
 		return bots[bot];
 	}
 }
-export const Bot = global.Bot = {
+export const Bot = (global.Bot = {
 	bots: bots,
 	get: getBot,
-	forEach(callback:any, thisArg:any) {
+	forEach(callback: any, thisArg: any) {
 		Object.values(bots).forEach(callback, thisArg);
 	},
-};
+});
 
 global.toId = Plugins.Utils.toId;
 global.splint = Plugins.Utils.splint;
@@ -55,7 +55,7 @@ interface ServerHolder {
 }
 
 class GBot {
-	discord:  DiscordClient | null;
+	discord: DiscordClient | null;
 	servers: ServerHolder;
 	constructor() {
 		this.discord = null;

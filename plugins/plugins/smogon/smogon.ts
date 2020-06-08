@@ -1,4 +1,3 @@
-
 import * as path from 'path';
 
 const LANG_DIR = path.resolve(__dirname, 'language.json');
@@ -73,7 +72,7 @@ function chatPokeHTML(lang, poke) {
 	poke = toId(poke);
 	let data = Dex.getPokemon(poke);
 	if (!data) return false;
-	let pD:any = pokeData(lang, poke);
+	let pD: any = pokeData(lang, poke);
 	let output = '';
 	output += `<center><strong>${data.name} #${data.num}</strong></center>`;
 	output += `<table width="100%">`;
@@ -121,7 +120,7 @@ function embedPokemon(lang, poke) {
 	});
 }
 
-export function init () {};
+export function init() {}
 
 export const psCommands = {
 	pokemon: 'dt',

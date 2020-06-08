@@ -1,9 +1,8 @@
-'use strict';
+import * as psData from 'ps-data';
+import * as Storage from '../storage';
 
-const psData = require('ps-data');
-const Storage = require('../storage');
-function searchSpanish(lookingfor) {
-	let found = false;
+export function searchSpanish(lookingfor: string) {
+	let found: any = false;
 	lookingfor = toId(lookingfor);
 	let lookingIn = [
 		[Storage.moves, 'Move'],
@@ -25,7 +24,7 @@ function searchSpanish(lookingfor) {
 	}
 	return found;
 }
-function searchTemplate(lookingfor) {
+export function searchTemplate(lookingfor: string) {
 	lookingfor = toId(lookingfor);
 	if (psData.getDex(8)[lookingfor]) {
 		return 'Pokemon';
@@ -41,8 +40,9 @@ function searchTemplate(lookingfor) {
 		return false;
 	}
 }
+export const search = searchTemplate;
 
-function getGen(name, num) {
+export function getGen(name: string, num: number) {
 	name = name.toLowerCase();
 	let gen;
 	if (num > 1) {
@@ -68,7 +68,7 @@ function getGen(name, num) {
 	}
 	return gen;
 }
-function getPokemon(poke) {
+export function getPokemon(poke: string) {
 	let data = psData.getDex(8)[poke];
 	if (!data) return false;
 	let abilities = [];
@@ -85,20 +85,14 @@ function getPokemon(poke) {
 		gen: getGen(data.name, data.num),
 	};
 }
-function searchAbilitieByNum(num) {
+export function searchAbilitieByNum(num: number) {
 	for (let i in psData.getAbilities(8)) {
 		let abilitie = psData.getAbilities(8)[i];
 		if (abilitie.num === num) return i;
 	}
 	return false;
 }
-function getMove(move) {
+export function getMove(move: string) {
 	move = toId(move);
 	return psData.getMoves(8)[move];
 }
-exports.searchSpanish = searchSpanish;
-exports.getMove = getMove;
-exports.getGen = getGen;
-exports.search = searchTemplate;
-exports.getPokemon = getPokemon;
-exports.searchAbilitieByNum = searchAbilitieByNum;

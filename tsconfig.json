@@ -11,7 +11,8 @@
     },
     "types": ["node"],
     "exclude": [
-        "./.*-dist/**/*"
+        "./.*-dist/**/*",
+        "*.spec.ts"
     ],
     "include": [
         "./lib/*",

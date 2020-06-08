@@ -1,9 +1,8 @@
-'use strict';
+import * as Bins from './index';
 
-const Bins = require('./index');
 let getLink = '';
 test('Upload a link', () => {
-	Bins.upload('Test', (r, link) => {
+	Bins.upload('Test', (r: any, link: string) => {
 		if (r) {
 			expect(typeof link).toBe('string');
 			getLink = link;
@@ -15,7 +14,7 @@ test('Link is defined!', () => {
 });
 test('Download a link', () => {
 	let splitLink = getLink.split('/');
-	Bins.download(splitLink[1], data => {
+	Bins.download(splitLink[1], (data: string) => {
 		expect(data).toBeDefined();
 	});
 });

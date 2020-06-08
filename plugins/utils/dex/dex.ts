@@ -1,11 +1,9 @@
-
 import * as ChartPath from './lib/chart';
 
 export const Chart: AnyObject = ChartPath;
 
 // @ts-ignore
 import * as psData from 'ps-data';
-
 
 export function teamToJSON(text: string | any) {
 	text = text.split('\n');
@@ -112,8 +110,8 @@ export function teamToJSON(text: string | any) {
 		}
 	}
 	return team;
-};
-export function packTeam (team: AnyObject[]) {
+}
+export function packTeam(team: AnyObject[]) {
 	let buf = '';
 	if (!team) return '';
 
@@ -233,7 +231,7 @@ export function packTeam (team: AnyObject[]) {
 	return buf;
 }
 
-export function exportTeam (team: AnyObject[]| string) {
+export function exportTeam(team: AnyObject[] | string) {
 	if (!team) return '';
 	if (typeof team === 'string') {
 		if (team.indexOf('\n') >= 0) return team;

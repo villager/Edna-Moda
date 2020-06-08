@@ -1,4 +1,3 @@
-
 import * as path from 'path';
 
 export let blacklist = Object.create(null);
@@ -21,4 +20,4 @@ export function loadData() {
 			Monitor.log(e);
 		}
 	}
-};
+}

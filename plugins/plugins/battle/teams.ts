@@ -1,8 +1,6 @@
-'use strict';
+import * as Storage from './storage';
 
-const Storage = require('./storage');
-
-let teams = Object.create(null);
+export let teams = Object.create(null);
 
 function mergeTeams() {
 	for (let i in Storage.teams) {
@@ -12,7 +10,7 @@ function mergeTeams() {
 	}
 }
 
-function addTeam(name, format, packed) {
+function addTeam(name: string, format: string, packed: AnyObject) {
 	if (Storage.isSaved(name)) return false;
 	Storage.teams[name] = {
 		format: format,
@@ -23,19 +21,19 @@ function addTeam(name, format, packed) {
 	return true;
 }
 
-function removeTeam(name) {
+function removeTeam(name: string) {
 	if (!Storage.isSaved(name)) return false;
 	delete Storage.teams[name];
 	Storage.saveTeams();
 	mergeTeams();
 	return true;
 }
-function getTeam(format) {
+function getTeam(format: string) {
 	let formatId = toId(format);
 	let teamStuff = teams[formatId];
 	if (!teamStuff || !teamStuff.length) return false;
 	let teamChosen = teamStuff[Math.floor(Math.random() * teamStuff.length)]; //choose team
-	let teamStr = '';
+	let teamStr: any = '';
 	try {
 		if (typeof teamChosen === 'string') {
 			//already parsed
@@ -68,18 +66,18 @@ function getTeam(format) {
 		console.log(e.stack);
 	}
 }
-function packTeam(team) {
+function packTeam(team: AnyObject[]) {
 	Plugins.Dex.packTeam(team);
 }
-function hasTeam(format) {
+function hasTeam(format: string) {
 	let formatId = toId(format);
 	if (teams[formatId]) return true;
 	return false;
 }
 
-exports.add = addTeam;
-exports.packed = packTeam;
-exports.remove = removeTeam;
-exports.merge = mergeTeams;
-exports.get = getTeam;
-exports.has = hasTeam;
+export const add = addTeam;
+export const packed = packTeam;
+export const remove = removeTeam;
+export const merge = mergeTeams;
+export const get = getTeam;
+export const has = hasTeam;

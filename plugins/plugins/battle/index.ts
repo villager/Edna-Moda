@@ -1,11 +1,9 @@
-'use strict';
+import * as Storage from './storage';
+import * as Challenges from './challenges';
+import * as Teams from './teams';
+import * as BattleBot from './battle-ai';
 
-const Storage = require('./storage');
-const Challenges = require('./challenges');
-const Teams = require('./teams');
-const BattleBot = require('./battle-ai');
-
-let countBattles = Object.create(null);
+export let countBattles = Object.create(null);
 
 Config.battles = {
 	disable: false,
@@ -13,7 +11,7 @@ Config.battles = {
 	all: false,
 };
 
-function onParse(server, room, data, isIntro, spl) {
+export function onParse(server, room, data, isIntro, spl) {
 	switch (spl[0]) {
 		case 'updatechallenges':
 			Challenges.parse(server, room, data, isIntro, spl);
@@ -32,9 +30,9 @@ function onParse(server, room, data, isIntro, spl) {
 		Monitor.log(e, null, server);
 	}
 }
-exports.loadData = Storage.loadData;
+export const loadData = Storage.loadData;
 
-exports.init = function () {
+export function init() {
 	// Initialize countBattles
 	Bot.forEach(bot => {
 		countBattles[bot.id] = 0;
@@ -42,5 +40,4 @@ exports.init = function () {
 	Teams.merge();
 	BattleBot.init();
 	Plugins.eventEmitter.on('PS_PARSE', onParse);
-};
-exports.countBattles = countBattles;
+}

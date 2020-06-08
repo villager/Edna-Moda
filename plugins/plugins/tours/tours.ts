@@ -1,20 +1,35 @@
-'use strict';
-
 /*
 	Tournaments Manager Feature
 */
-const path = require('path');
+import * as path from 'path';
 
 const LANG_DIR = path.resolve(__dirname, 'langs.json');
-let tournaments = (exports.tournaments = {});
-let tourData = (exports.tourData = {});
-let winners = Object.create(null);
+
+export let tournaments = Object.create(null);
+export let tourData = Object.create(null);
+export let winners = Object.create(null);
 const Lang = Plugins.Language.load(LANG_DIR);
 
-const Leaderboards = (exports.Leaderboards = require('./leaderboards'));
-exports.key = 'showdown';
+import * as LeaderboardsPath from './leaderboards';
+
+export const Leaderboards = LeaderboardsPath;
+
+export const key = 'showdown';
+
 class Tournament {
-	constructor(server, room, details) {
+	format: string;
+	type: string;
+	users: number;
+	maxUsers: number | null;
+	signups: Boolean;
+	started: Boolean;
+	startTimer: null | any;
+	room: string;
+	timeToStart: number;
+	scoutProtect: any | Boolean;
+	server: any;
+	autoDq: Boolean;
+	constructor(server: any, room: string, details: AnyObject) {
 		this.format = details.format || 'gen8randombattle';
 		this.type = details.type || 'elimination';
 		this.users = 0;
@@ -151,9 +166,9 @@ function parseTournament(server, room, message, isIntro, spl) {
 	}
 }
 
-exports.loadData = Leaderboards.load;
+export const loadData = Leaderboards.load;
 
-exports.init = function () {
+export function init() {
 	Plugins.eventEmitter.on('PS_PARSE', parseTournament);
 	for (let i in tournaments) {
 		for (let x in tournaments[i]) {
@@ -166,8 +181,8 @@ exports.init = function () {
 			delete tourData[i][x];
 		}
 	}
-};
-exports.commands = {
+}
+export const commands = {
 	tourhelp: true,
 	tourendtopic: 'tour',
 	tourstart: 'tourend',
@@ -192,7 +207,7 @@ exports.commands = {
 			if (toId(target) === 'start') return this.runCmd('tourstart');
 			return this.sendReply(Lang.getSub(this.lang, 'tour', 'e2'));
 		}
-		let details = {
+		let details: any = {
 			format: 'ou',
 			type: 'elimination',
 			maxUsers: null,

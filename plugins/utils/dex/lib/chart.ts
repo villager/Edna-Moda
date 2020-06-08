@@ -1,4 +1,3 @@
-
 export const StatsId = {
 	HP: 'hp',
 	hp: 'hp',
@@ -17,7 +16,7 @@ export const StatsId = {
 	Spe: 'spe',
 	Spd: 'spe',
 	spe: 'spe',
-}
+};
 
 export const StatsName = {
 	hp: 'HP',
@@ -26,7 +25,7 @@ export const StatsName = {
 	spa: 'SpA',
 	spd: 'SpD',
 	spe: 'Spe',
-}
+};
 export const Type = {
 	Bug: {
 		damageTaken: {
@@ -469,4 +468,4 @@ export const Type = {
 		HPivs: {atk: 30, def: 30, spa: 30},
 		HPdvs: {atk: 14, def: 13},
 	},
-}
+};

@@ -1,4 +1,3 @@
-
 export let psCommands = Object.create(null);
 
 export let globalCommands = Object.create(null);

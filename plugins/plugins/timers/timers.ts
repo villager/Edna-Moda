@@ -1,4 +1,3 @@
-
 export const key = ['showdown', 'discord'];
 let timers = Object.create(null);
 
@@ -44,7 +43,7 @@ class Timer extends Plugins.Timers {
 	}
 }
 
-export function init() {};
+export function init() {}
 export const psCommands = {
 	timer: {},
 };

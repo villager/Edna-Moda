@@ -1,4 +1,3 @@
-
 import * as HastebinPath from './hastebin';
 
 import * as PastiePath from './pastie';

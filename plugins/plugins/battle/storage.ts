@@ -1,17 +1,15 @@
-'use strict';
+export let teams = Object.create(null);
+export let autoJoin = Object.create(null);
 
-let teams = Object.create(null);
-let autoJoin = Object.create(null);
-
-const path = require('path');
+import * as path from 'path';
 
 const TEAMS_DIR = path.resolve(__dirname, 'data', 'teams.json');
 const AUTOJOIN_DIR = path.resolve(__dirname, 'data', 'autojoin.json');
 
-exports.saveTeams = () => Plugins.FS(TEAMS_DIR).writeUpdate(() => JSON.stringify(teams));
-exports.saveJoins = () => Plugins.FS(AUTOJOIN_DIR).writeUpdate(() => JSON.stringify(autoJoin));
+export const saveTeams = () => Plugins.FS(TEAMS_DIR).writeUpdate(() => JSON.stringify(teams));
+export const saveJoins = () => Plugins.FS(AUTOJOIN_DIR).writeUpdate(() => JSON.stringify(autoJoin));
 
-exports.loadData = function () {
+export function loadData() {
 	let fileData = [
 		['teams.json', teams],
 		['autojoin.json', autoJoin],
@@ -29,10 +27,8 @@ exports.loadData = function () {
 			Monitor.log(e);
 		}
 	}
-};
-exports.isSaved = function (name) {
+}
+export function isSaved(name: string) {
 	if (teams[name]) return true;
 	return false;
-};
-exports.teams = teams;
-exports.autoJoin = autoJoin;
+}

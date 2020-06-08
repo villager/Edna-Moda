@@ -1,6 +1,4 @@
-'use strict';
-
-const https = require('https');
+import * as https from 'https';
 const API_LINK = 'https://pokeapi.co/api/v2';
 
 function searchDataRaw(link) {
@@ -27,11 +25,11 @@ function searchDataRaw(link) {
 			.setTimeout(3500);
 	});
 }
-function searchData(link) {
+function searchData(link: string) {
 	return new Promise((resolve, reject) => {
 		searchDataRaw(link)
-			.then(data => {
-				let rawData = {spanish: {name: '', desc: ''}, english: {name: '', desc: ''}};
+			.then((data: AnyObject) => {
+				let rawData: AnyObject = {spanish: {name: '', desc: ''}, english: {name: '', desc: ''}};
 				for (const name of data.names) {
 					if (name.language.name === 'es') {
 						rawData.spanish.name = name.name;
@@ -55,7 +53,7 @@ function searchData(link) {
 			.catch(e => reject(e));
 	});
 }
-function searchAbilitie(num) {
+export function searchAbilitie(num: number) {
 	return new Promise((resolve, reject) => {
 		searchData(`${API_LINK}/ability/${num}`)
 			.then(data => {
@@ -64,7 +62,7 @@ function searchAbilitie(num) {
 			.catch(e => reject(e));
 	});
 }
-function searchItem(num) {
+export function searchItem(num: number) {
 	return new Promise((resolve, reject) => {
 		searchData(`${API_LINK}/move/${num}`)
 			.then(data => {
@@ -73,5 +71,3 @@ function searchItem(num) {
 			.catch(e => reject(e));
 	});
 }
-exports.searchAbilitie = searchAbilitie;
-exports.searchItem = searchItem;
