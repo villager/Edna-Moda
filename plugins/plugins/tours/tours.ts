@@ -1,9 +1,8 @@
 /*
 	Tournaments Manager Feature
 */
-import * as path from 'path';
 
-const LANG_DIR = path.resolve(__dirname, 'langs.json');
+const LANG_DIR = Plugins.resolve('langs.json');
 
 export let tournaments = Object.create(null);
 export let tourData = Object.create(null);
@@ -182,7 +181,7 @@ export function init() {
 		}
 	}
 }
-export const commands = {
+export const commands: ChatCommands = {
 	tourhelp: true,
 	tourendtopic: 'tour',
 	tourstart: 'tourend',

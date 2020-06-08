@@ -76,15 +76,23 @@ function copyDir(file, out) {
 		if (err) throw err;
 		if (stats.isSymbolicLink()) return;
 		if (stats.isFile()) {
-			fs.readFile(file,  "utf-8", function (err, text) {
-				if(err) throw err;
-				let extName = path.extname(file);
-				if(extName !== '.ts') {
-					fs.writeFile(out, text, function (err) {
-						if (err) throw err;
-					});						
-				}
-			});
+			let extName = path.extname(file);
+			if(extName !== '.ts') {
+				fs.readFile(file,  "utf-8", function (err, text) {
+					if(err) throw err;
+					if(file.startsWith("data")) {
+						if(file.slice(-8) === "-example") {
+							fs.writeFile(out, text, function (err) {
+								if (err) throw err;
+							});						
+						}
+					} else {
+						fs.writeFile(out, text, function (err) {
+							if (err) throw err;
+						});		
+					}
+				});
+			}
 		} else if(stats.isDirectory()) {
 			fs.readdir(file, function (err, files) {
 				if (err) throw err;

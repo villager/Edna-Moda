@@ -2,7 +2,7 @@
 
 export const key = 'discord';
 
-export const commands = {
+export const commands: ChatCommands = {
 	play(target, room, user, message) {
 		this.guild.channels.cache.forEach(channel => {
 			if (parseInt(channel.id) === 718722987351867413) {

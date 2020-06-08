@@ -6,7 +6,7 @@ if (!global.Config) global.Config = require('../config/config');
 
 declare const global: any;
 
-import * as Plugins from '../plugins';
+import {Plugins} from '../plugins';
 
 global.Plugins = Plugins;
 
@@ -43,7 +43,9 @@ export const Bot = (global.Bot = {
 global.toId = Plugins.Utils.toId;
 global.splint = Plugins.Utils.splint;
 global.toUserName = Plugins.Utils.toUserName;
+// @ts-ignore
 Plugins.init();
+
 const listeners: number = (Object.keys(Config.servers).length + 1) * Object.keys(Plugins.plugins).length;
 Plugins.eventEmitter.setMaxListeners(listeners);
 

@@ -43,7 +43,7 @@ function isBlackList(server, room, user) {
 	if (Storage.blacklist[server][room][toId(user)]) return true;
 	return false;
 }
-export const commands = {
+export const commands: ChatCommands = {
 	blacklist: {
 		add(target, room, user) {
 			if (!this.can('ban', true)) return false;

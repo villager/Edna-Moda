@@ -30,7 +30,7 @@ class Timer extends Plugins.Timers {
 		this.midAnnunce.start(() => {
 			this.mid();
 		});
-		this.start(() => {
+		super.start(() => {
 			this.send(`El tiempo se ha acabado!`);
 		});
 	}
@@ -38,17 +38,17 @@ class Timer extends Plugins.Timers {
 		this.send(`Quedan ${this.time / 2 / 1000} segundos`);
 	}
 	clearTimers() {
-		this.clear();
+		super.clear();
 		this.midAnnunce.clear();
 	}
 }
 
 export function init() {}
-export const psCommands = {
+export const psCommands: ChatCommands = {
 	timer: {},
 };
 
-export const discordCommands = {
+export const discordCommands: ChatCommands = {
 	timertopic: 'dynamic',
 	timer: {
 		new(target, room, user) {

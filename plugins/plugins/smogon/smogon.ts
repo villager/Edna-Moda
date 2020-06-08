@@ -122,7 +122,7 @@ function embedPokemon(lang, poke) {
 
 export function init() {}
 
-export const psCommands = {
+export const psCommands: ChatCommands = {
 	pokemon: 'dt',
 	dt(target) {
 		if (!target) return this.sendReply(Lang.getSub(this.lang, 'data', 'target'));
@@ -156,7 +156,7 @@ export const psCommands = {
 	},
 	dttopic: 'pokedata',
 };
-export const discordCommands = {
+export const discordCommands: ChatCommands = {
 	dttopic: 'pokedata',
 	dt(target) {
 		if (!target) return this.sendReply(Lang.getSub(this.lang, 'data', 'target'));

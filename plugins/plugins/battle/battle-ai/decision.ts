@@ -1,11 +1,16 @@
-'use strict';
-
 /**
  * Decision maker
  */
 
-class MoveDecision {
-	constructor(moveId, target, mega, move, zmove, ultra) {
+export class MoveDecision {
+	moveId: string;
+	zmove: Boolean | string;
+	readonly type: string;
+	mega: string | Boolean;
+	move: string;
+	ultra: string | Boolean;
+	target: any;
+	constructor(moveId, target, mega, move, zmove?, ultra?) {
 		this.type = 'move';
 		this.move = move || 'struggle';
 		this.moveId = moveId || 0;
@@ -16,7 +21,10 @@ class MoveDecision {
 	}
 }
 
-class SwitchDecision {
+export class SwitchDecision {
+	readonly type: string;
+	poke: string | any;
+	pokeId: number;
 	constructor(pokeId, poke) {
 		this.type = 'switch';
 		this.poke = poke || 'pikachu';
@@ -24,31 +32,29 @@ class SwitchDecision {
 	}
 }
 
-class TeamDecision {
+export class TeamDecision {
+	readonly type: string;
+	team: number[];
 	constructor(team) {
 		this.type = 'team';
 		this.team = team || [0, 1, 2, 3, 4, 5];
 	}
 }
-class PassDecision {
+export class PassDecision {
+	readonly type: string;
 	constructor() {
 		this.type = 'pass';
 	}
 }
 
-class ShiftDecision {
+export class ShiftDecision {
+	readonly type: string;
 	constructor() {
 		this.type = 'shift';
 	}
 }
 
-exports.ShiftDecision = ShiftDecision;
-exports.PassDecision = PassDecision;
-exports.TeamDecision = TeamDecision;
-exports.SwitchDecision = SwitchDecision;
-exports.MoveDecision = MoveDecision;
-
-function isTooFar(battle, a, b) {
+export function isTooFar(battle: any, a:number, b:number) {
 	if (battle.gametype === 'triples') {
 		return (a === 0 && b === 0) || (a === 2 && b === 2);
 	} else {
@@ -56,7 +62,7 @@ function isTooFar(battle, a, b) {
 	}
 }
 
-function combinateTeamPreview(array, i, values, solutions) {
+export function combinateTeamPreview(array: any, i: number, values: any, solutions: any) {
 	if (i >= array.length) {
 		solutions.push(array.slice());
 		return;
@@ -69,7 +75,7 @@ function combinateTeamPreview(array, i, values, solutions) {
 	}
 }
 
-function generateTeamCombinations(sideLength, requiredLength) {
+export function generateTeamCombinations(sideLength: number, requiredLength: number) {
 	let comb = [];
 	let values = [];
 	let array = [];
@@ -83,7 +89,7 @@ function generateTeamCombinations(sideLength, requiredLength) {
 	return comb;
 }
 
-function validateDecision(des) {
+export function validateDecision(des: any[]) {
 	let megaConsumed = false;
 	let ultraConsumed = false;
 	let zMoveConsumed = false;
@@ -116,7 +122,7 @@ function validateDecision(des) {
 	return true;
 }
 
-function nextCombinationDecision(array, i, tables, solutions) {
+export function nextCombinationDecision(array:any, i: number, tables: any[], solutions: any) {
 	if (i >= array.length) {
 		//validate combinational decision
 		if (!validateDecision(array)) return;
@@ -130,7 +136,7 @@ function nextCombinationDecision(array, i, tables, solutions) {
 	}
 }
 
-function cartesianProduct(tables) {
+export function cartesianProduct(tables: any) {
 	let array = [];
 	let comb = [];
 	for (let i = 0; i < tables.length; i++) array.push(null);
@@ -138,7 +144,7 @@ function cartesianProduct(tables) {
 	return comb;
 }
 
-function getDecisions(battle) {
+export function getDecisions(battle: any) {
 	let res = [];
 	let req = battle.request;
 	if (!req) return null;
@@ -247,5 +253,3 @@ function getDecisions(battle) {
 	}
 	return res;
 }
-
-exports.getDecisions = getDecisions;

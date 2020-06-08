@@ -1,9 +1,9 @@
-import * as FS from './fs';
+import {FS} from './fs';
 
 const logPath = './logs/errors.log';
 const debugPath = './logs/debug.log';
 
-export function log(error: Error, data: AnyObject, server: string) {
+export function log(error: any, data: AnyObject, server: string) {
 	let stack = typeof error === 'string' ? error : error.stack;
 	stack += '\nServer ID: ' + server;
 	if (data) {
@@ -17,17 +17,17 @@ export function log(error: Error, data: AnyObject, server: string) {
 	Stream.on('open', () => {
 		Stream.write(`\n${stack}\n`);
 		Stream.end();
-	}).on('error', err => {
+	}).on('error', (err:any) => {
 		console.error(`\nSUBCRASH: ${err.stack}\n`);
 	});
 }
 
-exports.debug = function (description) {
+export function debug(description: string) {
 	const Stream = FS(debugPath).createWriteStream({flags: 'a'});
 	Stream.on('open', () => {
 		Stream.write(`\n${description}\n`);
 		Stream.end();
-	}).on('error', err => {
+	}).on('error', (err: any) => {
 		console.error(`\nDEBUG CRASHED: ${err.stack}\n`);
 	});
 };

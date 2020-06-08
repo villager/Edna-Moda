@@ -1,12 +1,11 @@
-import * as path from 'path';
 
 import * as Api from './lib/api';
 
 import * as Dex from './lib/dex';
 
-const ABILITIES_DIR = path.resolve(__dirname, 'data', 'abilities.json');
-const ITEMS_DIR = path.resolve(__dirname, 'data', 'items.json');
-const MOVES_DIR = path.resolve(__dirname, 'data', 'moves.json');
+const ABILITIES_DIR = Plugins.resolve('data', 'data-abilities.json');
+const ITEMS_DIR = Plugins.resolve('data', 'data-items.json');
+const MOVES_DIR = Plugins.resolve('data', 'data-moves.json');
 
 export let abilities = Object.create(null);
 
@@ -20,9 +19,9 @@ export const saveMoves = () => Plugins.FS(MOVES_DIR).writeUpdate(() => JSON.stri
 
 export function loadData() {
 	let fileData = [
-		['abilities.json', abilities],
-		['items.json', items],
-		['moves.json', moves],
+		['data-abilities.json', abilities],
+		['data-items.json', items],
+		['data-moves.json', moves],
 	];
 	for (const file of fileData) {
 		try {

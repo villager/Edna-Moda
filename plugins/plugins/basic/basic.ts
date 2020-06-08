@@ -6,7 +6,8 @@ const ENGLISH_ALIASES = new Set(['en', 'ing', 'ingles', 'us', 'uk', 'english']);
 const {MessageEmbed} = require('discord.js');
 
 export const key = ['global', 'showdown', 'discord'];
-export const globalCommands = {
+
+export const globalCommands: ChatCommands = {
 	'?': 'help',
 	h: 'help',
 	help(target) {
@@ -108,7 +109,7 @@ export const globalCommands = {
 	pickhelp: true,
 	picktopic: 'dynamic',
 };
-export const psCommands = {
+export const psCommands: ChatCommands = {
 	errorlog(target, room, user) {
 		if (!this.can('hotpatch', true)) return false;
 		let log = Plugins.FS('./logs/errors.log').readSync().toString();
@@ -145,7 +146,7 @@ export const psCommands = {
 	languagetopic: 'settings',
 };
 
-export const discordCommands = {
+export const discordCommands: ChatCommands = {
 	errorlog() {
 		if (!this.can('hotpatch', true)) return false;
 		let log = Plugins.FS('./logs/errors.log').readSync().toString();

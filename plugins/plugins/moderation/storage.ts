@@ -1,12 +1,11 @@
-import * as path from 'path';
 
 export let blacklist = Object.create(null);
-const BLACK_LIST_PATH = path.resolve(__dirname, 'data', 'blacklist.json');
+const BLACK_LIST_PATH = Plugins.resolve('data', 'data-blacklist.json');
 
 export const saveBlack = () => Plugins.FS(BLACK_LIST_PATH).writeUpdate(() => JSON.stringify(blacklist));
 
 export function loadData() {
-	let dataFiles = [['blacklist.json', blacklist]];
+	let dataFiles = [['data-blacklist.json', blacklist]];
 	for (const file of dataFiles) {
 		try {
 			require.resolve(`./data/${file[0]}`);

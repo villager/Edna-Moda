@@ -1,12 +1,11 @@
-import * as path from 'path';
 
 let dyns = Object.create(null);
 
 import {MessageEmbed} from 'discord.js';
 
-const PHRASES_DIR = path.resolve(__dirname, 'data', 'dyn.json');
+const PHRASES_DIR = Plugins.resolve('data', 'data-dyn.json');
 
-const Lang = Plugins.Language.load(path.resolve(__dirname, 'dyn-language.json'));
+const Lang = Plugins.Language.load(Plugins.resolve('dyn-language.json'));
 
 let saveDyns = () => Plugins.FS(PHRASES_DIR).writeUpdate(() => JSON.stringify(dyns));
 
@@ -26,12 +25,12 @@ function initDyns(server) {
 }
 export const loadData = function () {
 	try {
-		require.resolve('./data/dyn.json');
+		require.resolve('./data/data-dyn.json');
 	} catch (e) {
 		Monitor.log(e);
 	}
 	try {
-		let JSONdata = require('./data/dyn.json');
+		let JSONdata = require('./data/data-dyn.json');
 		Object.assign(dyns, JSONdata);
 	} catch (e) {
 		Monitor.log(e);
@@ -40,7 +39,7 @@ export const loadData = function () {
 export const init = function (server) {
 	Plugins.eventEmitter.on('onDynamic', initDyns);
 };
-export const globalCommands = {
+export const globalCommands: ChatCommands = {
 	dyn(target) {
 		if (!dyns[this.id]) return this.sendReply(Lang.get(this.lang, 'non_server_exist'));
 		if (!dyns[this.id][target]) return this.sendReply(Lang.get(this.lang, 'non_exist'));
@@ -74,10 +73,10 @@ export const globalCommands = {
 		this.sendReply(`You"ve delete dynamic command "${target}"`);
 	},
 };
-export const discordCommands = {
+export const discordCommands: ChatCommands = {
 	dynlist: 'listdyn',
 	listdyn() {
-		if (!dyns[this.id]) return this.sendReply(Lang.getSub(this.lang, 'non_server_exist'));
+		if (!dyns[this.id]) return this.sendReply(Lang.get(this.lang, 'non_server_exist'));
 		let data = '';
 		data += Lang.get(this.lang, 'header') + '\n';
 		for (let i in dyns[this.id]) {
@@ -92,7 +91,7 @@ export const discordCommands = {
 			}
 			data += '\n';
 		}
-		Plugins.Hastebin.upload(data, (r, link) => {
+		Plugins.Bins.upload(data, (r, link) => {
 			if (r) {
 				let fullLink = 'https://' + link;
 				let embed = new MessageEmbed({
@@ -106,10 +105,10 @@ export const discordCommands = {
 		});
 	},
 };
-export const psCommands = {
+export const psCommands: ChatCommands = {
 	dynlist: 'listdyn',
 	listdyn() {
-		if (!dyns[this.id]) return this.sendReply(Lang.getSub(this.lang, 'non_server_exist'));
+		if (!dyns[this.id]) return this.sendReply(Lang.get(this.lang, 'non_server_exist'));
 		let data = '';
 		data += Lang.get(this.lang, 'header') + '\n';
 		for (let i in dyns[this.id]) {
@@ -124,7 +123,7 @@ export const psCommands = {
 			}
 			data += '\n';
 		}
-		Plugins.Hastebin.upload(data, (r, link) => {
+		Plugins.Bins.upload(data, (r, link) => {
 			if (r) {
 				this.sendReply(`${Lang.get(this.lang, 'header')}: ${link}`);
 			} else {

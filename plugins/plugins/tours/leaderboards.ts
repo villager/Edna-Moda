@@ -2,19 +2,18 @@
  * Tournaments points system
  */
 
-import * as path from 'path';
-const TOURS_DATA = path.resolve(__dirname, 'data', 'leaderboards.json');
+const TOURS_DATA = Plugins.resolve('data', 'data-leaderboards.json');
 
 export let ladder = Object.create(null);
 
 export function load() {
 	try {
-		require.resolve('./data/leaderboards.json');
+		require.resolve('./data/data-leaderboards.json');
 	} catch (e) {
 		Monitor.log(e);
 	}
 	try {
-		let JSONdata = require('./data/leaderboards.json');
+		let JSONdata = require('./data/data-leaderboards.json');
 		Object.assign(ladder, JSONdata);
 	} catch (e) {
 		Monitor.log(e);
