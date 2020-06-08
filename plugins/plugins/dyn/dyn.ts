@@ -1,4 +1,3 @@
-
 let dyns = Object.create(null);
 
 import {MessageEmbed} from 'discord.js';
@@ -93,10 +92,9 @@ export const discordCommands: ChatCommands = {
 		}
 		Plugins.Bins.upload(data, (r, link) => {
 			if (r) {
-				let fullLink = 'https://' + link;
 				let embed = new MessageEmbed({
 					title: Lang.get(this.lang, 'header'),
-					url: fullLink,
+					url: link,
 				});
 				this.sendReply(embed);
 			} else {

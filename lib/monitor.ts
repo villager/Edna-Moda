@@ -17,7 +17,7 @@ export function log(error: any, data: AnyObject, server: string) {
 	Stream.on('open', () => {
 		Stream.write(`\n${stack}\n`);
 		Stream.end();
-	}).on('error', (err:any) => {
+	}).on('error', (err: any) => {
 		console.error(`\nSUBCRASH: ${err.stack}\n`);
 	});
 }
@@ -30,4 +30,4 @@ export function debug(description: string) {
 	}).on('error', (err: any) => {
 		console.error(`\nDEBUG CRASHED: ${err.stack}\n`);
 	});
-};
+}

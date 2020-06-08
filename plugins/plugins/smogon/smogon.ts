@@ -43,7 +43,7 @@ function pokeData(lang, poke) {
 	let s = data.stats;
 	let stats = '';
 	for (let i in s) {
-		stats += `${Lang.getSub(lang, 'data', i)} ${s[i]} | `;
+		stats += `${Lang.get(lang, {msg: 'data', in: i})} ${s[i]} | `;
 	}
 	let abilities = [];
 	data.abilities.map(abilitie => {
@@ -125,7 +125,7 @@ export function init() {}
 export const psCommands: ChatCommands = {
 	pokemon: 'dt',
 	dt(target) {
-		if (!target) return this.sendReply(Lang.getSub(this.lang, 'data', 'target'));
+		if (!target) return this.sendReply(Lang.get(this.lang, {msg: 'data', in: 'target'}));
 		switch (Dex.search(target)) {
 			case 'Pokemon':
 				if (Chat.hasAuth(this.id, this.bot.name, 'html')) {
@@ -159,7 +159,7 @@ export const psCommands: ChatCommands = {
 export const discordCommands: ChatCommands = {
 	dttopic: 'pokedata',
 	dt(target) {
-		if (!target) return this.sendReply(Lang.getSub(this.lang, 'data', 'target'));
+		if (!target) return this.sendReply(Lang.get(this.lang, {msg: 'data', in: 'target'}));
 		let data: any = false;
 		switch (Dex.search(target)) {
 			case 'Pokemon':

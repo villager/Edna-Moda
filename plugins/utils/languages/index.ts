@@ -15,28 +15,22 @@ export class LoadLang {
 			this.translations[i] = langPackage[i];
 		}
 	}
-	get(lang: string, msg: string) {
+	get(lang: string, msg: string | AnyObject, ...args: string[]) {
 		let language = lang;
 		this.load();
+		let output = '';
 		if (!this.translations[language]) throw Error(`Lenguaje ${language} no existe`);
-		if (!this.translations[language][msg]) throw Error(`Mensaje ${msg} no existe en ${language}`);
-		return this.translations[language][msg];
-	}
-	getSub(lang: string, msg: string, sub: string) {
-		return this.get(lang, msg)[sub];
-	}
-	replaceSub(lang: string, msg: string, sub: string, ...args: string[]) {
-		let i = 1;
-		let output = this.get(lang, msg)[sub];
-		for (const arg of args) {
-			output = output.replace(`$${i}`, arg);
-			i++;
+		if (typeof msg !== 'string') {
+			if (!this.translations[language][msg.msg]) throw Error(`Mensaje ${msg.msg} no existe en ${language}`);
+		} else {
+			if (!this.translations[language][msg]) throw Error(`Mensaje ${msg} no existe en ${language}`);
 		}
-		return output;
-	}
-	replace(lang: string, msg: string, ...args: string[]) {
+		if (typeof msg !== 'string') {
+			output = this.translations[language][msg.msg][msg.in];
+		} else {
+			output = this.translations[language][msg];
+		}
 		let i = 1;
-		let output = this.get(lang, msg);
 		for (const arg of args) {
 			output = output.replace(`$${i}`, arg);
 			i++;

@@ -1,33 +1,9 @@
-import * as https from 'https';
 const API_LINK = 'https://pokeapi.co/api/v2';
 
-function searchDataRaw(link) {
-	return new Promise((resolve, reject) => {
-		https
-			.get(link, res => {
-				let data = '';
-				res.setEncoding('utf8');
-				res.on('data', chunk => {
-					data += chunk;
-				}).on('end', () => {
-					let parsedData;
-					try {
-						parsedData = JSON.parse(data);
-					} catch (e) {
-						return reject(e);
-					}
-					return resolve(parsedData);
-				});
-			})
-			.on('error', err => {
-				reject(err);
-			})
-			.setTimeout(3500);
-	});
-}
 function searchData(link: string) {
 	return new Promise((resolve, reject) => {
-		searchDataRaw(link)
+		Plugins.Net(link)
+			.toJSON()
 			.then((data: AnyObject) => {
 				let rawData: AnyObject = {spanish: {name: '', desc: ''}, english: {name: '', desc: ''}};
 				for (const name of data.names) {

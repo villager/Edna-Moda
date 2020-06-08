@@ -21,9 +21,9 @@ declare global {
 		target: string,
 		room: string | PSRoom | ChannelManager,
 		user: string | User,
-		message: string
+		message: string,
 	) => void;
-	
+
 	interface ChatCommands {
 		[k: string]: ChatHandler | string | string[] | true | ChatCommands;
 	}

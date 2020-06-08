@@ -151,7 +151,7 @@ function parseTournament(server, room, message, isIntro, spl) {
 			} catch (e) {}
 			// Validar que pueda vocear la felicitacion
 			let lang = room.language ? room.language : server.language;
-			server.send(Lang.replace(lang, 'congrats', winners[server.id][room]));
+			server.send(Lang.get(lang, 'congrats', winners[server.id][room]));
 			Leaderboards.onTournamentEnd(server, room, tourData[server.id][room]);
 			delete tourData[server.id][room];
 			if (tourRoom && tourRoom.startTimer) clearTimeout(tourRoom.startTimer);
@@ -188,9 +188,9 @@ export const commands: ChatCommands = {
 	tourend(target, room, user) {
 		if (/**this.roomType !== "chat" || */ !this.can('games', true)) return false;
 		if (!tourData[this.id]) tourData[this.id] = {};
-		if (!tourData[this.id][room.id]) return this.sendReply(Lang.getSub(this.lang, 'tourend', 'err'));
+		if (!tourData[this.id][room.id]) return this.sendReply(Lang.get(this.lang, {msg: 'tourend', in: 'err'}));
 		if (this.cmd === 'tourstart' && !tourData[this.id][room.id].signups) {
-			return this.sendReply(Lang.getSub(this.lang, 'tourend', 'err2'));
+			return this.sendReply(Lang.get(this.lang, {msg: 'tourend', in: 'err2'}));
 		}
 		this.sendReply('/tournament ' + (this.cmd === 'tourend' ? 'end' : 'start'));
 	},
@@ -204,7 +204,7 @@ export const commands: ChatCommands = {
 		if (tourData[this.id][room.id]) {
 			if (toId(target) === 'end') return this.runCmd('tourend');
 			if (toId(target) === 'start') return this.runCmd('tourstart');
-			return this.sendReply(Lang.getSub(this.lang, 'tour', 'e2'));
+			return this.sendReply(Lang.get(this.lang, {msg: 'tour', in: 'e2'}));
 		}
 		let details: any = {
 			format: 'ou',
@@ -283,7 +283,11 @@ export const commands: ChatCommands = {
 							break;
 						default:
 							return this.sendReply(
-								Lang.replaceSub(this.lang, 'paramerror', idArg, ' tier, timer, dq, users, type, scout'),
+								Lang.get(
+									this.lang,
+									{msg: 'paramerror', in: idArg},
+									' tier, timer, dq, users, type, scout',
+								),
 							);
 					}
 				}
@@ -291,7 +295,7 @@ export const commands: ChatCommands = {
 			if (params.format) {
 				let format = this.bot.parseAliases(params.format);
 				if (!this.bot.formats[format] || !this.bot.formats[format].chall) {
-					return this.sendReply(Lang.replaceSub(this.lang, 'tour', 'invalid_format', format));
+					return this.sendReply(Lang.get(this.lang, {msg: 'tour', in: 'invalid_format'}, format));
 				}
 				details.format = format;
 			}
@@ -300,7 +304,7 @@ export const commands: ChatCommands = {
 					details.timeToStart = null;
 				} else {
 					let time = parseInt(params.timeToStart);
-					if (!time || time < 10) return this.sendReply(Lang.getSub(this.lang, 'tour', 'e4'));
+					if (!time || time < 10) return this.sendReply(Lang.get(this.lang, {msg: 'tour', in: 'e4'}));
 					details.timeToStart = time * 1000;
 				}
 			}
@@ -309,7 +313,7 @@ export const commands: ChatCommands = {
 					details.autodq = false;
 				} else {
 					let dq = parseFloat(params.autodq);
-					if (!dq || dq < 0) return this.sendReply(Lang.getSub(this.lang, 'tour', 'e5'));
+					if (!dq || dq < 0) return this.sendReply(Lang.get(this.lang, {msg: 'tour', in: 'e5'}));
 					details.autodq = dq;
 				}
 			}
@@ -318,14 +322,14 @@ export const commands: ChatCommands = {
 					details.maxUsers = null;
 				} else {
 					let musers = parseInt(params.maxUsers);
-					if (!musers || musers < 4) return this.sendReply(Lang.getSub(this.lang, 'tour', 'e6'));
+					if (!musers || musers < 4) return this.sendReply(Lang.get(this.lang, {msg: 'tour', in: 'e6'}));
 					details.maxUsers = musers;
 				}
 			}
 			if (params.type) {
 				let type = toId(params.type);
 				if (type !== 'elimination' && type !== 'roundrobin') {
-					return this.sendReply(Lang.getSub(this.lang, 'tour', 'e7'));
+					return this.sendReply(Lang.get(this.lang, {msg: 'tour', in: 'e7'}));
 				}
 				details.type = type;
 			}
@@ -339,7 +343,7 @@ export const commands: ChatCommands = {
 		newTour(this.bot, room.id, details);
 		setTimeout(() => {
 			if (tournaments[this.id][room.id] && !tourData[this.id][room.id]) {
-				this.sendReply(Lang.getSub(this.lang, 'tour', 'notstarted'));
+				this.sendReply(Lang.get(this.lang, {msg: 'tour', in: 'notstarted'}));
 				delete tournaments[this.id][room.id];
 			}
 		}, 2500);
@@ -348,21 +352,21 @@ export const commands: ChatCommands = {
 	official(target, room, user) {
 		//if (!this.can("official")) return;
 		if (!Leaderboards.isConfigured(this.id, room.id)) {
-			return this.sendReply(Lang.replaceSub(this.lang, 'official', 'not', room.title));
+			return this.sendReply(Lang.get(this.lang, {msg: 'official', in: 'not'}, room.title));
 		}
-		if (!tourData[this.id][room.id]) return this.sendReply(Lang.getSub(this.lang, 'official', 'notour'));
+		if (!tourData[this.id][room.id]) return this.sendReply(Lang.get(this.lang, {msg: 'official', in: 'notour'}));
 		if (this.cmd === 'unofficial') {
 			if (!tourData[this.id][room.id].isOfficialTour) {
-				return this.sendReply(Lang.getSub(this.lang, 'official', 'already-not'));
+				return this.sendReply(Lang.get(this.lang, {msg: 'official', in: 'already-not'}));
 			}
 			tourData[this.id][room.id].isOfficialTour = false;
-			this.sendReply(Lang.getSub(this.lang, 'official', 'unofficial'));
+			this.sendReply(Lang.get(this.lang, {msg: 'official', in: 'unofficial'}));
 		} else {
 			if (tourData[this.id][room.id].isOfficialTour) {
-				return this.sendReply(Lang.getSub(this.lang, 'official', 'already'));
+				return this.sendReply(Lang.get(this.lang, {msg: 'official', in: 'already'}));
 			}
 			tourData[this.id][room.id].isOfficialTour = true;
-			this.sendReply(Lang.getSub(this.lang, 'official', 'official'));
+			this.sendReply(Lang.get(this.lang, {msg: 'official', in: 'official'}));
 		}
 	},
 	officialtopic: 'tour',

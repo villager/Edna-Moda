@@ -1,4 +1,3 @@
-
 export let blacklist = Object.create(null);
 const BLACK_LIST_PATH = Plugins.resolve('data', 'data-blacklist.json');
 

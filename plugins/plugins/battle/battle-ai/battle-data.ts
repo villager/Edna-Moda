@@ -1,4 +1,3 @@
-
 import * as psData from 'ps-data';
 
 export function getEffect(effect: string | any, gen?: number) {
@@ -13,7 +12,7 @@ export function getEffect(effect: string | any, gen?: number) {
 		}
 
 		let id = toId(name);
-		effect= {};
+		effect = {};
 
 		let pMove: any = getMove(id, gen);
 		let pAbility: any = getAbility(id, gen);
@@ -51,7 +50,7 @@ export function getEffect(effect: string | any, gen?: number) {
 	return effect;
 }
 
-export function getTemplate(poke: string, gen?:number) {
+export function getTemplate(poke: string, gen?: number) {
 	if (!gen || gen > 8 || gen < 1) gen = 8;
 	poke = toId(poke || '');
 	let pokemon: any = {};
@@ -82,7 +81,7 @@ export function getTemplate(poke: string, gen?:number) {
 	return pokemon;
 }
 export const getPokemon = getTemplate;
-export function getMove(move: string, gen?:number) {
+export function getMove(move: string, gen?: number) {
 	if (!gen || gen > 8 || gen < 1) gen = 8;
 	move = toId(move || '');
 	if (move.indexOf('hiddenpower') === 0) {
@@ -123,7 +122,7 @@ export function getMove(move: string, gen?:number) {
 	return moveData;
 }
 
-export function getItem(item:string, gen?: number) {
+export function getItem(item: string, gen?: number) {
 	if (!gen || gen > 8 || gen < 1) gen = 8;
 	item = toId(item || '');
 	let itemData: any = {};
@@ -154,7 +153,7 @@ export function getItem(item:string, gen?: number) {
 	return itemData;
 }
 
-export function getAbility(ab: string, gen?:number) {
+export function getAbility(ab: string, gen?: number) {
 	if (!gen || gen > 8 || gen < 1) gen = 8;
 	ab = toId(ab || '');
 	let ability: any = {};
@@ -227,7 +226,7 @@ export class Pokemon {
 	ability: string | any;
 	supressedAbility: Boolean;
 	baseAbility: string | any;
-	abilityStack: string[]
+	abilityStack: string[];
 	moves: any[];
 	active: Boolean;
 	slot: number;

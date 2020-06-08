@@ -5,21 +5,21 @@ import {EventEmitter} from './utils/events';
 import * as UtilLanguage from './utils/languages';
 import * as UtilBins from './utils/bins';
 import {UtilTimer} from './utils/timers';
-import * as UtilGlobal from './utils/global';
+import {GlobalUtility} from './utils/global';
 import * as UtilDex from './utils/dex';
-
+import {UtilNetwork} from './utils/net';
 const COMMANDS_MAP = new Map([
 	['showdown', 'psCommands'],
 	['discord', 'discordCommands'],
 	['global', 'globalCommands'],
 ]);
-export const Plugins = new class {
+export const Plugins = new (class {
 	plugins: AnyObject;
 	constructor() {
 		this.plugins = Object.create(null);
 	}
 	get(plugin: string) {
-		if(!this.plugins[plugin]) return false;
+		if (!this.plugins[plugin]) return false;
 		return this.plugins[plugin];
 	}
 	private load(pluginPath: string) {
@@ -49,8 +49,8 @@ export const Plugins = new class {
 		}
 		if (Config.isInitializacion) await this.initData();
 		this.forEach((plugin: AnyObject) => {
-			if (typeof plugin.loadData === "function") {
-				if(!Config.testMode) plugin.loadData();
+			if (typeof plugin.loadData === 'function') {
+				if (!Config.testMode) plugin.loadData();
 			}
 		});
 	}
@@ -84,7 +84,7 @@ export const Plugins = new class {
 					}
 				}
 			}
-		});		
+		});
 	}
 	async initData() {
 		const DATA_FOLDERS = ['data'];
@@ -143,10 +143,13 @@ export const Plugins = new class {
 		return UtilBins;
 	}
 	get Utils() {
-		return UtilGlobal;
+		return GlobalUtility;
 	}
 	get Dex() {
 		return UtilDex;
+	}
+	get Net() {
+		return UtilNetwork;
 	}
 	get eventEmitter() {
 		// @ts-ignore
@@ -158,4 +161,4 @@ export const Plugins = new class {
 	join(...args: string[]) {
 		return path.join(__dirname, ...args);
 	}
-}
+})();

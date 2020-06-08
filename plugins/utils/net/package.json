@@ -1,0 +1,11 @@
+{
+    "name": "netowrk-system",
+    "version": "1.0.0",
+    "main": "net.js",
+    "author": {
+        "name": "Aldair Beltran",
+        "email": "aldairbeltran23@hotmail.com",
+        "url": "https://github.com/villager"
+    },
+    "private": true
+}

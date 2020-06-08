@@ -54,7 +54,7 @@ export class ShiftDecision {
 	}
 }
 
-export function isTooFar(battle: any, a:number, b:number) {
+export function isTooFar(battle: any, a: number, b: number) {
 	if (battle.gametype === 'triples') {
 		return (a === 0 && b === 0) || (a === 2 && b === 2);
 	} else {
@@ -122,7 +122,7 @@ export function validateDecision(des: any[]) {
 	return true;
 }
 
-export function nextCombinationDecision(array:any, i: number, tables: any[], solutions: any) {
+export function nextCombinationDecision(array: any, i: number, tables: any[], solutions: any) {
 	if (i >= array.length) {
 		//validate combinational decision
 		if (!validateDecision(array)) return;

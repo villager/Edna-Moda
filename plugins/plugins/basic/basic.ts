@@ -49,14 +49,14 @@ export const globalCommands: ChatCommands = {
 					this.sendReply(HelpLang.get(this.lang, target));
 				}
 				/*if (Array.isArray(allCommands[helpCmd])) {
-					this.sendReply(Lang.getSub(this.lang, target, "msg"));
+					this.sendReply(Lang.get(this.lang, {msg: target, in: "msg"}));
 				}*/
 			}
 		}
 	},
 	helptopic: 'info',
 	version() {
-		return this.sendReply(Lang.replace(this.lang, 'version', Chat.packageData.version));
+		return this.sendReply(Lang.get(this.lang, 'version', Chat.packageData.version));
 	},
 	versiontopic: 'info',
 	say(target) {
@@ -104,7 +104,7 @@ export const globalCommands: ChatCommands = {
 		}
 		const options = target.split(',');
 		const pickedOption = options[Math.floor(Math.random() * options.length)].trim();
-		this.sendReply(Lang.replace(this.lang, 'pick', pickedOption));
+		this.sendReply(Lang.get(this.lang, 'pick', pickedOption));
 	},
 	pickhelp: true,
 	picktopic: 'dynamic',
@@ -114,32 +114,31 @@ export const psCommands: ChatCommands = {
 		if (!this.can('hotpatch', true)) return false;
 		let log = Plugins.FS('./logs/errors.log').readSync().toString();
 		Plugins.Bins.upload(log, (r, link) => {
-			let fullLink = 'https://' + link;
-			if (r) this.sendReply(Lang.replaceSub(this.lang, 'errorlog', 'link', fullLink));
-			else this.sendReply(Lang.getSub(this.lang, 'errorlog', 'error'));
+			if (r) this.sendReply(Lang.get(this.lang, {msg: 'errorlog', in: 'link'}, link));
+			else this.sendReply(Lang.get(this.lang, {msg: 'errorlog', in: 'error'}));
 		});
 	},
 	errorlogtopic: 'admin',
 	about() {
 		let version = Chat.packageData.url;
 		let author = Chat.packageData.author && Chat.packageData.author.name;
-		this.sendReply(Lang.replace(this.lang, 'about', this.bot.name, author, version));
+		this.sendReply(Lang.get(this.lang, 'about', this.bot.name, author, version));
 	},
 	abouttopic: 'info',
 	language(target, room) {
 		if (!this.can('invite', true)) return false;
-		if (!target) return this.sendReply(Lang.getSub(this.lang, 'language', 'target'));
+		if (!target) return this.sendReply(Lang.get(this.lang, {msg: 'language', in: 'target'}));
 		if (!LANG_LIST.has(target) && !SPANISH_ALIASES.has(target) && !ENGLISH_ALIASES.has(target)) {
-			return this.sendReply(Lang.getSub(this.lang, 'language', 'unavileable'));
+			return this.sendReply(Lang.get(this.lang, {msg: 'language', in: 'unavileable'}));
 		}
 		if (SPANISH_ALIASES.has(target)) {
-			if (room.language === 'es') return this.sendReply(Lang.getSub(this.lang, 'language', 'alr_es'));
-			this.sendReply(Lang.getSub(this.lang, 'language', 'now_es'));
+			if (room.language === 'es') return this.sendReply(Lang.get(this.lang, {msg: 'language', in: 'alr_es'}));
+			this.sendReply(Lang.get(this.lang, {msg: 'language', in: 'now_es'}));
 			room.language = 'es';
 		}
 		if (ENGLISH_ALIASES.has(target)) {
-			if (room.language === 'en') return this.sendReply(Lang.getSub(this.lang, 'language', 'alr_en'));
-			this.sendReply(Lang.getSub(this.lang, 'language', 'now_en'));
+			if (room.language === 'en') return this.sendReply(Lang.get(this.lang, {msg: 'language', in: 'alr_en'}));
+			this.sendReply(Lang.get(this.lang, {msg: 'language', in: 'now_en'}));
 			room.language = 'en';
 		}
 	},
@@ -151,12 +150,11 @@ export const discordCommands: ChatCommands = {
 		if (!this.can('hotpatch', true)) return false;
 		let log = Plugins.FS('./logs/errors.log').readSync().toString();
 		Plugins.Bins.upload(log, (r, link) => {
-			let fullLink = 'https://' + link;
 			if (r) {
 				let data = new MessageEmbed({
 					title: 'Errores',
 					description: 'Log de errores del Bot',
-					url: fullLink,
+					url: link,
 				});
 				this.sendReply(data);
 			} else {
