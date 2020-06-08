@@ -1,22 +1,16 @@
-'use strict';
+import * as path from 'path';
+import * as cluster from 'cluster';
 
-const cluster = require('cluster');
-const path = require('path');
+export let plugins = Object.create(null);
 
-let plugins = Object.create(null);
-
-function getPlugin(plugin) {
+function getPlugin(plugin: string) {
 	if (!plugins[plugin]) return false;
 	return plugins[plugin];
 }
 
-const Plugins = exports;
+export const get = getPlugin;
 
-Plugins.get = getPlugin;
-
-Plugins.plugins = plugins;
-
-Plugins.load = function (pluginPath) {
+export function load(pluginPath: string) {
 	const plugin = require('./plugins/' + pluginPath);
 	if (!plugin || (typeof plugin !== 'object' && typeof plugin !== 'function')) {
 		throw new Error('Plugin inválido: ´' + pluginPath + '´.');
@@ -32,45 +26,46 @@ Plugins.load = function (pluginPath) {
 		return;
 	}
 	return (plugins[pluginPath] = plugin);
-};
-
-Plugins.forEach = function (callback, thisArg) {
+}
+export function forEach(callback:any, thisArg?: any) {
 	return Object.values(plugins).forEach(callback, thisArg);
-};
+}
 
 const COMMANDS_MAP = new Map([
 	['showdown', 'psCommands'],
 	['discord', 'discordCommands'],
 	['global', 'globalCommands'],
 ]);
-Plugins.init = function () {
+
+export function init() {
 	let pluginsList = Plugins.FS('./plugins/plugins').readdirSync();
 	for (const plugin of pluginsList) {
 		Plugins.load(plugin);
 	}
 	if (Config.isInitializacion) Plugins.initData();
-	Plugins.forEach(plugin => {
+	Plugins.forEach((plugin: AnyObject) => {
 		if (typeof plugin.loadData === 'function') {
 			if (!Config.testMode) plugin.loadData();
 		}
 	});
-};
-Plugins.initCmds = function () {
-	let cmds = [];
-	Bot.forEach(bot => {
+}
+
+export function initCmds() {
+	let cmds: string[] = [];
+	Bot.forEach((bot: AnyObject) => {
 		if (Array.isArray(bot.initCmds)) {
 			cmds = cmds.concat(bot.initCmds);
 		}
 	});
-	Plugins.forEach(plugin => {
+	forEach((plugin: AnyObject) => {
 		if (Array.isArray(plugin.initCmds)) {
 			cmds = cmds.concat(plugin.initCmds);
 		}
 	});
 	return cmds;
-};
-Plugins.loadPlugins = function () {
-	Plugins.forEach(plugin => {
+}
+export function loadPlugins() {
+	forEach((plugin: AnyObject) => {
 		// The key is the king
 		if (plugin.key) {
 			if (Array.isArray(plugin.key)) {
@@ -86,21 +81,23 @@ Plugins.loadPlugins = function () {
 			}
 		}
 	});
-};
+}
 
-function joinPath(...args) {
+export const FS = require('../lib/fs').FS;
+
+function joinPath(...args: string[]) {
 	return path.resolve(__dirname, ...args);
 }
-Plugins.initData = function () {
+export function initData() {
 	const DATA_FOLDERS = ['data'];
-	Plugins.forEach(plugin => {
+	forEach((plugin: AnyObject) => {
 		if (typeof plugin.initData === 'function') {
 			plugin.initData();
 		}
 		for (const folder of DATA_FOLDERS) {
-			Plugins.FS(joinPath('plugins', plugin.id, folder))
+			FS(joinPath('plugins', plugin.id, folder))
 				.readdir()
-				.then(files => {
+				.then((files: string[]) => {
 					let fileDict = Object.create(null);
 					let exampleFiles = [];
 					for (let fileName of files) {
@@ -124,20 +121,26 @@ Plugins.initData = function () {
 							.isFile()
 							.catch(() => {
 								console.log(`Creating file ${fileData.name}`);
-								Plugins.FS(baseFile).writeSync(Plugins.FS(originalFile).readSync());
+								FS(baseFile).writeSync(FS(originalFile).readSync());
 							});
 					}
 				})
 				.catch(() => {});
 		}
 	});
-};
+}
 
-const events = require('./utils/events');
-Plugins.FS = require('../.lib-dist/fs').FS;
-Plugins.Language = require('./utils/languages');
-Plugins.Timers = require('./utils/timers');
-Plugins.Bins = require('./utils/bins');
-Plugins.Utils = require('./utils/global');
-Plugins.Dex = require('./utils/dex');
-Plugins.eventEmitter = new events.EventEmitter();
+import * as events from './utils/events';
+import * as UtilLanguage from './utils/languages';
+import * as UtilBins from './utils/bins';
+import {UtilTimer} from './utils/timers';
+import * as UtilGlobal from './utils/global';
+import * as UtilDex from './utils/dex';
+
+export const Language = UtilLanguage;
+export const Timers = UtilTimer;
+export const Bins = UtilBins;
+export const Utils = UtilGlobal;
+export const Dex = UtilDex;
+// @ts-ignore
+export const eventEmitter = new events.EventEmitter();

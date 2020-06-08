@@ -1,5 +1,3 @@
-"use strict";
-
 // Copyright Node.js contributors. All rights reserved.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -41,13 +39,10 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 // IN THE SOFTWARE.
-exports.key = "Software";
 
-
-function EventEmitter() {
+export function EventEmitter() {
   EventEmitter.init.call(this);
 }
-module.exports = EventEmitter;
 
 // Backwards-compat with node 0.10.x
 EventEmitter.EventEmitter = EventEmitter;

@@ -1,14 +1,16 @@
-'use strict';
 
-const Chart = require('./util/chart');
-const psData = require('ps-data');
+import * as ChartPath from './lib/chart';
 
-exports.Chart = Chart;
+export const Chart: AnyObject = ChartPath;
 
-exports.teamToJSON = function (text) {
+// @ts-ignore
+import * as psData from 'ps-data';
+
+
+export function teamToJSON(text: string | any) {
 	text = text.split('\n');
 	let team = [];
-	let curSet = null;
+	let curSet: null | AnyObject = null;
 	for (let i = 0; i < text.length; i++) {
 		let line = text[i].trim();
 		if (line === '' || line === '---') {
@@ -59,7 +61,7 @@ exports.teamToJSON = function (text) {
 			curSet.ability = line;
 		} else if (line.substr(0, 5) === 'EVs: ') {
 			line = line.substr(5);
-			let evLines = line.split('/');
+			let evLines: any = line.split('/');
 			curSet.evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
 			for (let j = 0; j < evLines.length; j++) {
 				let evLine = evLines[j].trim();
@@ -111,7 +113,7 @@ exports.teamToJSON = function (text) {
 	}
 	return team;
 };
-exports.packTeam = function (team) {
+export function packTeam (team: AnyObject[]) {
 	let buf = '';
 	if (!team) return '';
 
@@ -229,9 +231,9 @@ exports.packTeam = function (team) {
 	}
 
 	return buf;
-};
+}
 
-exports.exportTeam = function (team) {
+export function exportTeam (team: AnyObject[]| string) {
 	if (!team) return '';
 	if (typeof team === 'string') {
 		if (team.indexOf('\n') >= 0) return team;
@@ -286,7 +288,7 @@ exports.exportTeam = function (team) {
 		first = true;
 		if (curSet.ivs) {
 			let defaultIvs = true;
-			let hpType = false;
+			let hpType: string | any = false;
 			for (let j = 0; j < curSet.moves.length; j++) {
 				let move = curSet.moves[j];
 				if (move.substr(0, 13) === 'Hidden Power ' && move.substr(0, 14) !== 'Hidden Power [') {
@@ -342,9 +344,9 @@ exports.exportTeam = function (team) {
 		text += '\n';
 	}
 	return text;
-};
+}
 
-function fastUnpackTeam(buf) {
+export function fastUnpackTeam(buf: string) {
 	if (!buf) return [];
 
 	let team = [];
@@ -352,7 +354,7 @@ function fastUnpackTeam(buf) {
 		j = 0;
 
 	while (true) {
-		let set = {};
+		let set: AnyObject = {};
 		team.push(set);
 
 		// name
@@ -446,7 +448,8 @@ function fastUnpackTeam(buf) {
 	}
 	return team;
 }
-exports.teamOverview = function (buf) {
+
+export function teamOverview(buf: string) {
 	let team = fastUnpackTeam(buf);
 	if (!team) return '(empty)';
 	let pokes = [];
@@ -455,9 +458,9 @@ exports.teamOverview = function (buf) {
 	}
 	if (!pokes.length) return '(empty)';
 	return pokes.join(', ');
-};
+}
 
-function getTemplate(name) {
+export function getTemplate(name: string) {
 	name = toId(name || '');
 	try {
 		return psData.getDex(8)[name] || {};
@@ -465,7 +468,7 @@ function getTemplate(name) {
 	return {};
 }
 
-function getItem(name) {
+export function getItem(name: string) {
 	name = toId(name || '');
 	try {
 		return psData.getItems(8)[name] || {};
@@ -473,7 +476,7 @@ function getItem(name) {
 	return {};
 }
 
-function getAbility(name) {
+export function getAbility(name: string) {
 	name = toId(name || '');
 	try {
 		return psData.getAbilities(8)[name] || {};
@@ -481,16 +484,10 @@ function getAbility(name) {
 	return {};
 }
 
-function getMove(name) {
+export function getMove(name: string) {
 	name = toId(name || '');
 	try {
 		return psData.getMoves(8)[name] || {};
 	} catch (e) {}
 	return {};
 }
-
-exports.getTemplate = getTemplate;
-exports.getItem = getItem;
-exports.getAbility = getAbility;
-exports.getMove = getMove;
-exports.fastUnpackTeam = fastUnpackTeam;

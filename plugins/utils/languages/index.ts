@@ -1,10 +1,11 @@
-'use strict';
 
-class LoadLang {
+export class LoadLang {
 	/**
 	 * @param {string} path
 	 */
-	constructor(path) {
+	path: string;
+	translations: AnyObject;
+	constructor(path?: string) {
 		if (!path) path = './base-lang.json';
 		this.translations = Object.create(null);
 		this.path = path;
@@ -15,17 +16,17 @@ class LoadLang {
 			this.translations[i] = langPackage[i];
 		}
 	}
-	get(lang, msg) {
+	get(lang: string, msg: string) {
 		let language = lang;
 		this.load();
 		if (!this.translations[language]) throw Error(`Lenguaje ${language} no existe`);
 		if (!this.translations[language][msg]) throw Error(`Mensaje ${msg} no existe en ${language}`);
 		return this.translations[language][msg];
 	}
-	getSub(lang, msg, sub) {
+	getSub(lang: string, msg: string, sub: string) {
 		return this.get(lang, msg)[sub];
 	}
-	replaceSub(lang, msg, sub, ...args) {
+	replaceSub(lang: string, msg: string, sub: string, ...args: string[]) {
 		let i = 1;
 		let output = this.get(lang, msg)[sub];
 		for (const arg of args) {
@@ -34,7 +35,7 @@ class LoadLang {
 		}
 		return output;
 	}
-	replace(lang, msg, ...args) {
+	replace(lang: string, msg: string, ...args: string[]) {
 		let i = 1;
 		let output = this.get(lang, msg);
 		for (const arg of args) {
@@ -48,11 +49,11 @@ class LoadLang {
  * @param {string} langPath
  * @return {LoadLang}
  */
-function loadLang(langPath) {
+function loadLang(langPath?: string) {
 	return new LoadLang(langPath);
 }
-exports.load = loadLang;
+export const load = loadLang;
 
-exports.loadHelp = function () {
+export function loadHelp() {
 	return new LoadLang('./helps.json');
-};
+}

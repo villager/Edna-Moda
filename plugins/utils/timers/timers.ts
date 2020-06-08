@@ -1,7 +1,8 @@
-'use strict';
 
-class BotTimer {
-	constructor(time) {
+export class UtilTimer {
+	timer: null | any;
+	time: number;
+	constructor(time: number) {
 		this.timer = null;
 		this.time = time;
 	}
@@ -10,10 +11,8 @@ class BotTimer {
 		clearTimeout(this.timer);
 		this.timer = null;
 	}
-	start(callback) {
+	start(callback: any) {
 		this.clear();
 		this.timer = setTimeout(callback, this.time);
 	}
 }
-
-module.exports = BotTimer;

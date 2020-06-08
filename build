@@ -69,11 +69,43 @@ try {
 
 sucrase('./lib', './.lib-dist');
 sucrase('./servers', './.servers-dist');
+sucrase('./plugins', './.plugins-dist');
+
+function copyDir(file, out) {
+	fs.lstat(file, function (err, stats) {
+		if (err) throw err;
+		if (stats.isSymbolicLink()) return;
+		if (stats.isFile()) {
+			fs.readFile(file,  "utf-8", function (err, text) {
+				if(err) throw err;
+				let extName = path.extname(file);
+				if(extName !== '.ts') {
+					fs.writeFile(out, text, function (err) {
+						if (err) throw err;
+					});						
+				}
+			});
+		} else if(stats.isDirectory()) {
+			fs.readdir(file, function (err, files) {
+				if (err) throw err;
+				for (var i = 0; i < files.length; i++) {
+					let extName = path.extname(files[i]);
+					if(extName !== '.ts') {
+						copyDir(path.join(file, files[i]), path.join(out, files[i]));						
+					};
+				}
+			});		
+		}
+	});
+}
+copyDir('./plugins', './.plugins-dist');
 
 replace('.servers-dist', [
+	{regex: /(require\(.*?)(lib|plugins)/g, replace: `$1.$2-dist`},
+]);
+replace('.plugins-dist/index.js', [
 	{regex: /(require\(.*?)(lib)/g, replace: `$1.$2-dist`},
 ]);
-
 // Make sure config.js exists. If not, copy it over synchronously from
 // config-example.js, since it"s needed before we can start the bot
 try {

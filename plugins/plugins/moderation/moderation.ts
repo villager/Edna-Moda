@@ -1,10 +1,9 @@
-'use strict';
 
-const Storage = require('./storage');
+import * as Storage from './storage';
 
-exports.loadData = Storage.loadData;
+export const loadData = Storage.loadData;
 
-exports.key = 'showdown';
+export const key = 'showdown';
 
 function onParse(server, room, data, isIntro, spl) {
 	if (spl[0] === 'j' || spl[0] === 'l') {
@@ -15,7 +14,7 @@ function onParse(server, room, data, isIntro, spl) {
 	}
 }
 
-exports.init = function () {
+export const init = function () {
 	Plugins.eventEmitter.on('PS_PARSE', onParse);
 };
 
@@ -45,7 +44,7 @@ function isBlackList(server, room, user) {
 	if (Storage.blacklist[server][room][toId(user)]) return true;
 	return false;
 }
-exports.commands = {
+export const commands = {
 	blacklist: {
 		add(target, room, user) {
 			if (!this.can('ban', true)) return false;

@@ -1,14 +1,17 @@
-'use strict';
 
-const path = require('path');
+import * as path from 'path';
+
 let dyns = Object.create(null);
-const {MessageEmbed} = require('discord.js');
+
+import {MessageEmbed} from 'discord.js';
 
 const PHRASES_DIR = path.resolve(__dirname, 'data', 'dyn.json');
+
 const Lang = Plugins.Language.load(path.resolve(__dirname, 'dyn-language.json'));
+
 let saveDyns = () => Plugins.FS(PHRASES_DIR).writeUpdate(() => JSON.stringify(dyns));
 
-exports.key = ['global', 'discord', 'showdown'];
+export const key = ['global', 'discord', 'showdown'];
 
 function loadCmdDyns(list, commandsHandler) {
 	for (let i in list) {
@@ -22,7 +25,7 @@ function initDyns(server) {
 		if (server.id === i) loadCmdDyns(dyns[i], server.commands);
 	}
 }
-exports.loadData = function () {
+export const loadData = function () {
 	try {
 		require.resolve('./data/dyn.json');
 	} catch (e) {
@@ -35,10 +38,10 @@ exports.loadData = function () {
 		Monitor.log(e);
 	}
 };
-exports.init = function (server) {
+export const init = function (server) {
 	Plugins.eventEmitter.on('onDynamic', initDyns);
 };
-exports.globalCommands = {
+export const globalCommands = {
 	dyn(target) {
 		if (!dyns[this.id]) return this.sendReply(Lang.get(this.lang, 'non_server_exist'));
 		if (!dyns[this.id][target]) return this.sendReply(Lang.get(this.lang, 'non_exist'));
@@ -72,7 +75,7 @@ exports.globalCommands = {
 		this.sendReply(`You"ve delete dynamic command "${target}"`);
 	},
 };
-exports.discordCommands = {
+export const discordCommands = {
 	dynlist: 'listdyn',
 	listdyn() {
 		if (!dyns[this.id]) return this.sendReply(Lang.getSub(this.lang, 'non_server_exist'));
@@ -104,7 +107,7 @@ exports.discordCommands = {
 		});
 	},
 };
-exports.psCommands = {
+export const psCommands = {
 	dynlist: 'listdyn',
 	listdyn() {
 		if (!dyns[this.id]) return this.sendReply(Lang.getSub(this.lang, 'non_server_exist'));

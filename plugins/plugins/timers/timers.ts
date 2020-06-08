@@ -1,9 +1,13 @@
-'use strict';
 
-exports.key = ['showdown', 'discord'];
+export const key = ['showdown', 'discord'];
 let timers = Object.create(null);
 
 class Timer extends Plugins.Timers {
+	id: any;
+	time: number;
+	room: string | any;
+	server: any;
+	midAnnunce: any;
 	constructor(server, room, time) {
 		super(time * 1000 * 60);
 		this.id = server;
@@ -23,7 +27,7 @@ class Timer extends Plugins.Timers {
 			Bot(this.id).send(data, this.room);
 		}
 	}
-	run(callback) {
+	run() {
 		this.midAnnunce.start(() => {
 			this.mid();
 		});
@@ -40,12 +44,12 @@ class Timer extends Plugins.Timers {
 	}
 }
 
-exports.init = function () {};
-exports.psCommands = {
+export function init() {};
+export const psCommands = {
 	timer: {},
 };
 
-exports.discordCommands = {
+export const discordCommands = {
 	timertopic: 'dynamic',
 	timer: {
 		new(target, room, user) {

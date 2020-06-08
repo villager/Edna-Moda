@@ -1,4 +1,4 @@
-'use strict';
+
 
 const Lang = Plugins.Language.load();
 
@@ -7,8 +7,8 @@ const SPANISH_ALIASES = new Set(['es', 'spanish', 'español', 'espaol', 'espanol
 const ENGLISH_ALIASES = new Set(['en', 'ing', 'ingles', 'us', 'uk', 'english']);
 const {MessageEmbed} = require('discord.js');
 
-exports.key = ['global', 'showdown', 'discord'];
-exports.globalCommands = {
+export const key = ['global', 'showdown', 'discord'];
+export const globalCommands = {
 	'?': 'help',
 	h: 'help',
 	help(target) {
@@ -110,7 +110,7 @@ exports.globalCommands = {
 	pickhelp: true,
 	picktopic: 'dynamic',
 };
-exports.psCommands = {
+export const psCommands = {
 	errorlog(target, room, user) {
 		if (!this.can('hotpatch', true)) return false;
 		let log = Plugins.FS('./logs/errors.log').readSync().toString();
@@ -147,7 +147,7 @@ exports.psCommands = {
 	languagetopic: 'settings',
 };
 
-exports.discordCommands = {
+export const discordCommands = {
 	errorlog() {
 		if (!this.can('hotpatch', true)) return false;
 		let log = Plugins.FS('./logs/errors.log').readSync().toString();

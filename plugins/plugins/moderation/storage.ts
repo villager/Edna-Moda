@@ -1,13 +1,12 @@
-'use strict';
 
-const path = require('path');
+import * as path from 'path';
 
-let blacklist = Object.create(null);
+export let blacklist = Object.create(null);
 const BLACK_LIST_PATH = path.resolve(__dirname, 'data', 'blacklist.json');
 
-exports.saveBlack = () => Plugins.FS(BLACK_LIST_PATH).writeUpdate(() => JSON.stringify(blacklist));
+export const saveBlack = () => Plugins.FS(BLACK_LIST_PATH).writeUpdate(() => JSON.stringify(blacklist));
 
-exports.loadData = function () {
+export function loadData() {
 	let dataFiles = [['blacklist.json', blacklist]];
 	for (const file of dataFiles) {
 		try {
@@ -23,4 +22,3 @@ exports.loadData = function () {
 		}
 	}
 };
-exports.blacklist = blacklist;

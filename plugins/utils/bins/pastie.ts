@@ -1,17 +1,16 @@
-'use strict';
 
-const https = require('https');
+import * as https from 'https';
 
-function upload(toUpload, callback) {
+export function upload(toUpload: string, callback: any) {
 	let reqOpts = {
-		hostname: 'hastebin.com',
+		hostname: 'pastie.io',
 		method: 'POST',
 		path: '/documents',
 	};
 	let req = https.request(reqOpts, res => {
 		res.on('data', chunk => {
 			try {
-				let linkStr = 'hastebin.com/' + JSON.parse(chunk.toString())['key'];
+				let linkStr = 'pastie.io/' + JSON.parse(chunk.toString())['key'];
 				if (typeof callback === 'function') callback(true, linkStr);
 			} catch (e) {
 				if (typeof callback === 'function') callback(false, e);
@@ -24,9 +23,10 @@ function upload(toUpload, callback) {
 	req.write(toUpload);
 	req.end();
 }
-function download(key, callback) {
+
+export function download(key: string, callback: any) {
 	if (typeof callback !== 'function') throw new Error('callback must be a function');
-	let url = 'https://hastebin.com/raw/' + key;
+	let url = 'https://pastie.io/raw/' + key;
 	https
 		.get(url, response => {
 			let data = '';
@@ -44,5 +44,3 @@ function download(key, callback) {
 			callback(null, err);
 		});
 }
-exports.upload = upload;
-exports.download = download;

@@ -1,10 +1,9 @@
-'use strict';
 
 //const ytdl = require('ytdl-core');
 
-exports.key = 'discord';
+export const key = 'discord';
 
-exports.commands = {
+export const commands = {
 	play(target, room, user, message) {
 		this.guild.channels.cache.forEach(channel => {
 			if (parseInt(channel.id) === 718722987351867413) {

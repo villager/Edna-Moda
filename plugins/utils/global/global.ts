@@ -1,8 +1,4 @@
-'use strict';
-
-const Tools = exports;
-
-Tools.toId = function (text) {
+export function toId (text: string | any) {
 	if (text && text.id) {
 		text = text.id;
 	} else if (text && text.username) {
@@ -12,14 +8,14 @@ Tools.toId = function (text) {
 	return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
 
-Tools.toUserName = function (name) {
+export function toUserName (name: string | any) {
 	if (name && name.username) {
 		name = name.username;
 	}
 	return ('' + name).toLowerCase().replace(/[^a-z0-9]+/g, '');
 };
 
-Tools.splint = function (target, separator, length) {
+export function splint(target: string, separator: string, length: number) {
 	if (!separator) separator = ',';
 
 	let cmdArr = [];
@@ -58,14 +54,14 @@ Tools.splint = function (target, separator, length) {
 		cmdArr = target.split(separator);
 	}
 	return cmdArr.map(cmd => cmd.trim());
-};
+}
 
-Tools.toName = function (text) {
+export function toName(text: string) {
 	if (!text) return '';
 	return text.trim();
 };
 
-Tools.escapeHTML = function (str) {
+export function escapeHTML(str: string) {
 	if (!str) return '';
 	return ('' + str)
 		.replace(/&/g, '&amp;')
@@ -76,7 +72,7 @@ Tools.escapeHTML = function (str) {
 		.replace(/\//g, '&#x2f;');
 };
 
-Tools.toDurationString = function (val, options = {}) {
+export function toDurationString(val: string | number | Date, options: AnyObject = {}) {
 	// TODO: replace by Intl.DurationFormat or equivalent when it becomes available (ECMA-402)
 	// https://github.com/tc39/ecma402/issues/47
 	const date = new Date(+val);
@@ -113,4 +109,4 @@ Tools.toDurationString = function (val, options = {}) {
 		.slice(0, precision)
 		.join(' ')
 		.trim();
-};
+}

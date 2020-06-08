@@ -1,17 +1,18 @@
-'use strict';
 
-const path = require('path');
+import * as path from 'path';
+
 const LANG_DIR = path.resolve(__dirname, 'language.json');
-const {MessageEmbed} = require('discord.js');
+import {MessageEmbed} from 'discord.js';
 
 const Lang = Plugins.Language.load(LANG_DIR);
 
-const Dex = require('./lib/dex');
-const Storage = require('./storage');
+import * as Dex from './lib/dex';
 
-exports.key = ['discord', 'showdown'];
+import * as Storage from './storage';
 
-exports.loadData = Storage.loadData;
+export const key = ['discord', 'showdown'];
+
+export const loadData = Storage.loadData;
 
 const mapColor = new Map([
 	['Green', '#00FF76'],
@@ -59,7 +60,7 @@ function chatPokeText(lang, poke) {
 	poke = toId(poke);
 	let data = Dex.getPokemon(poke);
 	if (!data) return false;
-	let pD = pokeData(lang, poke);
+	let pD: any = pokeData(lang, poke);
 	let output = '';
 	output += `**${data.name} #${data.num}** |`;
 	output += `${Lang.get(lang, 'hab')}: ${pD.abilities} |`;
@@ -72,7 +73,7 @@ function chatPokeHTML(lang, poke) {
 	poke = toId(poke);
 	let data = Dex.getPokemon(poke);
 	if (!data) return false;
-	let pD = pokeData(lang, poke);
+	let pD:any = pokeData(lang, poke);
 	let output = '';
 	output += `<center><strong>${data.name} #${data.num}</strong></center>`;
 	output += `<table width="100%">`;
@@ -93,7 +94,7 @@ function embedPokemon(lang, poke) {
 	poke = toId(poke);
 	let data = Dex.getPokemon(poke);
 	if (!data) return false;
-	let pD = pokeData(lang, poke);
+	let pD: any = pokeData(lang, poke);
 	return new MessageEmbed({
 		title: `**${data.name} #${data.num}**`,
 		thumbnail: {
@@ -120,9 +121,9 @@ function embedPokemon(lang, poke) {
 	});
 }
 
-exports.init = function () {};
+export function init () {};
 
-exports.psCommands = {
+export const psCommands = {
 	pokemon: 'dt',
 	dt(target) {
 		if (!target) return this.sendReply(Lang.getSub(this.lang, 'data', 'target'));
@@ -156,11 +157,11 @@ exports.psCommands = {
 	},
 	dttopic: 'pokedata',
 };
-exports.discordCommands = {
+export const discordCommands = {
 	dttopic: 'pokedata',
 	dt(target) {
 		if (!target) return this.sendReply(Lang.getSub(this.lang, 'data', 'target'));
-		let data = false;
+		let data: any = false;
 		switch (Dex.search(target)) {
 			case 'Pokemon':
 				data = embedPokemon(this.lang, target);

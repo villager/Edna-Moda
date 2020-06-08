@@ -1,6 +1,5 @@
-'use strict';
 
-exports.StatsId = {
+export const StatsId = {
 	HP: 'hp',
 	hp: 'hp',
 	Atk: 'atk',
@@ -18,18 +17,17 @@ exports.StatsId = {
 	Spe: 'spe',
 	Spd: 'spe',
 	spe: 'spe',
-};
+}
 
-exports.StatsName = {
+export const StatsName = {
 	hp: 'HP',
 	atk: 'Atk',
 	def: 'Def',
 	spa: 'SpA',
 	spd: 'SpD',
 	spe: 'Spe',
-};
-
-exports.Type = {
+}
+export const Type = {
 	Bug: {
 		damageTaken: {
 			Bug: 0,
@@ -471,4 +469,4 @@ exports.Type = {
 		HPivs: {atk: 30, def: 30, spa: 30},
 		HPdvs: {atk: 14, def: 13},
 	},
-};
+}

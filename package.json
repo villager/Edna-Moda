@@ -54,6 +54,7 @@
         "node-static": "^0.7.11"
     },
     "devDependencies": {
+        "@types/prettier": "^2.0.1",
         "@types/request": "^2.48.5",
         "@types/sockjs-client": "^1.1.1",
         "@typescript-eslint/eslint-plugin": "^3.1.0",
