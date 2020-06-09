@@ -1,19 +1,17 @@
-'use strict';
 /**
  * Default module for singles
  */
-
-const Calc = require('../calc');
-const TypeChart = require('../typechart');
+import * as Calc from '../calc';
+import * as TypeChart from '../typechart';
 
 const Pokemon = Calc.Pokemon;
 const Conditions = Calc.Conditions;
 
-exports.setup = function (Data) {
-	const BattleModule = {};
+export function setup(Data: AnyObject) {
+	const BattleModule: AnyObject = {};
 	BattleModule.id = 'singles-eff';
 
-	function suposeActiveFoe(battle) {
+	function suposeActiveFoe(battle: any) {
 		let target = battle.foe.active[0];
 		console.log(target.template);
 		let pokeB = new Pokemon(target.template, {
@@ -40,7 +38,7 @@ exports.setup = function (Data) {
 		return pokeB;
 	}
 
-	function evaluatePokemon(battle, sideId, noMega) {
+	function evaluatePokemon(battle, sideId, noMega?) {
 		if (!battle.foe.active[0] || battle.foe.active[0].fainted) return {t: 0, d: 0};
 		let pokeA = battle.getCalcRequestPokemon(sideId, !noMega);
 		//	console.log(pokeA);
@@ -878,4 +876,4 @@ exports.setup = function (Data) {
 	};
 
 	return BattleModule;
-};
+}

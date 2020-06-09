@@ -10,36 +10,33 @@ import {Plugins} from '../plugins';
 
 global.Plugins = Plugins;
 
-import * as Monitor from '../lib/monitor';
+import {Monitor} from '../lib/monitor';
+
 global.Monitor = Monitor;
-
-import * as Chat from './chat';
-
-global.Chat = Chat;
 
 const Discord: any | null = null;
 
-const bots = Object.create(null);
-
-function getBot(bot: string) {
-	if (!bots[bot]) {
-		if (Discord && Discord.get(bot)) {
-			return Discord.get(bot);
-		} else {
-			return false;
-		}
-	} else {
-		return bots[bot];
+export const Bot = new (class {
+	bots: AnyObject;
+	constructor() {
+		this.bots = Object.create(null);
 	}
-}
-export const Bot = (global.Bot = {
-	bots: bots,
-	get: getBot,
-	forEach(callback: any, thisArg: any) {
-		Object.values(bots).forEach(callback, thisArg);
-	},
-});
-
+	get(bot: string) {
+		if (!this.bots[bot]) {
+			if (Discord && Discord.get(bot)) {
+				return Discord.get(bot);
+			} else {
+				return false;
+			}
+		} else {
+			return this.bots[bot];
+		}
+	}
+	forEach(callback: any, thisArg?: any) {
+		Object.values(this.bots).forEach(callback, thisArg);
+	}
+})();
+global.Bot = Bot;
 global.toId = Plugins.Utils.toId;
 global.splint = Plugins.Utils.splint;
 global.toUserName = Plugins.Utils.toUserName;
@@ -67,7 +64,7 @@ class GBot {
 		this.servers = Object.create(null);
 		for (const i in Config.servers) {
 			const Server = Config.servers[i];
-			this.servers[i] = bots[i] = new PSClient(Server);
+			this.servers[i] = Bot.bots[i] = new PSClient(Server);
 		}
 	}
 	connect() {
@@ -90,7 +87,7 @@ class GBot {
 					console.log('Sever in a test mode');
 				}
 			});
-			Chat.loadPlugins();
+			Plugins.loadCommands();
 		}
 		if (this.discord) this.discord.connect();
 	}

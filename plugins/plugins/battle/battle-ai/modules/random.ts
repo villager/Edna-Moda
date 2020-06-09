@@ -2,10 +2,8 @@
  * Random Decision
  */
 
-'use strict';
-
-exports.setup = function (Data) {
-	const BattleModule = {};
+export function setup() {
+	const BattleModule: AnyObject = {};
 	BattleModule.id = 'random';
 
 	BattleModule.decide = function (battle, decisions) {
@@ -13,4 +11,4 @@ exports.setup = function (Data) {
 	};
 
 	return BattleModule;
-};
+}

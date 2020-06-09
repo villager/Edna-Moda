@@ -1,4 +1,4 @@
-export function getMultipleEff(typeA: string, typeB: string, gen: number, notInmmune: Boolean) {
+export function getMultipleEff(typeA: string, typeB: string, gen: number, notInmmune?: Boolean) {
 	let mux = 1;
 	let tmp;
 	for (let i = 0; i < typeB.length; i++) {

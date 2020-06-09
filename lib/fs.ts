@@ -155,7 +155,7 @@ class FSPath {
 	 * @param {() => string | Buffer} dataFetcher
 	 * @param {Object} options
 	 */
-	async writeUpdate(dataFetcher, options: AnyObject) {
+	async writeUpdate(dataFetcher: any, options?: any) {
 		if (Config.nofswriting) return;
 		const pendingUpdate = FS.pendingUpdates.get(this.path);
 		if (pendingUpdate) {

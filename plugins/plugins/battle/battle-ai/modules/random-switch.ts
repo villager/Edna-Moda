@@ -1,24 +1,24 @@
-'use strict';
-/**
- * Random Move
+/*
+ * Random Switch
  */
-exports.setup = function (Data) {
-	const BattleModule = {};
-	BattleModule.id = 'randommove';
 
-	function getDecisionValue(des) {
+export function setup(Data: any) {
+	const BattleModule: AnyObject = {};
+	BattleModule.id = 'randomsw';
+
+	function getDecisionValue(des: AnyObject) {
 		if (des.type === 'team') {
 			return 5000;
 		} else if (des.type === 'move') {
-			return 1000;
-		} else if (des.type === 'switch') {
 			return 100;
+		} else if (des.type === 'switch') {
+			return 1000;
 		} else {
 			return -1000; // Pass, Shift
 		}
 	}
 
-	BattleModule.decide = function (battle, decisions) {
+	BattleModule.decide = function (battle: any, decisions: any) {
 		let dTable = [];
 		let p, maxP;
 		maxP = null;
@@ -38,6 +38,5 @@ exports.setup = function (Data) {
 		}
 		return chosen[Math.floor(Math.random() * chosen.length)];
 	};
-
 	return BattleModule;
-};
+}

@@ -56,7 +56,7 @@ export const globalCommands: ChatCommands = {
 	},
 	helptopic: 'info',
 	version() {
-		return this.sendReply(Lang.get(this.lang, 'version', Chat.packageData.version));
+		return this.sendReply(Lang.get(this.lang, 'version', Plugins.packageData.version));
 	},
 	versiontopic: 'info',
 	say(target) {
@@ -120,8 +120,8 @@ export const psCommands: ChatCommands = {
 	},
 	errorlogtopic: 'admin',
 	about() {
-		let version = Chat.packageData.url;
-		let author = Chat.packageData.author && Chat.packageData.author.name;
+		let version = Plugins.packageData.url;
+		let author = Plugins.packageData.author && Plugins.packageData.author.name;
 		this.sendReply(Lang.get(this.lang, 'about', this.bot.name, author, version));
 	},
 	abouttopic: 'info',
@@ -164,7 +164,7 @@ export const discordCommands: ChatCommands = {
 	},
 	errorlogtopic: 'admin',
 	about() {
-		let packageData = Chat.packageData;
+		let packageData = Plugins.packageData;
 		let data = new MessageEmbed({
 			title: 'Acerca de mi...',
 			description: `Soy ${Config.name} un bot multi-plataforma creado por ${

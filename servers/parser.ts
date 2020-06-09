@@ -128,8 +128,8 @@ export class BaseParser {
 
 		return commandHandler;
 	}
-	can(permission, broadcast) {
-		if (Chat.hasAuth(this.serverType, this.user, permission)) return true;
+	can(permission: string, broadcast: Boolean) {
+		if (Plugins.hasAuth(this.serverType, this.user, permission)) return true;
 		if (broadcast) this.sendReply('Acceso Denegado');
 		return false;
 	}

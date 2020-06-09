@@ -1,4 +1,3 @@
-'use strict';
 /**
  * Ingame (No Status)
  *
@@ -15,12 +14,12 @@
  *  - Priority -1000 - Switch / Shift / Pass
  *	- Priority -100000 - Moves 0 damage
  */
-const Calc = require('../calc');
+import * as Calc from '../calc';
 const Pokemon = Calc.Pokemon;
 const Conditions = Calc.Conditions;
 
-exports.setup = function (Data) {
-	const BattleModule = {};
+export function setup(Data: AnyObject) {
+	const BattleModule: AnyObject = {};
 	BattleModule.id = 'ingame-nostatus';
 
 	/* Bad moves for 1v1 */
@@ -39,7 +38,7 @@ exports.setup = function (Data) {
 
 	/* Team and Switch Decisions */
 
-	function getPokemonAverage(battle, s) {
+	function getPokemonAverage(battle: any, s: any) {
 		if (!battle.foe.teamPv.length) return 0;
 
 		let p = battle.request.side.pokemon[s];
@@ -73,7 +72,7 @@ exports.setup = function (Data) {
 		return 0 + final;
 	}
 
-	function evaluateTeamDecision(battle, des) {
+	function evaluateTeamDecision(battle: any, des: AnyObject) {
 		let final = 0;
 		for (let i = 0; i < des.team.length; i++) {
 			final += getPokemonAverage(battle, des.team[i]);
@@ -83,7 +82,7 @@ exports.setup = function (Data) {
 
 	/* Switch Decisions */
 
-	function getSwitchAverage(battle, s) {
+	function getSwitchAverage(battle: any, s: string | number) {
 		let final = 0;
 		let p = battle.request.side.pokemon[s];
 		let pokeA = battle.getCalcRequestPokemon(s, true);
@@ -133,7 +132,7 @@ exports.setup = function (Data) {
 		return final / p.moves.length;
 	}
 
-	function evaluateSwitchDecision(battle, des) {
+	function evaluateSwitchDecision(battle: any, des: any) {
 		let final = -1000;
 		final += getSwitchAverage(battle, des.pokeId);
 		return final;
@@ -141,7 +140,7 @@ exports.setup = function (Data) {
 
 	/* Move Decisions */
 
-	function evaluateMoveDecision(battle, desEnv, des, act) {
+	function evaluateMoveDecision(battle: any, desEnv: any, des: any, act: any) {
 		let final = 0;
 		let p = battle.request.side.pokemon[act];
 		let a = battle.request.active[act];
@@ -274,4 +273,4 @@ exports.setup = function (Data) {
 	};
 
 	return BattleModule;
-};
+}

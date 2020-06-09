@@ -124,9 +124,9 @@ export class PSClient extends EventEmitter {
 		this.emit('connecting');
 	}
 	loadCommands() {
-		Chat.loadPlugins();
+		Plugins.loadCommands();
 		Plugins.eventEmitter.emit('onDynamic', this).flush();
-		Object.assign(this.commands, Chat.psCommands); // Assign base PS commands
+		Object.assign(this.commands, Plugins.psCommands); // Assign base PS commands
 	}
 	initPlugins() {
 		Plugins.forEach((plugin: AnyObject) => {

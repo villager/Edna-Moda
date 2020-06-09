@@ -17,13 +17,13 @@ export class Server {
 		this.initPlugins();
 	}
 	loadCommands() {
-		Chat.loadPlugins();
+		Plugins.loadCommands();
 		Plugins.eventEmitter.emit('onDynamic', this).flush();
-		Object.assign(this.commands, Chat.discordCommands);
+		Object.assign(this.commands, Plugins.discordCommands);
 		this.parser.loadTopics();
 	}
 	initPlugins() {
-		Plugins.forEach(plugin => {
+		Plugins.forEach((plugin: AnyObject) => {
 			if (typeof plugin.init === 'function') {
 				plugin.init(this);
 			}

@@ -6,17 +6,21 @@ import * as UtilLanguage from './utils/languages';
 import * as UtilBins from './utils/bins';
 import {UtilTimer} from './utils/timers';
 import {GlobalUtility} from './utils/global';
-import * as UtilDex from './utils/dex';
+import {UtilDex} from './utils/dex';
 import {UtilNetwork} from './utils/net';
-const COMMANDS_MAP = new Map([
-	['showdown', 'psCommands'],
-	['discord', 'discordCommands'],
-	['global', 'globalCommands'],
-]);
+
 export const Plugins = new (class {
 	plugins: AnyObject;
+	psCommands: ChatCommands | null;
+	discordCommands: ChatCommands | null;
+	globalCommands: ChatCommands | null;
+	packageData: AnyObject | null;
 	constructor() {
 		this.plugins = Object.create(null);
+		this.psCommands = null;
+		this.discordCommands = null;
+		this.globalCommands = null;
+		this.packageData = null;
 	}
 	get(plugin: string) {
 		if (!this.plugins[plugin]) return false;
@@ -70,21 +74,76 @@ export const Plugins = new (class {
 	}
 	loadPlugins() {
 		this.forEach((plugin: AnyObject) => {
-			// The key is the king
+			// The key is our king
 			if (plugin.key) {
 				if (Array.isArray(plugin.key)) {
 					for (const key of plugin.key) {
-						if (COMMANDS_MAP.has(key)) {
-							Object.assign(Chat[COMMANDS_MAP.get(key)], plugin[COMMANDS_MAP.get(key)]);
+						switch (key) {
+							case 'global':
+								Object.assign(this.globalCommands, plugin.globalCommands);
+								break;
+							case 'showdown':
+								Object.assign(this.psCommands, plugin.psCommands);
+								break;
+							case 'discord':
+								Object.assign(this.discordCommands, plugin.discordCommands);
+								break;
 						}
 					}
 				} else {
 					if (plugin.commands && typeof plugin.commands === 'object') {
-						Object.assign(Chat[COMMANDS_MAP.get(plugin.key)], plugin.commands);
+						switch (plugin.key) {
+							case 'global':
+								Object.assign(this.globalCommands, plugin.commands);
+								break;
+							case 'showdown':
+								Object.assign(this.psCommands, plugin.commands);
+								break;
+							case 'discord':
+								Object.assign(this.discordCommands, plugin.commands);
+								break;
+						}
 					}
 				}
 			}
 		});
+	}
+	loadCommands() {
+		this.psCommands = Object.create(null);
+		this.globalCommands = Object.create(null);
+		this.discordCommands = Object.create(null);
+		this.packageData = Object.create(null);
+		this.FS('./package.json')
+			.readTextIfExists()
+			.then((data: any) => {
+				if (data) this.packageData = JSON.parse(data);
+			});
+		this.loadPlugins();
+		Object.assign(this.discordCommands, this.globalCommands);
+		Object.assign(this.psCommands, this.globalCommands);
+	}
+	hasAuth(id: string, user: string | any, perm: string) {
+		let group;
+		let userId = id === 'Discord' ? toUserName(user) : toId(user);
+		for (const owner of Config.owners) {
+			if (owner.id === userId) return true;
+			for (const aliases of owner.aliases) {
+				if (aliases === userId) return true;
+			}
+		}
+		if (id === 'Discord') {
+			return true; // I"ll do this latter
+		} else {
+			let rank = Config.permissions[perm];
+			if (toId(Bot.get(id).name) === userId) {
+				group = Bot.get(id).group;
+			} else {
+				group = user.charAt(0);
+			}
+			if (rank === group) return true;
+			if (Config.rankList.indexOf(group) >= Config.rankList.indexOf(rank)) return true;
+		}
+		return false;
 	}
 	async initData() {
 		const DATA_FOLDERS = ['data'];

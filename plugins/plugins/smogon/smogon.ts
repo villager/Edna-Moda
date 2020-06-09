@@ -1,6 +1,4 @@
-import * as path from 'path';
-
-const LANG_DIR = path.resolve(__dirname, 'language.json');
+const LANG_DIR = Plugins.resolve('language.json');
 import {MessageEmbed} from 'discord.js';
 
 const Lang = Plugins.Language.load(LANG_DIR);
@@ -32,7 +30,7 @@ const colorType = new Map([
 	['Fighting', 'Brown'],
 	['Normal', 'Gray'],
 ]);
-function pokeData(lang, poke) {
+function pokeData(lang: string, poke: string) {
 	poke = toId(poke);
 	let data = Dex.getPokemon(poke);
 	if (!data) return false;
@@ -55,7 +53,7 @@ function pokeData(lang, poke) {
 	});
 	return {name, stats, abilities};
 }
-function chatPokeText(lang, poke) {
+function chatPokeText(lang: string, poke: string) {
 	poke = toId(poke);
 	let data = Dex.getPokemon(poke);
 	if (!data) return false;
@@ -68,7 +66,7 @@ function chatPokeText(lang, poke) {
 	output += `Gen: ${data.gen}`;
 	return output;
 }
-function chatPokeHTML(lang, poke) {
+function chatPokeHTML(lang: string, poke: string) {
 	poke = toId(poke);
 	let data = Dex.getPokemon(poke);
 	if (!data) return false;
@@ -128,14 +126,14 @@ export const psCommands: ChatCommands = {
 		if (!target) return this.sendReply(Lang.get(this.lang, {msg: 'data', in: 'target'}));
 		switch (Dex.search(target)) {
 			case 'Pokemon':
-				if (Chat.hasAuth(this.id, this.bot.name, 'html')) {
+				if (Plugins.hasAuth(this.id, this.bot.name, 'html')) {
 					if (this.can('games', false)) {
 						this.sendReply(`/addhtmlbox ${chatPokeHTML(this.lang, target)}`);
 					} else {
-						this.sendStrict(chatPokeText(this.lang, target));
+						this.sendReply(chatPokeText(this.lang, target));
 					}
 				} else {
-					this.sendStrict(chatPokeText(this.lang, target));
+					this.sendReply(chatPokeText(this.lang, target));
 				}
 				break;
 			case 'Abilitie':

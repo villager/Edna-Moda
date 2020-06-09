@@ -9,7 +9,7 @@ function canChallenge(server: any, i: string, nBattles: number) {
 	if (Config.battles.disable) return false;
 	if (Config.battles.all) return true; //Acept all challenges if "aceptAll" is enabled
 	if (Config.battles.max && Config.battles.max > nBattles) return true; //If it is not in too many battles, accept the challenge
-	if (Chat.hasAuth(server.id, i, 'driver')) return true;
+	if (Plugins.hasAuth(server.id, i, 'driver')) return true;
 	return false;
 }
 

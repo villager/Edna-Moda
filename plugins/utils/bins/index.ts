@@ -1,5 +1,7 @@
 const bins_list = ['https://hastebin.com', 'https://pastie.io'];
 
+import {UtilNetwork as Net} from '../net/net';
+
 export class Bin {
 	url: string;
 	constructor(url?: string) {
@@ -7,12 +9,12 @@ export class Bin {
 		this.url = url;
 	}
 	upload(toUpload: string, callback: any) {
-		Plugins.Net(this.url)
+		Net(this.url)
 			.request({
 				path: '/documents',
 				data: toUpload,
 			})
-			.then((chunk: string) => {
+			.then((chunk: any) => {
 				try {
 					let linkStr = this.url + '/' + JSON.parse(chunk.toString())['key'];
 					if (typeof callback === 'function') callback(true, linkStr);
@@ -27,9 +29,9 @@ export class Bin {
 	download(key: string, callback: any) {
 		if (typeof callback !== 'function') throw new Error('callback must be a function');
 		let url = this.url + key;
-		Plugins.Net(url)
+		Net(url)
 			.get()
-			.then((data: string) => {
+			.then((data: any) => {
 				callback(data);
 			})
 			.catch((e: any) => {
