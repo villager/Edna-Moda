@@ -5,9 +5,9 @@ const SPANISH_ALIASES = new Set(['es', 'spanish', 'español', 'espaol', 'espanol
 const ENGLISH_ALIASES = new Set(['en', 'ing', 'ingles', 'us', 'uk', 'english']);
 const {MessageEmbed} = require('discord.js');
 
-export const key = ['global', 'showdown', 'discord'];
+export const key = 'global';
 
-export const globalCommands: ChatCommands = {
+export const commands: ChatCommands = {
 	'?': 'help',
 	h: 'help',
 	help(target) {
@@ -84,6 +84,27 @@ export const globalCommands: ChatCommands = {
 		}
 	},
 	evaltopic: 'owner',
+	errorlog() {
+		if (!this.can('hotpatch', true)) return false;
+		let log = Plugins.FS('./logs/errors.log').readSync().toString();
+		Plugins.Bins.upload(log, (r, link) => {
+			if (r) {
+				if (this.serverType === 'Discord') {
+					let data = new MessageEmbed({
+						title: 'Errores',
+						description: 'Log de errores del Bot',
+						url: link,
+					});
+					this.sendReply(data);
+				} else {
+					this.sendReply(Lang.get(this.lang, {msg: 'errorlog', in: 'link'}, link));
+				}
+			} else {
+				this.sendReply(Lang.get(this.lang, {msg: 'errorlog', in: 'error'}));
+			}
+		});
+	},
+	errorlogtopic: 'admin',
 	uptime() {
 		const uptime = process.uptime();
 		let uptimeText;
@@ -108,24 +129,23 @@ export const globalCommands: ChatCommands = {
 	},
 	pickhelp: true,
 	picktopic: 'dynamic',
-};
-export const psCommands: ChatCommands = {
-	errorlog(target, room, user) {
-		if (!this.can('hotpatch', true)) return false;
-		let log = Plugins.FS('./logs/errors.log').readSync().toString();
-		Plugins.Bins.upload(log, (r, link) => {
-			if (r) this.sendReply(Lang.get(this.lang, {msg: 'errorlog', in: 'link'}, link));
-			else this.sendReply(Lang.get(this.lang, {msg: 'errorlog', in: 'error'}));
-		});
-	},
-	errorlogtopic: 'admin',
 	about() {
-		let version = Plugins.packageData.url;
+		let url = Plugins.packageData.url;
 		let author = Plugins.packageData.author && Plugins.packageData.author.name;
-		this.sendReply(Lang.get(this.lang, 'about', this.bot.name, author, version));
+		if (this.serverType === 'Discord') {
+			let data = new MessageEmbed({
+				title: Lang.get(this.lang, 'bout_me'),
+				description: Lang.get(this.lang, 'about_cord', Config.name, author),
+				url: url,
+			});
+			this.sendReply(data);
+		} else {
+			this.sendReply(Lang.get(this.lang, 'about', this.bot.name, author, url));
+		}
 	},
 	abouttopic: 'info',
 	language(target, room) {
+		if (this.serverType === 'Discord') return; // Nothing to report here
 		if (!this.can('invite', true)) return false;
 		if (!target) return this.sendReply(Lang.get(this.lang, {msg: 'language', in: 'target'}));
 		if (!LANG_LIST.has(target) && !SPANISH_ALIASES.has(target) && !ENGLISH_ALIASES.has(target)) {
@@ -143,36 +163,4 @@ export const psCommands: ChatCommands = {
 		}
 	},
 	languagetopic: 'settings',
-};
-
-export const discordCommands: ChatCommands = {
-	errorlog() {
-		if (!this.can('hotpatch', true)) return false;
-		let log = Plugins.FS('./logs/errors.log').readSync().toString();
-		Plugins.Bins.upload(log, (r, link) => {
-			if (r) {
-				let data = new MessageEmbed({
-					title: 'Errores',
-					description: 'Log de errores del Bot',
-					url: link,
-				});
-				this.sendReply(data);
-			} else {
-				this.sendReply('Lo sentimos, no fue posible encontrar los logs');
-			}
-		});
-	},
-	errorlogtopic: 'admin',
-	about() {
-		let packageData = Plugins.packageData;
-		let data = new MessageEmbed({
-			title: 'Acerca de mi...',
-			description: `Soy ${Config.name} un bot multi-plataforma creado por ${
-				packageData.author && packageData.author.name
-			} para el servidor Space Showdown`,
-			url: packageData.url,
-		});
-		this.sendReply(data);
-	},
-	abouttopic: 'info',
 };
