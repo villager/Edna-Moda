@@ -1,22 +1,18 @@
-//const ytdl = require('ytdl-core');
+const ytdl = require('ytdl-core');
 
 export const key = 'discord';
+const streamOptions = {seek: 0, volume: 1};
 
 export const commands: ChatCommands = {
 	play(target, room, user, message) {
 		this.guild.channels.cache.forEach(channel => {
 			if (parseInt(channel.id) === 718722987351867413) {
-				console.log('Entro aqui');
 				channel
 					.join()
 					.then(connection => {
-						connection.setMaxListeners(0);
-						connection.play(
-							'https://cdn.glitch.com/0c2bdbfc-5fce-47cd-a82f-7460fce155b2%2FAlexa_joins.mp3',
-							{
-								volume: '5',
-							},
-						);
+						const stream = ytdl('https://www.youtube.com/watch?v=xkDabM0Cy-E', {filter: 'audioonly'});
+						const dispatcher = connection.play(stream, streamOptions);
+						dispatcher.on('end', () => channel.leave());
 					})
 					.catch(e => console.log(e));
 			}

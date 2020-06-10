@@ -2,9 +2,11 @@ let dyns = Object.create(null);
 
 import {MessageEmbed} from 'discord.js';
 
-const PHRASES_DIR = Plugins.resolve('data', 'data-dyn.json');
+import * as path from 'path';
 
-const Lang = Plugins.Language.load(Plugins.resolve('dyn-language.json'));
+const PHRASES_DIR = path.resolve(__dirname, 'data', 'data-dyn.json');
+
+const Lang = Plugins.Language.load(path.resolve(__dirname, 'dyn-language.json'));
 
 let saveDyns = () => Plugins.FS(PHRASES_DIR).writeUpdate(() => JSON.stringify(dyns));
 

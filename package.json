@@ -41,7 +41,9 @@
         "url": "https://github.com/villager"
     },
     "dependencies": {
+        "@discordjs/opus": "^0.3.2",
         "discord.js": "^12.2.0",
+        "ffmpeg-static": "^4.2.2",
         "ps-data": "git://github.com/spaceshowdown/ps-data.git",
         "request": "^2.88.2",
         "sockjs-client": "^1.1.4",

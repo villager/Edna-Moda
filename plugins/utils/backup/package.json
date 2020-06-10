@@ -1,7 +1,7 @@
 {
-    "name": "bins",
-    "version": "1.0.2",
-    "main": "index.js",
+    "name": "backups",
+    "version": "1.0.0",
+    "main": "backup.js",
     "author": {
         "name": "Aldair Beltran",
         "email": "aldairbeltran3@hotmail.com",

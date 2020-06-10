@@ -1,5 +1,6 @@
 export let blacklist = Object.create(null);
-const BLACK_LIST_PATH = Plugins.resolve('data', 'data-blacklist.json');
+
+const BLACK_LIST_PATH = Plugins.resolve(__dirname, 'data', 'data-blacklist.json');
 
 export const saveBlack = () => Plugins.FS(BLACK_LIST_PATH).writeUpdate(() => JSON.stringify(blacklist));
 

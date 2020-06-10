@@ -1,8 +1,8 @@
 export let teams = Object.create(null);
 export let autoJoin = Object.create(null);
 
-const TEAMS_DIR = Plugins.resolve('data', 'data-teams.json');
-const AUTOJOIN_DIR = Plugins.resolve('data', 'data-autojoin.json');
+const TEAMS_DIR = Plugins.resolve(__dirname, 'data', 'data-teams.json');
+const AUTOJOIN_DIR = Plugins.resolve(__dirname, 'data', 'data-autojoin.json');
 
 export const saveTeams = () => Plugins.FS(TEAMS_DIR).writeUpdate(() => JSON.stringify(teams));
 export const saveJoins = () => Plugins.FS(AUTOJOIN_DIR).writeUpdate(() => JSON.stringify(autoJoin));

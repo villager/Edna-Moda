@@ -1,6 +1,6 @@
 const API_LINK = 'https://pokeapi.co/api/v2';
 
-function searchData(link: string) {
+export const searchData = (link: string) => {
 	return new Promise((resolve, reject) => {
 		Plugins.Net(link)
 			.toJSON()
@@ -28,8 +28,8 @@ function searchData(link: string) {
 			})
 			.catch(e => reject(e));
 	});
-}
-export function searchAbilitie(num: number) {
+};
+export const searchAbilitie = (num: number) => {
 	return new Promise((resolve, reject) => {
 		searchData(`${API_LINK}/ability/${num}`)
 			.then(data => {
@@ -37,8 +37,8 @@ export function searchAbilitie(num: number) {
 			})
 			.catch(e => reject(e));
 	});
-}
-export function searchItem(num: number) {
+};
+export const searchItem = (num: number) => {
 	return new Promise((resolve, reject) => {
 		searchData(`${API_LINK}/move/${num}`)
 			.then(data => {
@@ -46,4 +46,4 @@ export function searchItem(num: number) {
 			})
 			.catch(e => reject(e));
 	});
-}
+};

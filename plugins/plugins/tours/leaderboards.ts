@@ -2,7 +2,8 @@
  * Tournaments points system
  */
 
-const TOURS_DATA = Plugins.resolve('data', 'data-leaderboards.json');
+
+const TOURS_DATA = Plugins.resolve(__dirname, 'data', 'data-leaderboards.json');
 
 export let ladder = Object.create(null);
 

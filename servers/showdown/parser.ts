@@ -1,4 +1,4 @@
-const BaseParser = require('../parser').BaseParser;
+import {BaseParser} from '../parser';
 
 export class Parser extends BaseParser {
 	readonly serverType: string;
@@ -6,7 +6,7 @@ export class Parser extends BaseParser {
 		super(bot);
 		this.serverType = 'Showdown';
 	}
-	sendReply(data) {
+	sendReply(data: string) {
 		if (this.pmTarget) {
 			return this.bot.send(`/pm ${toId(this.pmTarget)}, ${data}`, toId(this.room));
 		} else {
@@ -23,7 +23,7 @@ export class Parser extends BaseParser {
 		const lang = this.room.language ? this.room.language : super.lang;
 		return lang;
 	}
-	parse(room, user, message, pm) {
+	parse(room: string, user: string, message: string, pm?: Boolean): void {
 		this.pmTarget = '';
 		this.bot.lastMessage = message;
 		if (toId(this.bot.name) === toId(user)) this.bot.group = user.charAt(0);

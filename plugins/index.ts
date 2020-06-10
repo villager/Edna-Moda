@@ -8,6 +8,7 @@ import {UtilTimer} from './utils/timers';
 import {GlobalUtility} from './utils/global';
 import {UtilDex} from './utils/dex';
 import {UtilNetwork} from './utils/net';
+import {UtilBackup} from './utils/backup';
 
 export const Plugins = new (class {
 	plugins: AnyObject;
@@ -22,7 +23,7 @@ export const Plugins = new (class {
 		this.globalCommands = null;
 		this.packageData = null;
 	}
-	get(plugin: string) {
+	get(plugin: string): AnyObject | Boolean {
 		if (!this.plugins[plugin]) return false;
 		return this.plugins[plugin];
 	}
@@ -52,13 +53,13 @@ export const Plugins = new (class {
 			this.load(plugin);
 		}
 		if (Config.isInitializacion) await this.initData();
-		this.forEach((plugin: AnyObject) => {
+		void this.forEach((plugin: AnyObject) => {
 			if (typeof plugin.loadData === 'function') {
 				if (!Config.testMode) plugin.loadData();
 			}
 		});
 	}
-	initCmds() {
+	initCmds(): string[] {
 		let cmds: string[] = [];
 		Bot.forEach((bot: AnyObject) => {
 			if (Array.isArray(bot.initCmds)) {
@@ -72,7 +73,7 @@ export const Plugins = new (class {
 		});
 		return cmds;
 	}
-	loadPlugins() {
+	loadPlugins(): void {
 		this.forEach((plugin: AnyObject) => {
 			// The key is our king
 			if (plugin.key) {
@@ -108,12 +109,12 @@ export const Plugins = new (class {
 			}
 		});
 	}
-	loadCommands() {
+	loadCommands(): void {
 		this.psCommands = Object.create(null);
 		this.globalCommands = Object.create(null);
 		this.discordCommands = Object.create(null);
 		this.packageData = Object.create(null);
-		this.FS('./package.json')
+		void this.FS('./package.json')
 			.readTextIfExists()
 			.then((data: any) => {
 				if (data) this.packageData = JSON.parse(data);
@@ -122,7 +123,7 @@ export const Plugins = new (class {
 		Object.assign(this.discordCommands, this.globalCommands);
 		Object.assign(this.psCommands, this.globalCommands);
 	}
-	hasAuth(id: string, user: string | any, perm: string) {
+	hasAuth(id: string, user: string | any, perm: string): Boolean {
 		let group;
 		let userId = id === 'Discord' ? toUserName(user) : toId(user);
 		for (const owner of Config.owners) {
@@ -210,14 +211,14 @@ export const Plugins = new (class {
 	get Net() {
 		return UtilNetwork;
 	}
+	get Backup() {
+		return UtilBackup;
+	}
 	get eventEmitter() {
 		// @ts-ignore
 		return new EventEmitter();
 	}
 	resolve(...args: string[]) {
-		return path.resolve(__dirname, ...args);
-	}
-	join(...args: string[]) {
-		return path.join(__dirname, ...args);
+		return path.resolve(...args);
 	}
 })();

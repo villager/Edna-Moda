@@ -1,5 +1,6 @@
 {
     "english": {
+        "target": "Specify a Pokemon or a type",
         "data": {
             "target": "You need to set a target",
             "atk": "Attack",
@@ -14,11 +15,30 @@
         "none": "None",
         "group": "Group",
         "evolution": "Evolution",
-        "404": "We couldn't found that poke data"
+        "404": "We couldn't found that poke data",
+        "Fire": "Fire",
+        "Water": "Water",
+        "Grass": "Grass",
+        "Steel": "Steel",
+        "Normal": "Normal",
+        "Ghost": "Ghost",
+        "Rock": "Rock",
+        "Ground": "Ground",
+        "Flying": "Flying",
+        "Fighting": "Fighting",
+        "Dark": "Dark",
+        "Electric": "Electric",
+        "Fairy": "Fairy",
+        "Dragon": "Dragon",
+        "Ice": "Ice",
+        "Bug": "Bug",
+        "Psychic": "Psychic",
+        "Poison": "Poison"
     },
     "spanish": {
+        "target": "Especifica un Pokemon o un tipo",
         "data": {
-            "target": "Necesitas especificar un Pokemon",
+            "target": "Necesitas especificar un Pokemon/Movimiento/Habilidad",
             "atk": "Ataque",
             "def": "Defensa",
             "spe": "Velocidad",
@@ -31,6 +51,24 @@
         "none": "Ninguna",
         "group": "Grupo",
         "evolution": "Evolucion",
-        "404": "No pudimos encontrar el pokemon"
+        "404": "No pudimos encontrar el pokemon",
+        "Fire": "Fuego",
+        "Water": "Agua",
+        "Grass": "Planta",
+        "Steel": "Acero",
+        "Normal": "Normal",
+        "Ghost": "Fantasma",
+        "Rock": "Roca",
+        "Ground": "Tierra",
+        "Flying": "Volador",
+        "Fighting": "Lucha",
+        "Dark": "Siniestro",
+        "Electric": "Electrico",
+        "Fairy": "Hada",
+        "Dragon": "Dragon",
+        "Ice": "Hielo",
+        "Bug": "Bicho",
+        "Psychic": "Psiquico",
+        "Poison": "Veneno"
     }
 }

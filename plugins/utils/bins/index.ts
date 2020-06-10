@@ -39,6 +39,9 @@ export class Bin {
 			});
 	}
 }
+
+export const Pastie = new Bin(bins_list[1]);
+export const Hastebin = new Bin(bins_list[0]);
 export function upload(toUpload: string, callback: any) {
 	let Hastebin = new Bin();
 	try {

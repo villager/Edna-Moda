@@ -2,6 +2,8 @@
 !plugins/plugins/**/data/*-example*
 config/*
 logs/*
+backups/*
+!backups/README.md
 .*-dist/*
 !logs/README.md
 /node_modules

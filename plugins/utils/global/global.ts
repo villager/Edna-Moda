@@ -8,13 +8,22 @@ export const GlobalUtility = new (class {
 		if (typeof text !== 'string' && typeof text !== 'number') return '';
 		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 	}
+	toName(text: string | any) {
+		if (text && text.name) {
+			text = text.name;
+		} else if (text && text.username) {
+			text = text.username;
+		}
+		if (typeof text !== 'string' && typeof text !== 'number') return '';
+		return text as string;
+	}
 	toUserName(name: string | any) {
 		if (name && name.username) {
 			name = name.username;
 		}
 		return ('' + name).toLowerCase().replace(/[^a-z0-9]+/g, '');
 	}
-	splint(target: string, separator: string, length: number) {
+	splint(target: string, separator?: string, length?: number): string | string[] {
 		if (!separator) separator = ',';
 
 		let cmdArr = [];
@@ -54,11 +63,7 @@ export const GlobalUtility = new (class {
 		}
 		return cmdArr.map(cmd => cmd.trim());
 	}
-	toName(text: string) {
-		if (!text) return '';
-		return text.trim();
-	}
-	escapeHTML(str: string) {
+	escapeHTML(str: string | any) {
 		if (!str) return '';
 		return ('' + str)
 			.replace(/&/g, '&amp;')

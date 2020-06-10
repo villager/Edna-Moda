@@ -2,15 +2,15 @@ import * as Storage from './storage';
 
 export let teams = Object.create(null);
 
-function mergeTeams() {
+const mergeTeams = () => {
 	for (let i in Storage.teams) {
 		let team = Storage.teams[i];
 		if (teams[team.format]) teams[team.format] = [];
 		teams[team.format].push(team.packed);
 	}
-}
+};
 
-function addTeam(name: string, format: string, packed: AnyObject) {
+const addTeam = (name: string, format: string, packed: AnyObject) => {
 	if (Storage.isSaved(name)) return false;
 	Storage.teams[name] = {
 		format: format,
@@ -19,16 +19,16 @@ function addTeam(name: string, format: string, packed: AnyObject) {
 	Storage.saveTeams();
 	mergeTeams();
 	return true;
-}
+};
 
-function removeTeam(name: string) {
+const removeTeam = (name: string) => {
 	if (!Storage.isSaved(name)) return false;
 	delete Storage.teams[name];
 	Storage.saveTeams();
 	mergeTeams();
 	return true;
-}
-function getTeam(format: string) {
+};
+const getTeam = (format: string) => {
 	let formatId = toId(format);
 	let teamStuff = teams[formatId];
 	if (!teamStuff || !teamStuff.length) return false;
@@ -65,15 +65,15 @@ function getTeam(format: string) {
 	} catch (e) {
 		console.log(e.stack);
 	}
-}
-function packTeam(team: AnyObject[]) {
+};
+const packTeam = (team: AnyObject[]) => {
 	Plugins.Dex.packTeam(team);
-}
-function hasTeam(format: string) {
+};
+const hasTeam = (format: string) => {
 	let formatId = toId(format);
 	if (teams[formatId]) return true;
 	return false;
-}
+};
 
 export const add = addTeam;
 export const packed = packTeam;

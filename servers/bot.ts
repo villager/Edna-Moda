@@ -35,10 +35,17 @@ export const Bot = new (class {
 	forEach(callback: any, thisArg?: any) {
 		Object.values(this.bots).forEach(callback, thisArg);
 	}
+	yallEach(callback: any, thisArg?: any) {
+		Object.values(this.bots).forEach(callback, thisArg);
+		if (Discord) {
+			Discord.servers.forEach(callback, thisArg);
+		}
+	}
 })();
 global.Bot = Bot;
 global.toId = Plugins.Utils.toId;
 global.splint = Plugins.Utils.splint;
+global.toName = Plugins.Utils.toName;
 global.toUserName = Plugins.Utils.toUserName;
 // @ts-ignore
 Plugins.init();

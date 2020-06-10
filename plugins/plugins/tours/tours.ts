@@ -1,8 +1,7 @@
 /*
 	Tournaments Manager Feature
 */
-
-const LANG_DIR = Plugins.resolve('langs.json');
+const LANG_DIR = Plugins.resolve(__dirname, 'langs.json');
 
 export let tournaments = Object.create(null);
 export let tourData = Object.create(null);

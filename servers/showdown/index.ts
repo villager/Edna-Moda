@@ -249,6 +249,7 @@ export class PSClient extends EventEmitter {
 						break;
 					case 'rooms':
 						if (splittedLine[2] === 'null') break;
+						// @ts-ignore
 						const roomData = JSON.parse(splittedLine.slice(2));
 						if (!roomList[this.id]) {
 							roomList[this.id] = {};
@@ -370,7 +371,7 @@ export class PSClient extends EventEmitter {
 		manager.start();
 		return manager;
 	}
-	login(name, pass) {
+	login(name: string, pass: string) {
 		const self = this;
 		let options;
 		if (pass !== '') {
@@ -407,7 +408,7 @@ export class PSClient extends EventEmitter {
 		 * @param {string} response
 		 * @param {string} body
 		 */
-		function callback(error, response, body) {
+		function callback(error: any, response: any, body: string) {
 			if (body === ';') return console.log('Failed to log in, name is registered', self.id);
 			if (body.length < 50) return console.log('Failed to log in: ' + body, self.id);
 			if (~body.indexOf('heavy load')) {

@@ -9,13 +9,13 @@ export class LoadLang {
 		this.translations = Object.create(null);
 		this.path = path;
 	}
-	load() {
+	load(): void {
 		let langPackage = require(this.path);
 		for (let i in langPackage) {
 			this.translations[i] = langPackage[i];
 		}
 	}
-	get(lang: string, msg: string | AnyObject, ...args: string[]) {
+	get(lang: string, msg: string | AnyObject, ...args: string[]): string {
 		let language = lang;
 		this.load();
 		let output = '';
@@ -36,6 +36,12 @@ export class LoadLang {
 			i++;
 		}
 		return output;
+	}
+	static normalized(obj: AnyObject) {
+		if (!obj.msg) throw RangeError('UNCAUGHT_LANGUAGE_NAME_ID');
+		if (!obj.input) throw RangeError('UNCAUGHT_LANGUAGE_INNER_ID');
+		if (Object.keys(obj).length > 2) throw RangeError('UNEXPECTED_PARAM');
+		return obj;
 	}
 }
 /**

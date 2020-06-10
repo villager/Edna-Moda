@@ -23,7 +23,7 @@ class Timer extends Plugins.Timers {
 		if (this.id === 'discord') {
 			this.room.send(data);
 		} else {
-			Bot(this.id).send(data, this.room);
+			Bot.get(this.id).send(data, this.room);
 		}
 	}
 	run() {

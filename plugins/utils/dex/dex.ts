@@ -485,4 +485,7 @@ export const UtilDex = new (class {
 		} catch (e) {}
 		return {};
 	}
+	get Chart() {
+		return Chart;
+	}
 })();

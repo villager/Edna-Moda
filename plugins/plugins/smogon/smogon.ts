@@ -1,15 +1,16 @@
-const LANG_DIR = Plugins.resolve('language.json');
+const LANG_DIR = Plugins.resolve(__dirname, 'language.json');
+
 import {MessageEmbed} from 'discord.js';
 
 const Lang = Plugins.Language.load(LANG_DIR);
 
-import * as Dex from './lib/dex';
+import {Dex} from './lib/dex';
 
-import * as Storage from './storage';
+import {Storage} from './storage';
 
-export const key = ['discord', 'showdown'];
+export const key = 'global';
 
-export const loadData = Storage.loadData;
+export const loadData = Storage.load;
 
 const mapColor = new Map([
 	['Green', '#00FF76'],
@@ -30,7 +31,7 @@ const colorType = new Map([
 	['Fighting', 'Brown'],
 	['Normal', 'Gray'],
 ]);
-function pokeData(lang: string, poke: string) {
+const pokeData = (lang: string, poke: string) => {
 	poke = toId(poke);
 	let data = Dex.getPokemon(poke);
 	if (!data) return false;
@@ -46,14 +47,14 @@ function pokeData(lang: string, poke: string) {
 	let abilities = [];
 	data.abilities.map(abilitie => {
 		let id = toId(abilitie).replace(' ', '');
-		Storage.localAbilitie(id)
+		Storage.local('Abilitie', id)
 			.then(() => {})
 			.catch(() => {});
 		abilities.push(Storage.abilities[id] ? Storage.abilities[id][lang].name : abilitie);
 	});
 	return {name, stats, abilities};
-}
-function chatPokeText(lang: string, poke: string) {
+};
+const chatPokeText = (lang: string, poke: string) => {
 	poke = toId(poke);
 	let data = Dex.getPokemon(poke);
 	if (!data) return false;
@@ -65,8 +66,8 @@ function chatPokeText(lang: string, poke: string) {
 	output += `${Lang.get(lang, 'evolution')}: ${data.evos ? data.evos : Lang.get(lang, 'none')} |`;
 	output += `Gen: ${data.gen}`;
 	return output;
-}
-function chatPokeHTML(lang: string, poke: string) {
+};
+const chatPokeHTML = (lang: string, poke: string) => {
 	poke = toId(poke);
 	let data = Dex.getPokemon(poke);
 	if (!data) return false;
@@ -86,8 +87,8 @@ function chatPokeHTML(lang: string, poke: string) {
 	output += '</table>';
 	output += `${pD.stats}`;
 	return output;
-}
-function embedPokemon(lang, poke) {
+};
+const embedPokemon = (lang: string, poke: string) => {
 	poke = toId(poke);
 	let data = Dex.getPokemon(poke);
 	if (!data) return false;
@@ -116,31 +117,142 @@ function embedPokemon(lang, poke) {
 		},
 		color: mapColor.has(data.color) ? mapColor.get(data.color) : '#FFFFFF',
 	});
-}
+};
 
-export function init() {}
-
-export const psCommands: ChatCommands = {
+export const init = () => {
+	for (const file of Storage.fileList) {
+		let fullDir = `./.plugins-dist/plugins/smogon/data/${file}`;
+		Plugins.Backup(fullDir).on();
+	}
+};
+let typeList = new Set([
+	'Fire',
+	'Water',
+	'Steel',
+	'Rock',
+	'Ground',
+	'Flying',
+	'Fighting',
+	'Normal',
+	'Ghost',
+	'Dark',
+	'Electric',
+	'Fairy',
+	'Dragon',
+	'Ice',
+	'Bug',
+	'Grass',
+	'Psychic',
+	'Poison',
+]);
+export const loadWeak = (type): any => {
+	let Type = Plugins.Dex.Chart.Type[type];
+	if (!Type || !type) return false;
+	let weakness = [];
+	let resistances = [];
+	let immunities = [];
+	for (let i in Type.damageTaken) {
+		let typeData = Type.damageTaken[i];
+		if (!typeList.has(i)) continue;
+		switch (typeData) {
+			case 1: // Weak
+				weakness.push(i);
+				break;
+			case 2: // Resistence
+				resistances.push(i);
+				break;
+			case 3: // Inmune
+				immunities.push(i);
+				break;
+		}
+	}
+	return {weak: weakness, resist: resistances, inmune: immunities};
+};
+const typeFormat = (type: string): string => {
+	let fstLetter = type.charAt(0).toUpperCase();
+	return fstLetter + type.slice(1);
+};
+export const commands: ChatCommands = {
+	weakness(target) {
+		let poke = Dex.getPokemon(target);
+		if (!target) return this.sendReply(Lang.get(this.lang, {msg: 'data', in: 'target'}));
+		if (poke) {
+		} else {
+			target = typeFormat(toId(target));
+			if (!Plugins.Dex.Chart.Type[target]) {
+				return this.sendReply(Lang.get(this.lang, {msg: 'data', in: 'target'}));
+			} else {
+				let data;
+				let typeData = loadWeak(target);
+				if (this.serverType === 'Showdown') {
+				} else {
+					data = `**${target}** es ${
+						typeData.inmune.length
+							? 'inmune a: ' + typeData.inmune.map(type => Lang.get(this.lang, type)).join(' ,')
+							: ''
+					}`;
+					data += ` resistente a ${typeData.resist.map(type => Lang.get(this.lang, type)).join(', ')}`;
+					data += ` y debil a ${typeData.weak.map(type => Lang.get(this.lang, type)).join(', ')}`;
+				}
+				this.sendReply(data);
+			}
+		}
+	},
+	weaknesstopic: 'pokedata',
 	pokemon: 'dt',
 	dt(target) {
 		if (!target) return this.sendReply(Lang.get(this.lang, {msg: 'data', in: 'target'}));
 		switch (Dex.search(target)) {
 			case 'Pokemon':
-				if (Plugins.hasAuth(this.id, this.bot.name, 'html')) {
-					if (this.can('games', false)) {
-						this.sendReply(`/addhtmlbox ${chatPokeHTML(this.lang, target)}`);
+				if (this.serverType === 'Showdown') {
+					if (Plugins.hasAuth(this.id, this.bot.name, 'html')) {
+						if (this.can('games', false)) {
+							this.sendReply(`/addhtmlbox ${chatPokeHTML(this.lang, target)}`);
+						} else {
+							this.sendReply(chatPokeText(this.lang, target));
+						}
 					} else {
 						this.sendReply(chatPokeText(this.lang, target));
 					}
 				} else {
-					this.sendReply(chatPokeText(this.lang, target));
+					this.sendReply(embedPokemon(this.lang, target));
 				}
 				break;
 			case 'Abilitie':
-				Storage.localAbilitie(toId(target).replace(' ', ''))
+				Storage.local('Abilitie', toId(target).replace(' ', ''))
 					.then(abilitie => {
-						let data = `**${abilitie[this.lang].name}:** `;
-						data += abilitie[this.lang].desc.replace('\n', ' ');
+						let data;
+						if (this.serverType === 'Showdown') {
+							data = `**${abilitie[this.lang].name}:** `;
+							data += abilitie[this.lang].desc.replace('\n', ' ');
+							this.sendReply(data);
+						} else {
+							data = new MessageEmbed({
+								title: `**${abilitie[this.lang].name}**`,
+								description: abilitie[this.lang].desc,
+							});
+						}
+						this.sendReply(data);
+					})
+					.catch(() => {
+						this.sendReply(Lang.get(this.lang, '404'));
+					});
+				break;
+			case 'Move':
+				Storage.local('Move', toId(target).replace(' ', ''))
+					.then(move => {
+						let data;
+						if (this.serverType === 'Showdown') {
+							data = `**${move[this.lang].name}**: ${move[this.lang].desc}`;
+						} else {
+							let type = Dex.getMove(target).type;
+							let color = colorType.has(type) ? mapColor.get(colorType.get(type)) : '#CCC';
+							data = new MessageEmbed({
+								title: `**${move[this.lang].name}**`,
+								description: move[this.lang].desc,
+								color: color,
+							});
+						}
 						this.sendReply(data);
 					})
 					.catch(() => {
@@ -153,49 +265,4 @@ export const psCommands: ChatCommands = {
 		}
 	},
 	dttopic: 'pokedata',
-};
-export const discordCommands: ChatCommands = {
-	dttopic: 'pokedata',
-	dt(target) {
-		if (!target) return this.sendReply(Lang.get(this.lang, {msg: 'data', in: 'target'}));
-		let data: any = false;
-		switch (Dex.search(target)) {
-			case 'Pokemon':
-				data = embedPokemon(this.lang, target);
-				this.sendReply(data);
-				break;
-			case 'Abilitie':
-				Storage.localAbilitie(toId(target).replace(' ', ''))
-					.then(abilitie => {
-						let embed = new MessageEmbed({
-							title: `**${abilitie[this.lang].name}**`,
-							description: abilitie[this.lang].desc,
-						});
-						this.sendReply(embed);
-					})
-					.catch(() => {
-						this.sendReply(Lang.get(this.lang, '404'));
-					});
-				break;
-			case 'Move':
-				Storage.localMove(toId(target).replace(' ', ''))
-					.then(move => {
-						let type = Dex.getMove(target).type;
-						let color = colorType.has(type) ? mapColor.get(colorType.get(type)) : '#CCC';
-						let embed = new MessageEmbed({
-							title: `**${move[this.lang].name}**`,
-							description: move[this.lang].desc,
-							color: color,
-						});
-						this.sendReply(embed);
-					})
-					.catch(() => {
-						this.sendReply(Lang.get(this.lang, '404'));
-					});
-				break;
-			default: {
-				this.sendReply(Lang.get(this.lang, '404'));
-			}
-		}
-	},
 };

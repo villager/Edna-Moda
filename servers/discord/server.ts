@@ -11,7 +11,7 @@ export class Server {
 		this.idNum = guild.id;
 		this.name = guild.name;
 		this.id = toId(this.name);
-		this.language = 'english';
+		this.language = 'spanish';
 		this.commands = Object.create(null);
 		this.parser = new Parser(this);
 		this.initPlugins();

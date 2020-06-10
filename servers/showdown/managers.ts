@@ -1,3 +1,5 @@
+import {PSClient} from '.';
+
 const DEFAULT_ACTIVITY = {
 	every: 10,
 	cmd: '/noonewillusethisthingever',
@@ -6,7 +8,7 @@ const DEFAULT_DELAY = Config.reconnectingDelay || 1000 * 30;
 
 class Activity extends Plugins.Timers {
 	manager: typeof ConnectionManager;
-	constructor(manager) {
+	constructor(manager: typeof ConnectionManager) {
 		super(DEFAULT_ACTIVITY.every * 1000);
 		this.manager = manager;
 	}
@@ -18,9 +20,9 @@ class Activity extends Plugins.Timers {
 	check() {}
 }
 export class RoomManager extends Plugins.Timers {
-	baseRooms: string[];
-	server: AnyObject;
-	constructor(server) {
+	baseRooms: string[] | string;
+	server: PSClient;
+	constructor(server: PSClient) {
 		super(1000 * 15);
 		this.baseRooms = server.baseRooms;
 		this.server = server;
@@ -46,15 +48,16 @@ export class ConnectionManager extends Plugins.Timers {
 	maxAttemps: number;
 	attemps: number;
 	activity: any;
-	server: AnyObject;
+	server: PSClient;
 	conntime: number;
-	constructor(server) {
+	constructor(server: PSClient) {
 		super(DEFAULT_DELAY);
 		this.connecting = false;
 		this.status = {connected: false};
 		this.closed = false;
 		this.maxAttemps = Config.maxAttemps || 3;
 		this.attemps = 0;
+		// @ts-ignore
 		this.activity = new Activity(this);
 		this.server = server;
 		this.conntime = 0;
@@ -87,8 +90,8 @@ export class SendManager {
 	callback: null | any;
 	destroyHandler: any;
 	err: any;
-	interval: any;
-	constructor(data, msgMaxLines, sendFunc, destroyHandler) {
+	interval: any | null;
+	constructor(data: string | string[], msgMaxLines: number, sendFunc: Function, destroyHandler: Function) {
 		this.data = data;
 		this.msgMaxLines = msgMaxLines;
 		this.sendFunc = sendFunc;
@@ -106,7 +109,7 @@ export class SendManager {
 		} else {
 			data = data.slice();
 		}
-		const nextToSend = function () {
+		const nextToSend = () => {
 			if (!data.length) {
 				clearInterval(this.interval);
 				this.interval = null;
@@ -144,7 +147,7 @@ export class SendManager {
 	/**
 	 * @param {function} callback
 	 */
-	then(callback) {
+	then(callback: Function) {
 		if (this.status !== 'sending') {
 			return callback(this.err);
 		} else {

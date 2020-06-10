@@ -29,10 +29,9 @@ export class BaseParser {
 	get lang() {
 		return this.bot.language;
 	}
-	sendReply(data: string) {}
-	splitToken(message: string[]) {
-		message = splint(message, ' ');
-		return message;
+	splitToken(message: string) {
+		let splitMessage = splint(message, ' ');
+		return splitMessage;
 	}
 	splitOne(target: string) {
 		const commaIndex = target.indexOf(',');
@@ -41,7 +40,7 @@ export class BaseParser {
 		}
 		return [target.slice(0, commaIndex).trim(), target.slice(commaIndex + 1).trim()];
 	}
-	splitCommand(message: any) {
+	splitCommand(message: string | string[]) {
 		this.cmd = '';
 		this.cmdToken = '';
 		this.target = '';

@@ -10,6 +10,7 @@ declare global {
 		interface Global {
 			Plugins: any;
 			toId(input: string): string;
+			splint(target: string, param?: string, len?: number): string[] | string;
 			Monitor: any;
 			Bot: any;
 		}
@@ -35,4 +36,5 @@ declare global {
 	const splint: typeof Plugins.Utils.splint;
 	const toUserName: typeof Plugins.Utils.toUserName;
 	const toId: typeof Plugins.Utils.toId;
+	const toName: typeof Plugins.Utils.toName;
 }

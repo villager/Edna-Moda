@@ -24,7 +24,7 @@ declare global {
 			Plugins: any;
 			toId(input: any): string;
 			toUserName(input: any): string;
-			splint(target: string, param?: string, len?: number): string[];
+			splint(target: string, param?: string, len?: number): string[] | string;
 			Chat: any;
 			Bot: any;
 		}

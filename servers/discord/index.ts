@@ -11,7 +11,7 @@ export class DiscordClient extends Client {
 		this.servers = new Map();
 		this.name = Config.name;
 	}
-	get(name) {
+	get(name: any) {
 		name = name.name ? toId(name.name) : toId(name);
 		if (!this.servers.has(name)) return false;
 		return this.servers.get(name);

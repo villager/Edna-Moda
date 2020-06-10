@@ -4,7 +4,7 @@ export class Room {
 	users: any;
 	title: string;
 	userCount: number;
-	language: boolean | string;
+	language: Boolean | string;
 	constructor(room: string, options: any = {}) {
 		this.id = toId(room);
 		this.type = options.type || 'chat';
