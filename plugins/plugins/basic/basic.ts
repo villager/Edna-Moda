@@ -89,16 +89,16 @@ export const commands: ChatCommands = {
 		let log = Plugins.FS('./logs/errors.log').readSync().toString();
 		Plugins.Bins.upload(log, (r, link) => {
 			if (r) {
-				if (this.serverType === 'Discord') {
+				this.isDiscord.then(() => {
 					let data = new MessageEmbed({
 						title: 'Errores',
 						description: 'Log de errores del Bot',
 						url: link,
 					});
 					this.sendReply(data);
-				} else {
+				}).catch(() => {
 					this.sendReply(Lang.get(this.lang, {msg: 'errorlog', in: 'link'}, link));
-				}
+				});
 			} else {
 				this.sendReply(Lang.get(this.lang, {msg: 'errorlog', in: 'error'}));
 			}
@@ -132,16 +132,16 @@ export const commands: ChatCommands = {
 	about() {
 		let url = Plugins.packageData.url;
 		let author = Plugins.packageData.author && Plugins.packageData.author.name;
-		if (this.serverType === 'Discord') {
+		this.isDiscord.then(() => {
 			let data = new MessageEmbed({
 				title: Lang.get(this.lang, 'bout_me'),
 				description: Lang.get(this.lang, 'about_cord', Config.name, author),
 				url: url,
 			});
 			this.sendReply(data);
-		} else {
+		}).catch(() => {
 			this.sendReply(Lang.get(this.lang, 'about', this.bot.name, author, url));
-		}
+		});
 	},
 	abouttopic: 'info',
 	language(target, room) {

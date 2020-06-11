@@ -1,0 +1,9 @@
+{
+    "spanish": {
+        "start": "$1 ha iniciado un nuevo juego de pasa la bomba!"
+    },
+    "english": {
+        "start": "$1 has started a new game of pass the bomb!"
+
+    }
+}

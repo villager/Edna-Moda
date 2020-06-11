@@ -1,0 +1,14 @@
+{
+    "name": "pass-the-bomb",
+    "version": "1.0.2",
+    "main": "passthebomb.js",
+    "dependencies": {
+        "discord.js": "^12.2.0"
+    },
+    "author": {
+        "name": "Aldair Beltran",
+        "email": "aldairbeltran23@hotmail.com",
+        "url": "https://github.com/villager"
+    },
+    "private": true
+}

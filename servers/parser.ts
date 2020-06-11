@@ -29,6 +29,10 @@ export class BaseParser {
 	get lang() {
 		return this.bot.language;
 	}
+	get isDiscord() {
+		if(this.serverType === 'Discord') return Promise.resolve();
+		else return Promise.reject();
+	}
 	splitToken(message: string) {
 		let splitMessage = splint(message, ' ');
 		return splitMessage;
