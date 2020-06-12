@@ -1,6 +1,6 @@
 {
-    "name": "Language System",
-    "version": "2.0.2",
+    "name": "language-system",
+    "version": "2.0.4",
     "main": "index.js",
     "author": {
         "name": "Aldair Beltran",

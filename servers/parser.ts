@@ -30,7 +30,7 @@ export class BaseParser {
 		return this.bot.language;
 	}
 	get isDiscord() {
-		if(this.serverType === 'Discord') return Promise.resolve();
+		if (this.serverType === 'Discord') return Promise.resolve();
 		else return Promise.reject();
 	}
 	splitToken(message: string) {

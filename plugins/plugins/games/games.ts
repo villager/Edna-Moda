@@ -1,4 +1,3 @@
-
 export let games = Object.create(null);
 
 export class BaseGame {
@@ -13,7 +12,7 @@ export class BaseGame {
 		this.room = options.room;
 		this.serverType = options.serverType;
 		this.gameType = null;
-		this.lang = options.language || "spanish";
+		this.lang = options.language || 'spanish';
 		this.host = options.host;
 	}
 	send(data) {
@@ -27,10 +26,12 @@ export class BaseGame {
 		delete games[this.id][toRoomId(this.room)];
 	}
 }
+const HELP_DIR = Plugins.resolve(__dirname, 'helps.json');
 export const init = () => {
 	Bot.yallEach(bot => {
 		games[bot.id] = {};
 	});
+	Plugins.Language.Help.add(HELP_DIR);
 };
 export const key = 'global';
 
@@ -42,8 +43,17 @@ export const getGame = (server: any, room: any) => {
 	if (!games[server][room]) return false;
 	return games[server][room];
 };
+
+export const idUser = (user: any) => {
+	if (user && user.id) {
+		user = user.id;
+	}
+	return user;
+};
+
 import * as PassTheBomb from './passthebomb';
 
 export const commands: ChatCommands = {
 	ptb: PassTheBomb.commands,
+	ptbhelp: true,
 };

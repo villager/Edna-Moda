@@ -1,4 +1,3 @@
-const Lang = Plugins.Language.load();
 
 const LANG_LIST = new Set(['en', 'es']);
 const SPANISH_ALIASES = new Set(['es', 'spanish', 'español', 'espaol', 'espanol']);
@@ -6,6 +5,15 @@ const ENGLISH_ALIASES = new Set(['en', 'ing', 'ingles', 'us', 'uk', 'english']);
 const {MessageEmbed} = require('discord.js');
 
 export const key = 'global';
+
+const HELP_DIR = Plugins.resolve(__dirname, 'helps.json');
+const LANGUAGE_DIR = Plugins.resolve(__dirname, 'language.json');
+
+const Lang = Plugins.Language.load(LANGUAGE_DIR);
+
+export const init = () => {
+	Plugins.Language.Help.add(HELP_DIR);
+};
 
 export const commands: ChatCommands = {
 	'?': 'help',
@@ -45,8 +53,8 @@ export const commands: ChatCommands = {
 			}
 			if (helpCmd in allCommands) {
 				if (allCommands[helpCmd] === true) {
-					const HelpLang = Plugins.Language.loadHelp();
-					this.sendReply(HelpLang.get(this.lang, target));
+					const Help = Plugins.Language.Help;
+					this.sendReply(Help.get(this.lang, target));
 				}
 				/*if (Array.isArray(allCommands[helpCmd])) {
 					this.sendReply(Lang.get(this.lang, {msg: target, in: "msg"}));
@@ -89,16 +97,18 @@ export const commands: ChatCommands = {
 		let log = Plugins.FS('./logs/errors.log').readSync().toString();
 		Plugins.Bins.upload(log, (r, link) => {
 			if (r) {
-				this.isDiscord.then(() => {
-					let data = new MessageEmbed({
-						title: 'Errores',
-						description: 'Log de errores del Bot',
-						url: link,
+				this.isDiscord
+					.then(() => {
+						let data = new MessageEmbed({
+							title: 'Errores',
+							description: 'Log de errores del Bot',
+							url: link,
+						});
+						this.sendReply(data);
+					})
+					.catch(() => {
+						this.sendReply(Lang.get(this.lang, {msg: 'errorlog', in: 'link'}, link));
 					});
-					this.sendReply(data);
-				}).catch(() => {
-					this.sendReply(Lang.get(this.lang, {msg: 'errorlog', in: 'link'}, link));
-				});
 			} else {
 				this.sendReply(Lang.get(this.lang, {msg: 'errorlog', in: 'error'}));
 			}
@@ -132,16 +142,18 @@ export const commands: ChatCommands = {
 	about() {
 		let url = Plugins.packageData.url;
 		let author = Plugins.packageData.author && Plugins.packageData.author.name;
-		this.isDiscord.then(() => {
-			let data = new MessageEmbed({
-				title: Lang.get(this.lang, 'bout_me'),
-				description: Lang.get(this.lang, 'about_cord', Config.name, author),
-				url: url,
+		this.isDiscord
+			.then(() => {
+				let data = new MessageEmbed({
+					title: Lang.get(this.lang, 'bout_me'),
+					description: Lang.get(this.lang, 'about_cord', Config.name, author),
+					url: url,
+				});
+				this.sendReply(data);
+			})
+			.catch(() => {
+				this.sendReply(Lang.get(this.lang, 'about', this.bot.name, author, url));
 			});
-			this.sendReply(data);
-		}).catch(() => {
-			this.sendReply(Lang.get(this.lang, 'about', this.bot.name, author, url));
-		});
 	},
 	abouttopic: 'info',
 	language(target, room) {

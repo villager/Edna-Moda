@@ -221,4 +221,16 @@ export const Plugins = new (class {
 	resolve(...args: string[]) {
 		return path.resolve(...args);
 	}
+	mapList(list: string[], lang: string): string {
+		let output = `${list[0]}`;
+		for (let i = 1; i + 1 < list.length; i++) {
+			if (i === 1) output += ' ';
+			output += ', ' + list[i];
+		}
+		let finalTxt = lang === 'spanish' ? ' y ' : ' and ';
+		if (list.length > 1) {
+			output += finalTxt + list[list.length - 1];
+		}
+		return output;
+	}
 })();
