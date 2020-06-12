@@ -7,13 +7,19 @@ export class BaseGame {
 	host: string;
 	id: string;
 	lang: string;
+	name: string;
 	constructor(options: AnyObject) {
 		this.id = options.id;
 		this.room = options.room;
+		this.name = options.name || Config.name;
 		this.serverType = options.serverType;
 		this.gameType = null;
 		this.lang = options.language || 'spanish';
 		this.host = options.host;
+	}
+	get canHTML() {
+		if(Plugins.hasAuth(this.id, this.name, 'html')) return Promise.resolve();
+		return Promise.reject();
 	}
 	send(data) {
 		if (this.serverType === 'Discord') {
@@ -56,4 +62,5 @@ import * as PassTheBomb from './passthebomb';
 export const commands: ChatCommands = {
 	ptb: PassTheBomb.commands,
 	ptbhelp: true,
+	ptbtopic: 'games',
 };

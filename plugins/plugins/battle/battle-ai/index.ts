@@ -12,7 +12,7 @@ function updateJoins() {
 		}
 	}
 }
-exports.init = function () {
+export const init = () => {
 	for (let i in battles) {
 		for (let x in battles[i]) {
 			try {
@@ -22,7 +22,7 @@ exports.init = function () {
 		}
 	}
 };
-exports.receive = function (server, room, data, isIntro) {
+export const receive = (server, room, data, isIntro) => {
 	if (data.charAt(0) === '>') return;
 	let spl = data.substr(1).split('|');
 	if (!battles[server.id]) battles[server.id] = {};
@@ -48,7 +48,7 @@ exports.receive = function (server, room, data, isIntro) {
 		}
 	}
 };
-exports.tryAbanoned = function () {
+export const tryAbanoned = () => {
 	if (!Config.abandonedBattleAutojoin) return;
 	let cmds = [];
 	for (let i in Storage.autoJoin) {

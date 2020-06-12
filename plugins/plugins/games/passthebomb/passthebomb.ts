@@ -34,13 +34,20 @@ class PassTheBomb extends BaseGame {
 		return Lang.get(this.lang, id, ...params);
 	}
 	notifyCreation() {
+		let header = this.getLang('start', this.host),
+		body = this.getLang('joining', Config.triggers[0]);
 		if (this.serverType === 'Discord') {
 			let Embed = new MessageEmbed({
-				title: this.getLang('start', this.host),
-				description: `Para unirte escribe ${Config.triggers[0]}ptb join`,
+				title: header,
+				description: body,
 			});
 			this.actionMessage = this.send(Embed);
 		} else {
+			this.canHTML.then(() => {
+				this.send(`/addhtmlbox <center><h1>${header}</h1><br>${body}</center>`);
+			}).catch(() => {
+				this.send(`${header}. ${body}`);
+			});
 		}
 	}
 	reset() {
@@ -173,6 +180,7 @@ export const commands = {
 			host: toName(user),
 			room: room,
 			id: this.id,
+			name: this.bot.name ? this.bot.name : Config.name,
 			serverType: this.serverType,
 			language: this.lang,
 			maxCap: target ? target : Infinity,

@@ -3,12 +3,14 @@
         "start": "$1 ha iniciado un nuevo juego de pasa la bomba!",
         "wait": "Espera...",
         "has_bomb": "La bomba la tiene **$1** utiliza .ptb pass [usuario]",
-        "explosion": "La bomba ha explotado y matado a $1"
+        "explosion": "La bomba ha explotado y matado a $1",
+        "joining": "Para unirte escribe $1ptb join"
     },
     "english": {
         "start": "$1 has started a new game of pass the bomb!",
         "wait": "Wait...",
         "has_bomb": "$1 has the bomb, use .ptb pass [user]",
-        "explosion": "The bomb exploded and killed $1"
+        "explosion": "The bomb exploded and killed $1",
+        "joining": "Use $1ptb join to participate"
     }
 }
