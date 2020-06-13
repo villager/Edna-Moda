@@ -8,6 +8,15 @@ export const GlobalUtility = new (class {
 		if (typeof text !== 'string' && typeof text !== 'number') return '';
 		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
 	}
+	toRoomId(text: string | any) {
+		if (text && text.name) {
+			text = text.name;
+		} else if (text && text.title) {
+			text = text.title;
+		}
+		if (typeof text !== 'string' && typeof text !== 'number') return '';
+		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
+	}
 	toName(text: string | any) {
 		if (text && text.name) {
 			text = text.name;

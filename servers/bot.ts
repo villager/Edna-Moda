@@ -47,6 +47,7 @@ global.toId = Plugins.Utils.toId;
 global.splint = Plugins.Utils.splint;
 global.toName = Plugins.Utils.toName;
 global.toUserName = Plugins.Utils.toUserName;
+global.toRoomId = Plugins.Utils.toRoomId;
 // @ts-ignore
 Plugins.init();
 

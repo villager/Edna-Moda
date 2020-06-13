@@ -18,14 +18,14 @@ export class BaseGame {
 		this.host = options.host;
 	}
 	get canHTML() {
-		if(Plugins.hasAuth(this.id, this.name, 'html')) return Promise.resolve();
-		return Promise.reject();
+		if(Plugins.hasAuth(this.id, this.name, 'html')) return Promise.resolve(true);
+		return Promise.reject(false);
 	}
 	send(data) {
 		if (this.serverType === 'Discord') {
 			return this.room.send(data);
 		} else {
-			return Bot.get(this.id).send(data, this.room);
+			return Bot.get(this.id).send(data, this.room.id);
 		}
 	}
 	destroy() {
@@ -41,9 +41,6 @@ export const init = () => {
 };
 export const key = 'global';
 
-export const toRoomId = (text: any) => {
-	return toId(toName(text));
-};
 export const getGame = (server: any, room: any) => {
 	if (!games[server]) return false;
 	if (!games[server][room]) return false;

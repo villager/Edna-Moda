@@ -1,4 +1,4 @@
-import {games, toRoomId, getGame, BaseGame, idUser} from '../games';
+import {games, getGame, BaseGame, idUser} from '../games';
 
 import {MessageEmbed} from 'discord.js';
 
@@ -44,7 +44,7 @@ class PassTheBomb extends BaseGame {
 			this.actionMessage = this.send(Embed);
 		} else {
 			this.canHTML.then(() => {
-				this.send(`/addhtmlbox <center><h1>${header}</h1><br>${body}</center>`);
+				this.send(`/adduhtml ${this.name}, <center><h3>${header}</h3><br>${body}</center>`);
 			}).catch(() => {
 				this.send(`${header}. ${body}`);
 			});
@@ -146,27 +146,45 @@ class PassTheBomb extends BaseGame {
 	}
 	leaveUser(user) {
 		user = toId(user);
-		if (this.playerList.has(user)) return false;
+		if (!this.playerList.has(user)) return false;
 		this.playerList.delete(user);
 		this.getUsers();
 	}
 	getUsers() {
+		let header = this.getLang('start', this.host),
+		body = `Para unirte escribe ${Config.triggers[0]}ptb join\nMaximo de jugadores ${this.maxCap}`;
+		let playerList = [];
+		this.playerList.forEach(player => playerList.push(player.name));
+		let footer = `Jugadores (${this.playerList.size}): ${Plugins.mapList(playerList, this.lang)}`;
 		if (this.serverType === 'Discord') {
 			let Embed;
 			if (!this.started) {
 				Embed = new MessageEmbed({
-					title: this.getLang('start', this.host),
-					description: `Para unirte escribe ${Config.triggers[0]}ptb join\nMaximo de jugadores ${this.maxCap}`,
+					title: header,
+					description: body,
 				});
 				if (this.playerList.size > 0) {
-					let playerList = [];
-					this.playerList.forEach(player => playerList.push(player.name));
-					Embed.setFooter(`Jugadores (${this.playerList.size}): ${Plugins.mapList(playerList, this.lang)}`);
+					Embed.setFooter(footer);
 				}
 				this.actionMessage.then(msg => {
 					msg.edit(Embed);
 				});
 			} else {
+				// Pending to do a getusers when the game has started
+			}
+		} else {
+			if (!this.started) {
+				this.canHTML.then(() => {
+					let data = '';
+					data += `/adduhtml ${this.name}, <center><h3>${header}</h3><br>`;
+					data += `${body}</center>`;
+					if (this.playerList.size > 0) {
+						data += `<br><center> ${footer}</center>`;
+					}
+					this.send(data);
+				}).catch(() => {});
+			} else {
+
 			}
 		}
 	}
@@ -202,6 +220,11 @@ export const commands = {
 		game.start();
 	},
 	join(target, room, user) {
+		console.log(user);
+		console.log(user);
+		console.log(user);
+		console.log(user);
+		console.log('TONAME ' + toName(user));
 		let game = getGame(this.id, toRoomId(room));
 		if (!game || game.gameType !== 'PassTheBomb' || game.started) return false; // Nothing to report
 		game.joinUser(user);
