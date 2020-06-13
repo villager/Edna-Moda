@@ -18,7 +18,7 @@ export class BaseGame {
 		this.host = options.host;
 	}
 	get canHTML() {
-		if(Plugins.hasAuth(this.id, this.name, 'html')) return Promise.resolve(true);
+		if (Plugins.hasAuth(this.id, this.name, 'html')) return Promise.resolve(true);
 		return Promise.reject(false);
 	}
 	send(data) {

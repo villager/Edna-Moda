@@ -1,4 +1,3 @@
-
 const LANG_LIST = new Set(['en', 'es']);
 const SPANISH_ALIASES = new Set(['es', 'spanish', 'español', 'espaol', 'espanol']);
 const ENGLISH_ALIASES = new Set(['en', 'ing', 'ingles', 'us', 'uk', 'english']);

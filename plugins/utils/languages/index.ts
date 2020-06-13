@@ -40,7 +40,7 @@ export class LoadLang {
 			i++;
 		}
 		return output;
-	} 
+	}
 	static normalized(obj: AnyObject) {
 		if (!obj.msg) throw RangeError('UNCAUGHT_LANGUAGE_NAME_ID');
 		if (!obj.input) throw RangeError('UNCAUGHT_LANGUAGE_INNER_ID');
@@ -57,7 +57,7 @@ class LoadHelp {
 	add(file: string) {
 		let data = require(file);
 		for (let i in data) {
-			if(!this.translations[i]) this.translations[i] = data[i];
+			if (!this.translations[i]) this.translations[i] = data[i];
 			else Object.assign(this.translations[i], data[i]);
 		}
 	}
@@ -81,7 +81,7 @@ class LoadHelp {
 			i++;
 		}
 		return output;
-	} 
+	}
 }
 /**
  * @param {string} langPath

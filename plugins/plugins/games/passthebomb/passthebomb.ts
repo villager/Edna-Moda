@@ -35,7 +35,7 @@ class PassTheBomb extends BaseGame {
 	}
 	notifyCreation() {
 		let header = this.getLang('start', this.host),
-		body = this.getLang('joining', Config.triggers[0]);
+			body = this.getLang('joining', Config.triggers[0]);
 		if (this.serverType === 'Discord') {
 			let Embed = new MessageEmbed({
 				title: header,
@@ -43,11 +43,13 @@ class PassTheBomb extends BaseGame {
 			});
 			this.actionMessage = this.send(Embed);
 		} else {
-			this.canHTML.then(() => {
-				this.send(`/adduhtml ${this.name}, <center><h3>${header}</h3><br>${body}</center>`);
-			}).catch(() => {
-				this.send(`${header}. ${body}`);
-			});
+			this.canHTML
+				.then(() => {
+					this.send(`/adduhtml ${this.name}, <center><h3>${header}</h3><br>${body}</center>`);
+				})
+				.catch(() => {
+					this.send(`${header}. ${body}`);
+				});
 		}
 	}
 	reset() {
@@ -152,7 +154,7 @@ class PassTheBomb extends BaseGame {
 	}
 	getUsers() {
 		let header = this.getLang('start', this.host),
-		body = `Para unirte escribe ${Config.triggers[0]}ptb join\nMaximo de jugadores ${this.maxCap}`;
+			body = `Para unirte escribe ${Config.triggers[0]}ptb join\nMaximo de jugadores ${this.maxCap}`;
 		let playerList = [];
 		this.playerList.forEach(player => playerList.push(player.name));
 		let footer = `Jugadores (${this.playerList.size}): ${Plugins.mapList(playerList, this.lang)}`;
@@ -174,17 +176,18 @@ class PassTheBomb extends BaseGame {
 			}
 		} else {
 			if (!this.started) {
-				this.canHTML.then(() => {
-					let data = '';
-					data += `/adduhtml ${this.name}, <center><h3>${header}</h3><br>`;
-					data += `${body}</center>`;
-					if (this.playerList.size > 0) {
-						data += `<br><center> ${footer}</center>`;
-					}
-					this.send(data);
-				}).catch(() => {});
+				this.canHTML
+					.then(() => {
+						let data = '';
+						data += `/adduhtml ${this.name}, <center><h3>${header}</h3><br>`;
+						data += `${body}</center>`;
+						if (this.playerList.size > 0) {
+							data += `<br><center> ${footer}</center>`;
+						}
+						this.send(data);
+					})
+					.catch(() => {});
 			} else {
-
 			}
 		}
 	}
